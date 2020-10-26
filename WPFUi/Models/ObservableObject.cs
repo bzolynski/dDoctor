@@ -5,7 +5,7 @@ using System.Text;
 
 namespace WPFUi.Models
 {
-    public class ObservableCollecition : INotifyPropertyChanged
+    public class ObservableObject : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

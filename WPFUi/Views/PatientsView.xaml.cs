@@ -8,17 +8,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
-using WPFUi.ViewModels;
 
 namespace WPFUi.Views
 {
     /// <summary>
-    /// Interaction logic for ShellView.xaml
+    /// Interaction logic for PatientsView.xaml
     /// </summary>
-    public partial class ShellView : Window
+    public partial class PatientsView : UserControl
     {
-        public ShellView()
+        public PatientsView()
         {
             InitializeComponent();
         }

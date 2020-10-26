@@ -3,10 +3,28 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:WPFUi"
              xmlns:viewModels="clr-namespace:WPFUi.ViewModels"
-             xmlns:views="clr-namespace:WPFUi.Views">
+             xmlns:views="clr-namespace:WPFUi.Views"
+             xmlns:controls="clr-namespace:WPFUi.Controls">
     <Application.Resources>
         <ResourceDictionary>
-            
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/Buttons.xaml" />
+                <ResourceDictionary Source="/Styles/TextBlocks.xaml" />
+                <ResourceDictionary Source="/Styles/TextBoxes.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate DataType="{x:Type viewModels:HomeViewModel}">
+                <views:HomeView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModels:PatientsViewModel}">
+                <views:PatientsView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModels:PatientFormViewModel}">
+                <controls:PatientForm />
+            </DataTemplate>
         </ResourceDictionary>
+        
     </Application.Resources>
 </Application>

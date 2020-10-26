@@ -4,9 +4,16 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFUi.Views"
+        xmlns:controls="clr-namespace:WPFUi.Controls"
         mc:Ignorable="d"
         Title="dDoctor" MinHeight="750" MinWidth="1400">
-    <Grid>
-        
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <controls:MenuBar Grid.Row="0"/>
+        <ContentControl Grid.Row="1"
+                        Content="{Binding CurrentViewModel}" />
     </Grid>
 </Window>
