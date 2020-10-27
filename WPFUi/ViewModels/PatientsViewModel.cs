@@ -29,7 +29,6 @@ namespace WPFUi.ViewModels
         #region Bindings
         public ObservableCollection<PatientDisplayModel> Patients { get; set; }
         
-
         public PatientFormViewModel PatientFormViewModel
         {
             get { return _patientFormViewModel; }
@@ -40,16 +39,21 @@ namespace WPFUi.ViewModels
             }
         }
 
-
         public PatientDisplayModel SelectedPatient
         {
             get { return _selectedPatient; }
             set 
             { 
                 _selectedPatient = value;
+
                 OnPropertyChanged(nameof(SelectedPatient));
+                
             }
         }
+
+
+        public bool ArePatientDetailsVisible => false;
+
         #endregion
 
         // Commands

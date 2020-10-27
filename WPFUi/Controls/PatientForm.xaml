@@ -4,12 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WPFUi.Controls"
+             xmlns:components="clr-namespace:WPFUi.Components"
              mc:Ignorable="d" 
-             Background="White"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Margin="10">
+    <Grid Background="#f2f3f8">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -18,65 +19,85 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Vertical" 
+                    Margin="50"
                     Grid.Column="0" Grid.Row="0">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Style="{StaticResource FormTextBlock}" 
-                           Text="Last name" />
+
+            <StackPanel.Resources>
+                <Style TargetType="{x:Type components:LabelLayoutForFormInputs}">
+                    <Setter Property="Margin" Value="0 0 0 15"/>
+                </Style>
+            </StackPanel.Resources>
+            
+            <components:LabelLayoutForFormInputs Label="Last name">
                 <TextBox Style="{StaticResource FormTextBox}"
                          Text="{Binding LastName}" />
-            </StackPanel>
-            
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Style="{StaticResource FormTextBlock}" 
-                           Text="First name" />
+            </components:LabelLayoutForFormInputs>
+
+
+            <components:LabelLayoutForFormInputs Label="First name">
                 <TextBox Style="{StaticResource FormTextBox}" 
                          Text="{Binding FirstName}"/>
-            </StackPanel>
+            </components:LabelLayoutForFormInputs>
 
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Style="{StaticResource FormTextBlock}" Text="Phone number" />
+            <components:LabelLayoutForFormInputs Label="Phone number">
                 <TextBox Style="{StaticResource FormTextBox}" 
                          Text="{Binding PhoneNumber}"/>
-            </StackPanel>
-            
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Style="{StaticResource FormTextBlock}" Text="Email" />
+            </components:LabelLayoutForFormInputs>
+
+            <components:LabelLayoutForFormInputs Label="Email">
                 <TextBox Style="{StaticResource FormTextBox}" 
                          Text="{Binding Email}"/>
-            </StackPanel>
+            </components:LabelLayoutForFormInputs>
 
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Style="{StaticResource FormTextBlock}" Text="Birth date" />
+            <components:LabelLayoutForFormInputs Label="Birth date">
                 <DatePicker SelectedDate="{Binding BirthDate}"/>
-            </StackPanel>
+            </components:LabelLayoutForFormInputs>
             
             
         </StackPanel>
-        <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="0">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Style="{StaticResource FormTextBlock}" Text="Post code" />
+        
+        <!-- Separator -->
+        <Border Grid.Column="1" Width="0.8">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="White" Offset="0" />
+                    <GradientStop Color="DarkGray" Offset="0.2" />
+                    <GradientStop Color="DarkGray" Offset="0.8" />
+                    <GradientStop Color="White" Offset="1" />
+                </LinearGradientBrush>
+            </Border.Background>
+        </Border>
+        
+        <StackPanel Orientation="Vertical" 
+                    Margin="50"
+                    Grid.Column="2" Grid.Row="0">
+            <StackPanel.Resources>
+                <Style TargetType="{x:Type components:LabelLayoutForFormInputs}">
+                    <Setter Property="Margin" Value="0 0 0 15"/>
+                </Style>
+            </StackPanel.Resources>
+            <components:LabelLayoutForFormInputs Label="Post code">
                 <TextBox Style="{StaticResource FormTextBox}" 
                          Text="{Binding PostCode}"/>
-            </StackPanel>
+            </components:LabelLayoutForFormInputs>
 
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Style="{StaticResource FormTextBlock}" Text="City" />
+            <components:LabelLayoutForFormInputs Label="City">
                 <TextBox Style="{StaticResource FormTextBox}" 
                          Text="{Binding City}"/>
-            </StackPanel>
+            </components:LabelLayoutForFormInputs>
 
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Style="{StaticResource FormTextBlock}" Text="Street" />
+            <components:LabelLayoutForFormInputs Label="Street">
                 <TextBox Style="{StaticResource FormTextBox}" 
                          Text="{Binding Street}"/>
-            </StackPanel>
+            </components:LabelLayoutForFormInputs>
         </StackPanel>
 
-        <StackPanel Grid.Column="1" 
+        <!-- Buttons -->
+        <StackPanel Grid.Column="2" 
                     Grid.Row="1"
                     Orientation="Horizontal" 
                     HorizontalAlignment="Right"
->
+                    Margin="0 0 20 20">
             <Button Style="{StaticResource MenuBarButton}" 
                     Content="Accept"
                     Margin="0 0 10 0"

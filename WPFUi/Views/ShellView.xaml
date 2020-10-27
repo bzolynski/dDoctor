@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:WPFUi.Views"
         xmlns:controls="clr-namespace:WPFUi.Controls"
         mc:Ignorable="d"
-        Title="dDoctor" MinHeight="750" MinWidth="1400">
-    <Grid Margin="10">
+        Title="dDoctor" MinHeight="700" MinWidth="1200">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50" />
             <RowDefinition Height="*" />
