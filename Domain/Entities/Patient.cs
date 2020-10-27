@@ -6,6 +6,7 @@ namespace Domain.Entities
 {
     public class Patient : BaseEntity
     {
+        // TODO: Add PESEL
         public string FirstName { get; set; }
         public string Lastname { get; set; }
         public string PhoneNumber { get; set; }

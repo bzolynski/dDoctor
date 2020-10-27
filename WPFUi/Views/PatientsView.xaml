@@ -28,10 +28,12 @@
                     <Border BorderThickness="1" Grid.ColumnSpan="2" BorderBrush="Blue" />
                     <StackPanel Orientation="Horizontal" Grid.Column="0">
                         <Button Style="{StaticResource MenuBarButton}" 
-                            Content="Add"
+                                Content="Add"
+                                Command="{Binding OpenNewPatientFormCommand}"
                             />
                         <Button Style="{StaticResource MenuBarButton}" 
-                            Content="Edit"
+                                Content="Edit"
+                                Command="{Binding OpenEditPatientFormCommand}"
                             />
                         <Button Style="{StaticResource MenuBarButton}" 
                             Content="Delete"
@@ -47,7 +49,7 @@
                               CanUserAddRows="False" 
                               CanUserDeleteRows="False"
                               CanUserResizeRows="False"
-                              AutoGenerateColumns="False"
+                              AutoGenerateColumns="False"                              
                               SelectionMode="Single"
                               IsReadOnly="True"
                               SelectedItem="{Binding SelectedPatient, Mode=OneWayToSource}">

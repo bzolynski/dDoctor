@@ -79,9 +79,11 @@
 >
             <Button Style="{StaticResource MenuBarButton}" 
                     Content="Accept"
-                    Margin="0 0 10 0"/>
+                    Margin="0 0 10 0"
+                    Command="{Binding SubmitFormCommand}"/>
             <Button Style="{StaticResource MenuBarButton}" 
-                    Content="Cancel"/>
+                    Content="Cancel"
+                    Command="{Binding CancelFormCommand}"/>
         </StackPanel>
     </Grid>
 </UserControl>

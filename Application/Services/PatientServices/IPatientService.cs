@@ -6,7 +6,9 @@ namespace Application.Services.PatientServices
 {
     public interface IPatientService
     {
-        Task CreatePatient(Patient patient, Address address);
+        Task<Patient> CreatePatient(Patient patient);
+        Task<Patient> UpdatePatient(int id, Patient patient);
+
         Task DeletePatient(int id);
         Task<IEnumerable<Patient>> GetAllPatients();
     }

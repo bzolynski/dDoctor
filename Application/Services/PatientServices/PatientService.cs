@@ -22,10 +22,14 @@ namespace Application.Services.PatientServices
 
         }
 
-        public async Task CreatePatient(Patient patient, Address address)
+        public async Task<Patient> CreatePatient(Patient patient)
         {
-            patient.Address = address;
-            await _patientDataService.Create(patient);
+            return await _patientDataService.Create(patient);
+        }
+
+        public async Task<Patient> UpdatePatient(int id, Patient patient)
+        {
+            return await _patientDataService.Update(id, patient);
         }
 
         // TODO: Check if patient has any reservation etc
@@ -38,5 +42,7 @@ namespace Application.Services.PatientServices
         {
             return await _patientDataService.GetAll();
         }
+
+        
     }
 }

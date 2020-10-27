@@ -2,6 +2,6 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:WPFUi.Styles">
     <Style x:Key="FormTextBox" TargetType="{x:Type TextBox}">
-        
+        <Setter Property="MinWidth" Value="150" />
     </Style>
 </ResourceDictionary>
