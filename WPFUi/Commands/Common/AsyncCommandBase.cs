@@ -10,11 +10,17 @@ namespace WPFUi.Commands.Common
     {
         private bool _isExecuting;
         private readonly Action<Exception> _onException;
+        private readonly Predicate<object> _canExecute;
 
 
-        public AsyncCommandBase(Action<Exception> onException)
+        public AsyncCommandBase(Predicate<object> canExecute, Action<Exception> onException)
         {
+            _canExecute = canExecute;
             _onException = onException;
+        }
+
+        public AsyncCommandBase(Action<Exception> onException): this(null, onException)
+        {
         }
 
         public bool IsExecuting
@@ -23,15 +29,25 @@ namespace WPFUi.Commands.Common
             set
             {
                 _isExecuting = value;
-                CanExecuteChanged?.Invoke(this, new EventArgs());
+                
+                //CanExecuteChanged?.Invoke(this, new EventArgs());
+                
             }
         }
 
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
 
+        //public event EventHandler CanExecuteChanged;
+                
         public bool CanExecute(object parameter)
         {
-            return !IsExecuting;
+            if (_canExecute == null ? true : _canExecute.Invoke(parameter) && !IsExecuting)
+                return true;
+            return false;
         }
 
         public async void Execute(object parameter)

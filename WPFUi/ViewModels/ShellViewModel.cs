@@ -12,9 +12,35 @@ namespace WPFUi.ViewModels
     {
         // Private fields
         private readonly INavigator _navigator;
+        private bool _isExpandedNavigationVisible;
+        private bool _isShortNavigationVisible;
 
         // States
         public ViewModelBase CurrentViewModel => _navigator.CurrentViewModel;
+
+        // Bindings
+        
+        public bool IsShortNavigationVisible
+        {
+            get { return _isShortNavigationVisible; }
+            set
+            {
+                _isShortNavigationVisible = value;
+                OnPropertyChanged(nameof(IsShortNavigationVisible));
+            }
+        }
+
+        public bool IsExpandedNavigationVisible
+        {
+            get { return _isExpandedNavigationVisible; }
+            set
+            {
+                _isExpandedNavigationVisible = value;
+                OnPropertyChanged(nameof(IsExpandedNavigationVisible));
+                IsShortNavigationVisible = !value;
+                OnPropertyChanged(nameof(IsShortNavigationVisible));
+            }
+        }
 
         // Commands
         public ICommand UpdateCurrentViewModelCommand { get; set; }
@@ -24,6 +50,7 @@ namespace WPFUi.ViewModels
         {
             _navigator = navigator;
             _navigator.StateChanged += Navigator_StateChanged;
+            _navigator.CurrentViewModel = viewModelFactory.CreateViewModel(ViewType.Home);
 
             UpdateCurrentViewModelCommand = new UpdateCurrentViewModelCommand(_navigator, viewModelFactory);
         }
@@ -31,6 +58,10 @@ namespace WPFUi.ViewModels
         private void Navigator_StateChanged()
         {
             OnPropertyChanged(nameof(CurrentViewModel));
+            if (_navigator.CurrentViewModel is HomeViewModel)
+                IsExpandedNavigationVisible = true;
+            else
+                IsExpandedNavigationVisible = false;
         }
     }
 }

@@ -9,6 +9,11 @@ namespace WPFUi.Commands.Common
     {
         private readonly Func<Task> _function;
 
+        public AsyncRelayCommand(Func<Task> function, Predicate<object> canExecute, Action<Exception> onException) : base(canExecute, onException)
+        {
+            _function = function;
+        }
+
         public AsyncRelayCommand(Func<Task> function, Action<Exception> onException) : base(onException)
         {
             _function = function;

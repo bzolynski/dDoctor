@@ -4,11 +4,57 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WPFUi.Views"
+             xmlns:navigator="clr-namespace:WPFUi.States.Navigation"
+             xmlns:components="clr-namespace:WPFUi.Components"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <TextBlock>
-            HOME HOME HOME HOME HOME HOME HOME HOME HOME HOME HOME HOME
-        </TextBlock>
-    </Grid>
+
+        
+            <Grid >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="60" />
+
+                </Grid.RowDefinitions>
+
+                    <!-- Messages section-->
+                    <Border Style="{StaticResource MainDarkBorder}" 
+                            Grid.Row="0" 
+                            Margin="15" 
+                            CornerRadius="5"
+                            Background="{StaticResource LightBlueSolidColorBlush}">
+                        
+                        <StackPanel Orientation="Vertical">
+                            
+                            
+                        </StackPanel>
+                        
+                    </Border>
+                    
+                
+                
+                <!-- Footer -->
+                <Grid Grid.Row="1" Background="{StaticResource MainLinearGradient}">
+                    <StackPanel Margin="10" VerticalAlignment="Center">
+                        <TextBlock Padding="2" FontWeight="Bold" 
+                               Foreground="{StaticResource MainFontSolidColorBrush}"
+                               Text="© Bartosz Żołyński"
+                               />
+                        <Button Style="{StaticResource LinkButton}"
+                                HorizontalAlignment="Left"
+                                Command="{Binding OpenGitHubProfileCommand}">
+                            <TextBlock FontWeight="Bold" 
+                                       Padding="2"
+                                   Foreground="{StaticResource MainFontSolidColorBrush}"
+                                   Text="GitHub profile: https://github.com/bzolynski"
+                                   />
+                            
+                        </Button>
+                        
+                    </StackPanel>
+                </Grid>
+                
+            </Grid>
+        
+ 
 </UserControl>

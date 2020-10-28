@@ -1,4 +1,5 @@
-﻿using Application.Services.PatientServices;
+﻿using Application.Services;
+using Application.Services.PatientServices;
 using AutoMapper;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -53,7 +54,9 @@ namespace WPFUi
             services.AddScoped<NonQueryDataService<Patient>>();
             services.AddScoped<NonQueryDataService<Address>>();
 
-            services.AddScoped<IPatientService, PatientService>();
+            services.AddTransient<IPatientService, PatientService>();
+            services.AddTransient<IDateTimeService, DateTimeService>();
+            services.AddTransient<IAgeService, AgeServices>();
 
             services.AddScoped<IAddressDataService, AddressDataService>();
             services.AddScoped<IPatientDataService, PatientDataService>();

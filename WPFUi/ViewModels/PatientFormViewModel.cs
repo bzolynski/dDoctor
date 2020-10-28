@@ -1,4 +1,5 @@
-﻿using Application.Services.PatientServices;
+﻿using Application.Services;
+using Application.Services.PatientServices;
 using AutoMapper;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace WPFUi.ViewModels
         private readonly PatientDisplayModel _patient;
         private readonly IPatientService _patientService;
         private readonly IMapper _mapper;
+        private readonly IDateTimeService _dateTimeService;
 
 
         // Bindings
@@ -41,23 +43,24 @@ namespace WPFUi.ViewModels
 
         // Constructors
         #region Constructors
-        private PatientFormViewModel(IPatientService patientService, IMapper mapper)
+        private PatientFormViewModel(IPatientService patientService, IMapper mapper, IDateTimeService dateTimeService)
         {
             CancelFormCommand = new RelayCommand(CancelForm);
             _patientService = patientService;
             _mapper = mapper;
+            _dateTimeService = dateTimeService;
         }
 
-        public PatientFormViewModel(PatientsViewModel patientsViewModel, IPatientService patientService, IMapper mapper) : this(patientService, mapper)
+        public PatientFormViewModel(PatientsViewModel patientsViewModel, IPatientService patientService, IMapper mapper, IDateTimeService dateTimeService) : this(patientService, mapper, dateTimeService)
         {
             _patientsViewModel = patientsViewModel;
 
-            BirthDate = DateTime.Now;
+            BirthDate = _dateTimeService.Now;
 
             SubmitFormCommand = new AsyncRelayCommand(SubmitNewPatientForm, (ex) => { throw ex; });
         }
 
-        public PatientFormViewModel(PatientsViewModel patientsViewModel, PatientDisplayModel patient, IPatientService patientService, IMapper mapper) : this(patientService, mapper)
+        public PatientFormViewModel(PatientsViewModel patientsViewModel, PatientDisplayModel patient, IPatientService patientService, IMapper mapper, IDateTimeService dateTimeService) : this(patientService, mapper, dateTimeService)
         {
             _patientsViewModel = patientsViewModel;
             _patient = patient;
@@ -97,7 +100,8 @@ namespace WPFUi.ViewModels
                 }
             });
 
-            _patientsViewModel.Patients.Add(_mapper.Map<PatientDisplayModel>(newPatient));
+            _patientsViewModel.PatientsList.Add(_mapper.Map<PatientDisplayModel>(newPatient));
+            _patientsViewModel.PatientsDisplayList.Add(_mapper.Map<PatientDisplayModel>(newPatient));
             CloseForm();
         }
 
@@ -118,9 +122,11 @@ namespace WPFUi.ViewModels
                 }
             });
 
+            _patientsViewModel.PatientsList.Remove(_patient);
+            _patientsViewModel.PatientsList.Add(_mapper.Map<PatientDisplayModel>(editedPatient)); 
+            _patientsViewModel.PatientsDisplayList.Remove(_patient);
+            _patientsViewModel.PatientsDisplayList.Add(_mapper.Map<PatientDisplayModel>(editedPatient));
 
-            _patientsViewModel.Patients.Remove(_patient);
-            _patientsViewModel.Patients.Add(_mapper.Map<PatientDisplayModel>(editedPatient));
             CloseForm();
 
         }

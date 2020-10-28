@@ -19,7 +19,6 @@ namespace WPFUi.Models
         }
 
 
-
         public string FullName => $"{ LastName } { FirstName }";
         public string FullAddress => $"{ Address.City }, { Address.Street }";
         public string FullAddressWithPostCode => $"{ Address.PostCode } { Address.City }, { Address.Street }";

@@ -3,13 +3,17 @@
                     xmlns:local="clr-namespace:WPFUi.Styles">
     
     <Color x:Key="DarkBlue">#055287</Color>
+    <Color x:Key="LightBlue">#e8f5ff</Color>
     <Color x:Key="LightPurple">#d4dcf0</Color>
     <Color x:Key="MainFontColor">white</Color>
+    <Color x:Key="SecondaryFontColor">#80858d</Color>
 
     <SolidColorBrush x:Key="DarkBlueSolidColorBrush" Color="{StaticResource DarkBlue}" />
     <SolidColorBrush x:Key="LightPurpleSolidColorBrush" Color="{StaticResource LightPurple}" />
     <SolidColorBrush x:Key="MainFontSolidColorBrush" Color="{StaticResource MainFontColor}" />
+    <SolidColorBrush x:Key="SecondaryFontSolidColorBrush" Color="{StaticResource SecondaryFontColor}" />
     <SolidColorBrush x:Key="MediumBlueSolidColorBlush" Color="#356d94" />
+    <SolidColorBrush x:Key="LightBlueSolidColorBlush" Color="{StaticResource LightBlue}" />
 
     <LinearGradientBrush x:Key="MainLinearGradient" StartPoint="0,0" EndPoint="1,1">
         <GradientStop Color="{StaticResource DarkBlue}" Offset="0" />
