@@ -32,7 +32,9 @@
                 <Button Style="{StaticResource MenuBarButton}" Content="Patients"
                         Command="{Binding UpdateCurrentViewModelCommand}"
                         CommandParameter="{x:Static navigator:ViewType.Patients}"/>
-                <Button Style="{StaticResource MenuBarButton}" Content="Timetable"/>
+                <Button Style="{StaticResource MenuBarButton}" Content="Schedule"
+                        Command="{Binding UpdateCurrentViewModelCommand}"
+                        CommandParameter="{x:Static navigator:ViewType.Schedule}"/>
 
                 
             </StackPanel>
@@ -103,7 +105,10 @@
                                     Command="{Binding UpdateCurrentViewModelCommand}"
                                     CommandParameter="{x:Static navigator:ViewType.Patients}"
                                     />
-                        <components:HomeMenuIconComponent Grid.Column="3" />
+                        <components:HomeMenuIconComponent Grid.Column="3" 
+                                                          Label="Schedule"
+                                                          Command="{Binding UpdateCurrentViewModelCommand}"
+                                                          CommandParameter="{x:Static navigator:ViewType.Schedule}"/>
                         <components:HomeMenuIconComponent Grid.Column="5" />
                         <components:HomeMenuIconComponent Grid.Column="7" />
 

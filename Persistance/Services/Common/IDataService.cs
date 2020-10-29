@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Persistance.Services.Interfaces
+namespace Persistance.Services.Common
 {
     public interface IDataService<TEntity>
     {

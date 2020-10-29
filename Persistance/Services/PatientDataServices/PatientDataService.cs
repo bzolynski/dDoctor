@@ -1,12 +1,12 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using Persistance.Services.Interfaces;
+using Persistance.Services.Common;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Persistance.Services
+namespace Persistance.Services.PatientDataServices
 {
     public class PatientDataService : IPatientDataService
     {
@@ -42,7 +42,7 @@ namespace Persistance.Services
                     .Include(p => p.Address)
                     .FirstOrDefaultAsync(p => p.Id == id);
 
-                return entity;                    
+                return entity;
             }
         }
 

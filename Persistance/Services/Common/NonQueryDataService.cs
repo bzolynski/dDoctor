@@ -1,4 +1,4 @@
-﻿using Domain.Entities;
+﻿using Domain.Entities.Common;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Persistance.Services
+namespace Persistance.Services.Common
 {
     public class NonQueryDataService<TEntity> where TEntity : BaseEntity
     {
@@ -23,7 +23,7 @@ namespace Persistance.Services
             {
                 var result = await context.Set<TEntity>().AddAsync(entity);
                 await context.SaveChangesAsync();
-                
+
                 return result.Entity;
             }
         }

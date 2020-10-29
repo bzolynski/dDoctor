@@ -126,7 +126,7 @@ namespace WPFUi.ViewModels
             {
                 if (task.Exception == null)
                 {
-                    PatientsList = new ObservableCollection<PatientDisplayModel>(_mapper.Map<ObservableCollection<PatientDisplayModel>>(task.Result.OrderBy(x => x.Lastname)));
+                    PatientsList = new ObservableCollection<PatientDisplayModel>(_mapper.Map<ObservableCollection<PatientDisplayModel>>(task.Result.OrderBy(x => x.LastName)));
                     PatientsDisplayList = new ObservableCollection<PatientDisplayModel>(PatientsList);
                     OnPropertyChanged(nameof(PatientsList));                    
                     OnPropertyChanged(nameof(PatientsDisplayList));

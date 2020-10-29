@@ -6,8 +6,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistance;
-using Persistance.Services;
-using Persistance.Services.Interfaces;
+using Persistance.Services.AddressDataServices;
+using Persistance.Services.Common;
+using Persistance.Services.DoctorDataServices;
+using Persistance.Services.PatientDataServices;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -44,6 +46,8 @@ namespace WPFUi
             services.AddSingleton<HomeViewModel>();
             services.AddSingleton<PatientsView>();
             services.AddSingleton<PatientsViewModel>();
+            services.AddSingleton<ScheduleView>();
+            services.AddSingleton<ScheduleViewModel>();
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
@@ -53,6 +57,7 @@ namespace WPFUi
 
             services.AddScoped<NonQueryDataService<Patient>>();
             services.AddScoped<NonQueryDataService<Address>>();
+            services.AddScoped<NonQueryDataService<Doctor>>();
 
             services.AddTransient<IPatientService, PatientService>();
             services.AddTransient<IDateTimeService, DateTimeService>();
@@ -60,10 +65,12 @@ namespace WPFUi
 
             services.AddScoped<IAddressDataService, AddressDataService>();
             services.AddScoped<IPatientDataService, PatientDataService>();
+            services.AddScoped<IDoctorDataService, DoctorDataService>();
 
             services.AddScoped<IRootViewModelFactory, RootViewModelFactory>();
             services.AddScoped<IViewModelFactory<HomeViewModel>, HomeViewModelFactory>();
             services.AddScoped<IViewModelFactory<PatientsViewModel>, PatientsViewModelFactory>();
+            services.AddScoped<IViewModelFactory<ScheduleViewModel>, ScheduleViewModelFactory>();
 
 
             // States

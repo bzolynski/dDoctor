@@ -8,6 +8,6 @@ namespace WPFUi.States.Navigation
     {
         Home,
         Patients,
-        Timetable
+        Schedule
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Domain.Entities;
-using Persistance.Services.Interfaces;
+using Persistance.Services.AddressDataServices;
+using Persistance.Services.PatientDataServices;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Loader;

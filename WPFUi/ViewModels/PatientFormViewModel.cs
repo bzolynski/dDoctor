@@ -87,7 +87,7 @@ namespace WPFUi.ViewModels
         {
             var newPatient = await _patientService.CreatePatient(new Domain.Entities.Patient
             {
-                Lastname = LastName,
+                LastName = LastName,
                 FirstName = FirstName,
                 Email = Email,
                 PhoneNumber = PhoneNumber,
@@ -109,7 +109,7 @@ namespace WPFUi.ViewModels
         {
             var editedPatient = await _patientService.UpdatePatient(_patient.Id, new Domain.Entities.Patient
             {
-                Lastname = LastName,
+                LastName = LastName,
                 FirstName = FirstName,
                 Email = Email,
                 PhoneNumber = PhoneNumber,

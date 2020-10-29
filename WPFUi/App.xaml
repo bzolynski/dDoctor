@@ -22,9 +22,14 @@
                 <views:PatientsView />
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type viewModels:ScheduleViewModel}">
+                <views:ScheduleView />
+            </DataTemplate>
+            
             <DataTemplate DataType="{x:Type viewModels:PatientFormViewModel}">
                 <controls:PatientForm />
             </DataTemplate>
+            
         </ResourceDictionary>
         
     </Application.Resources>

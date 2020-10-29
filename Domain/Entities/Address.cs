@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Entities.Common;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -11,6 +12,5 @@ namespace Domain.Entities
         public string City { get; set; }
 
         public Patient Patient { get; set; }
-
     }
 }

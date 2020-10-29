@@ -1,12 +1,12 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using Persistance.Services.Interfaces;
+using Persistance.Services.Common;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Persistance.Services
+namespace Persistance.Services.AddressDataServices
 {
     public class AddressDataService : IAddressDataService
     {
@@ -55,6 +55,6 @@ namespace Persistance.Services
             }
         }
 
-        
+
     }
 }
