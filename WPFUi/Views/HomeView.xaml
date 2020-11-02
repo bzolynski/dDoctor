@@ -17,19 +17,8 @@
 
                 </Grid.RowDefinitions>
 
-                    <!-- Messages section-->
-                    <Border Style="{StaticResource MainDarkBorder}" 
-                            Grid.Row="0" 
-                            Margin="15" 
-                            CornerRadius="5"
-                            Background="{StaticResource LightBlueSolidColorBlush}">
-                        
-                        <StackPanel Orientation="Vertical">
-                            
-                            
-                        </StackPanel>
-                        
-                    </Border>
+                <!-- TODO: Main content -->
+                    
                     
                 
                 

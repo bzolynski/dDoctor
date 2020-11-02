@@ -94,51 +94,17 @@ namespace Persistance.Migrations
                     b.ToTable("Patients");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Schedule", b =>
+            modelBuilder.Entity("Domain.Entities.Reservation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("DayOfTheWeek")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DoctorId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("EndHour")
-                        .HasColumnType("datetime2");
-
-                    b.Property<TimeSpan>("MaxTimePerPatient")
+                    b.Property<TimeSpan>("Hour")
                         .HasColumnType("time");
 
-                    b.Property<int>("SpecializationId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("StartHour")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DoctorId");
-
-                    b.HasIndex("SpecializationId");
-
-                    b.ToTable("Schedules");
-                });
-
-            modelBuilder.Entity("Domain.Entities.ScheduleHour", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("Hour")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("PatientId")
+                    b.Property<int?>("PatientId")
                         .HasColumnType("int");
 
                     b.Property<int>("ScheduleId")
@@ -147,11 +113,46 @@ namespace Persistance.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("PatientId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[PatientId] IS NOT NULL");
 
                     b.HasIndex("ScheduleId");
 
-                    b.ToTable("ScheduleHours");
+                    b.ToTable("Reservations");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Schedule", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DoctorId")
+                        .HasColumnType("int");
+
+                    b.Property<TimeSpan>("EndHour")
+                        .HasColumnType("time");
+
+                    b.Property<TimeSpan>("MaxTimePerPatient")
+                        .HasColumnType("time");
+
+                    b.Property<int>("SpecializationId")
+                        .HasColumnType("int");
+
+                    b.Property<TimeSpan>("StartHour")
+                        .HasColumnType("time");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DoctorId");
+
+                    b.HasIndex("SpecializationId");
+
+                    b.ToTable("Schedules");
                 });
 
             modelBuilder.Entity("Domain.Entities.Specialization", b =>
@@ -184,6 +185,19 @@ namespace Persistance.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Domain.Entities.Reservation", b =>
+                {
+                    b.HasOne("Domain.Entities.Patient", "Patient")
+                        .WithOne("ScheduleHour")
+                        .HasForeignKey("Domain.Entities.Reservation", "PatientId");
+
+                    b.HasOne("Domain.Entities.Schedule", "Schedule")
+                        .WithMany("Reservations")
+                        .HasForeignKey("ScheduleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Entities.Schedule", b =>
                 {
                     b.HasOne("Domain.Entities.Doctor", "Doctor")
@@ -195,21 +209,6 @@ namespace Persistance.Migrations
                     b.HasOne("Domain.Entities.Specialization", "Specialization")
                         .WithMany("Schedules")
                         .HasForeignKey("SpecializationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Entities.ScheduleHour", b =>
-                {
-                    b.HasOne("Domain.Entities.Patient", "Patient")
-                        .WithOne("ScheduleHour")
-                        .HasForeignKey("Domain.Entities.ScheduleHour", "PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.Schedule", "Schedule")
-                        .WithMany("ScheduleHours")
-                        .HasForeignKey("ScheduleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

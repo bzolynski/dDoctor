@@ -9,120 +9,29 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
+    <UserControl.Resources>
+        <!-- Context menu for rows -->
+        
+        <ContextMenu x:Key="RowContextMenu" >
+            <MenuItem Header="Edit" 
+                      
+                      Command="{Binding DataContext.OpenEditPatientFormCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                      CommandParameter="{Binding}" />
+            <Separator />
+            <MenuItem Header="Delete" 
+                      Command="{Binding DataContext.DeletePatientCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                      CommandParameter="{Binding}" />
+        </ContextMenu>
+        <Style x:Key="DefaultRowStyle" TargetType="{x:Type DataGridRow}">
+            <Setter Property="ContextMenu" Value="{StaticResource RowContextMenu}" />
+        </Style>
+        
+    </UserControl.Resources>
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="230" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <!-- Side panel (search bar) -->
-        <Border Style="{StaticResource MainDarkBorder}" 
-                Grid.Column="0"
-                Background="{StaticResource LightPurpleSolidColorBrush}">
+    <Grid Background="{StaticResource LightPurpleSolidColorBrush}">
 
-            <Border BorderThickness="2" BorderBrush="#e0e1e3" Margin="3">
-                <StackPanel Orientation="Vertical" >
-
-                    <!-- Label -->
-                    <TextBlock Background="{StaticResource MainLinearGradient}"
-                           Foreground="{StaticResource MainFontSolidColorBrush}"
-                           Padding="10 0 0 0"
-                           Text="Search"
-                           VerticalAlignment="Center"
-                           Height="20"/>
-
-                    <StackPanel DataContext="{Binding PatientSearchParameters}" >
-
-                        <!-- PESEL field -->
-                        <StackPanel Orientation="Vertical">
-                            <TextBlock 
-                           Foreground="{StaticResource SecondaryFontSolidColorBrush}"
-                            FontWeight="Bold"
-                            Text="PESEL:" />
-                            <TextBox Text="{Binding PESEL}" />
-
-
-                        </StackPanel>
-
-                        <!-- Last name field -->
-                        <StackPanel Orientation="Vertical" >
-                            <TextBlock 
-                           Foreground="{StaticResource SecondaryFontSolidColorBrush}"
-                            FontWeight="Bold"
-                            Text="Last name:" />
-                            <TextBox Text="{Binding LastName}" />
-
-                        </StackPanel>
-
-                        <!-- First name field -->
-                        <StackPanel Orientation="Vertical">
-                            <TextBlock 
-                           Foreground="{StaticResource SecondaryFontSolidColorBrush}"
-                            FontWeight="Bold"
-                            Text="First name:" />
-                            <TextBox Text="{Binding FirstName}" />
-
-
-                        </StackPanel>
-
-                        <!-- City field -->
-                        <StackPanel Orientation="Vertical">
-                            <TextBlock 
-                           Foreground="{StaticResource SecondaryFontSolidColorBrush}"
-                            FontWeight="Bold"
-                            Text="City:" />
-                            <TextBox Text="{Binding City}" />
-
-
-                        </StackPanel>
-
-                        <!-- Street name field -->
-                        <StackPanel Orientation="Vertical">
-                            <TextBlock 
-                           Foreground="{StaticResource SecondaryFontSolidColorBrush}"
-                            FontWeight="Bold"
-                            Text="Street name:" />
-                            <TextBox Text="{Binding StreetName}" />
-
-
-                        </StackPanel>
-
-                        <!-- Age field -->
-                        <StackPanel Orientation="Vertical">
-                            <TextBlock 
-                           Foreground="{StaticResource SecondaryFontSolidColorBrush}"
-                            FontWeight="Bold"
-                            Text="Patient's age (years):" />
-                            <TextBox Text="{Binding Path=Age, TargetNullValue=''}" />
-
-
-                        </StackPanel>
-                    </StackPanel>
-
-                    <!-- Buttons -->
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"  Margin="0 10 0 0">
-                        <Button Style="{StaticResource MenuBarButton}"
-                                Content="Clear" 
-                                Command="{Binding ClearSearchParametersCommand}"/>
-                        
-                        <Button Style="{StaticResource MenuBarButton}"
-                                Content="Search" 
-                                Command="{Binding PatientSearchCommand}"/>
-
-                        
-                    </StackPanel>
-
-                </StackPanel>
-            </Border>
-
-
-        </Border>
-        <Border Style="{StaticResource MainDarkBorder}" Grid.Column="1" >
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="250" />
-                </Grid.RowDefinitions>
+        <Border Style="{StaticResource MainDarkBorder}"  >
+            
 
                 <Grid Grid.Row="0" >
                     <Grid.RowDefinitions>
@@ -136,7 +45,6 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto" />
                                 <ColumnDefinition Width="*" />
-
                             </Grid.ColumnDefinitions>
 
                             <!-- Label -->
@@ -147,7 +55,9 @@
                                 <Button Margin="0 0 10 0" 
                                         Style="{StaticResource MenuBarButton}" 
                                         Height="40" Width="40" 
-                                        Content="XD"
+                                        FontFamily="{StaticResource FontAwesome}"
+                                        Content="&#xf073;"
+                                        FontSize="20"
                                         IsEnabled="False"/>
 
                                 <TextBlock Text="Patients list"
@@ -158,148 +68,101 @@
                                 <Button Margin="10 0 0 0" Style="{StaticResource MenuBarButton}" 
                                         Content="Reload"
                                         Command="{Binding ReloadPatientListCommand}" />
+
+                                <TextBox Width="100" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
                             </StackPanel>
 
-                            <!-- Buttons -->
-                            <StackPanel Grid.Column="1"                                          
-                                        Orientation="Horizontal"  
-                                        HorizontalAlignment="Right">
-                                <Button Style="{StaticResource MenuBarButton}" 
-                                        Content="Add"
-                                        Command="{Binding OpenNewPatientFormCommand}" />
-                                <Button Style="{StaticResource MenuBarButton}" 
-                                        Content="Edit"
-                                        Command="{Binding OpenEditPatientFormCommand}" />
-                                <Button Style="{StaticResource MenuBarButton}" 
-                                        Content="Delete"
-                                        Command="{Binding DeletePatientCommand}" />
-                            </StackPanel>
+                            
 
 
                         </Grid>
                     </Grid>
+                    
+
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"  />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
 
                     <!-- Data Grid -->
-                    <DataGrid 
-                              Grid.Row="1"
+
+                        <DataGrid Grid.Column="0"
+                              HorizontalAlignment="Left"
                               Padding="8"
                               Background="{StaticResource LightPurpleSolidColorBrush}"
                               ItemsSource="{Binding PatientsDisplayList}" 
+                              SelectedItem="{Binding SelectedPatient, Mode=OneWayToSource}"
                               CanUserAddRows="False" 
                               CanUserDeleteRows="False"
                               CanUserResizeRows="False"
                               AutoGenerateColumns="False"  
+                              RowStyle="{StaticResource DefaultRowStyle}"
                             
                               SelectionMode="Single"
                               IsReadOnly="True"
-                              RowHeaderWidth="15"
-                              SelectedItem="{Binding SelectedPatient, Mode=OneWayToSource}">
+                              RowHeaderWidth="15">
+
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Last name" Binding="{Binding Path=LastName}" />
+                                <DataGridTextColumn Header="First name" Binding="{Binding Path=FirstName}" />
+                                <DataGridTextColumn Header="Address" Binding="{Binding Path=FullAddress}"/>
+                                <DataGridTextColumn Header="Birth date" Binding="{Binding Path=BirthDateString}" />
+                                <DataGridTextColumn Header="Phone number" Binding="{Binding Path=PhoneNumber}" />
+                                <DataGridTextColumn Header="Email" Binding="{Binding Path=Email}" />
+                                <DataGridTextColumn Header="Patient id" Binding="{Binding Path=Id}" />
+                            </DataGrid.Columns>
+                        </DataGrid>
 
 
-                        
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Last name" Binding="{Binding Path=LastName}" />
-                            <DataGridTextColumn Header="First name" Binding="{Binding Path=FirstName}" />
-                            <DataGridTextColumn Header="Address" Binding="{Binding Path=FullAddress}"/>
-                            <DataGridTextColumn Header="Birth date" Binding="{Binding Path=BirthDateString}" />
-                            <DataGridTextColumn Header="Phone number" Binding="{Binding Path=PhoneNumber}" />
-                            <DataGridTextColumn Header="Email" Binding="{Binding Path=Email}" />
-                            <DataGridTextColumn Header="Patient id" Binding="{Binding Path=Id}" />
-                        </DataGrid.Columns>
-                    </DataGrid>
+                        <Grid Grid.Column="1" VerticalAlignment="Top">
+                            <components:PatientsPageBottomBoxLayout Grid.Column="1"
+                                                                    DataContext="{Binding SelectedPatient}"
+                                                                    Label="PATIENT DETAILS">
 
-                </Grid>
-
-                <!-- Bottom section -->
-
-                <Grid Grid.Row="1" DataContext="{Binding SelectedPatient}">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="50" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-
-                    <Grid Grid.Row="0" Background="{StaticResource MainLinearGradient}" >
-                        <TextBlock Text="{Binding Path=FullName}" 
-                                   FontSize="20" 
-                                   FontWeight="SemiBold"
-                                   Foreground="{StaticResource MainFontSolidColorBrush}"
-                                   VerticalAlignment="Center" 
-                                   Margin="20 0 0 0"/>
-                    </Grid>
-
-                    <!-- Boxes -->
-                    <Grid Grid.Row="1"
-                          Background="{StaticResource LightPurpleSolidColorBrush}">
-
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
+                                <StackPanel Orientation="Vertical" >
 
 
-                        <!-- Patient details -->
-                        <components:PatientsPageBottomBoxLayout Grid.Column="0"
-                                                            Label="PATIENT DETAILS">
-
-                            <StackPanel Orientation="Vertical" >
-
-
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Style="{StaticResource BottomSectionOfPatientView}"
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Style="{StaticResource BottomSectionOfPatientView}"
                                                Text="Date of birth: " />
-                                    <TextBlock Text="{Binding Path=BirthDateString}" />
-                                </StackPanel>
+                                        <TextBlock Text="{Binding Path=BirthDateString}" />
+                                    </StackPanel>
 
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Style="{StaticResource BottomSectionOfPatientView}"
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Style="{StaticResource BottomSectionOfPatientView}"
                                                Text="Address: " />
-                                    <TextBlock Text="{Binding Path=FullAddressWithPostCode}" />
-                                </StackPanel>
+                                        <TextBlock Text="{Binding Path=FullAddressWithPostCode}" />
+                                    </StackPanel>
 
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Style="{StaticResource BottomSectionOfPatientView}"
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Style="{StaticResource BottomSectionOfPatientView}"
                                                Text="Phone number: " />
-                                    <TextBlock Text="{Binding Path=PhoneNumber}" />
-                                </StackPanel>
+                                        <TextBlock Text="{Binding Path=PhoneNumber}" />
+                                    </StackPanel>
 
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Style="{StaticResource BottomSectionOfPatientView}"
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Style="{StaticResource BottomSectionOfPatientView}"
                                                Text="Email: " />
-                                    <TextBlock Text="{Binding Path=Email}" />
+                                        <TextBlock Text="{Binding Path=Email}" />
+                                    </StackPanel>
+
                                 </StackPanel>
 
-                            </StackPanel>
+                            </components:PatientsPageBottomBoxLayout>
 
-                        </components:PatientsPageBottomBoxLayout>
-
-                        <!-- Medical appointments -->
-                        <components:PatientsPageBottomBoxLayout Grid.Column="1"
-                                                                Label="MEDICAL APPOINTMENTS">
-                            <StackPanel Orientation="Vertical" >
-
-                                <!-- Future content -->
-                            </StackPanel>
-
-                        </components:PatientsPageBottomBoxLayout>
-
-                        <!-- Other -->
-                        <components:PatientsPageBottomBoxLayout Grid.Column="2"
-                                                                Label="OTHER">
-                            <StackPanel Orientation="Vertical" >
-
-                                <!-- Future content -->
-                            </StackPanel>
-
-                        </components:PatientsPageBottomBoxLayout>
-
+                            <ContentControl Content="{Binding PatientFormViewModel}" />
+                        </Grid>
+                        
                     </Grid>
+                    
 
                 </Grid>
-            </Grid>
+
+                
         </Border>
 
         <!-- Patient form -->
-        <ContentControl Grid.ColumnSpan="2" Content="{Binding PatientFormViewModel}" />
+        
     </Grid>
 </UserControl>

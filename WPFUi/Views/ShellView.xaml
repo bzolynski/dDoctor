@@ -5,24 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFUi.Views"
         xmlns:controls="clr-namespace:WPFUi.Controls"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        WindowState="Maximized"
+        WindowStyle="None"
         x:Name="shell"
         mc:Ignorable="d"
-        Title="dDoctor" MinHeight="700" MinWidth="1200">
-    <Window.Resources>
-        <BooleanToVisibilityConverter x:Key="BoolToVis" />
         
-    </Window.Resources>
+        Title="dDoctor" MinHeight="700" MinWidth="1400">
     
-    <Grid Background="{StaticResource LightPurpleSolidColorBrush}">
+    <Grid Background="#c1c1c1">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         
-        <controls:MenuBar Grid.Row="0" />
+        <controls:NavigationBar Grid.Row="0" />
         
         <ContentControl Grid.Row="1"
-                        Margin="1 0 1 1"
+                        Margin="100 50"
                         Content="{Binding CurrentViewModel}" />
     </Grid>
 </Window>

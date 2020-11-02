@@ -1,0 +1,93 @@
+﻿<UserControl x:Class="WPFUi.Controls.RegisterControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WPFUi.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Grid.ColumnSpan="2">
+        <Grid.Background>
+            <SolidColorBrush Color="Black" Opacity="0.5" />
+        </Grid.Background>
+
+        <Border Style="{StaticResource MainDarkBorder}"
+                    Width="700"
+                    Height="400" >
+
+            <Grid Background="{StaticResource LightPurpleSolidColorBrush}" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0"
+                               Background="{StaticResource MainLinearGradient}"
+                               Foreground="{StaticResource MainFontSolidColorBrush}"
+                               Padding="0 5"
+                               Text="Register"
+                               FontWeight="Bold"
+                               FontSize="30"
+                               TextAlignment="Center" />
+
+                <Grid Grid.Row="1" Margin="10 5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="50" />
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        
+                        
+                        
+                        <DataGrid 
+                              Grid.Row="1"
+                              Padding="8"
+                              Background="{StaticResource LightPurpleSolidColorBrush}"
+                              ItemsSource="{Binding PatientsDisplayList}" 
+                              SelectedItem="{Binding SelectedPatient, Mode=OneWayToSource}"
+                              CanUserAddRows="False" 
+                              CanUserDeleteRows="False"
+                              CanUserResizeRows="False"
+                              AutoGenerateColumns="False"  
+
+                            
+                              SelectionMode="Single"
+                              IsReadOnly="True"
+                              RowHeaderWidth="15">
+
+
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Last name" Binding="{Binding Path=LastName}" />
+                                <DataGridTextColumn Header="First name" Binding="{Binding Path=FirstName}" />
+                                <DataGridTextColumn Header="Address" Binding="{Binding Path=FullAddress}"/>
+                                <DataGridTextColumn Header="Birth date" Binding="{Binding Path=BirthDateString}" />
+                                <DataGridTextColumn Header="Phone number" Binding="{Binding Path=PhoneNumber}" />
+                                <DataGridTextColumn Header="Email" Binding="{Binding Path=Email}" />
+                                <DataGridTextColumn Header="Patient id" Binding="{Binding Path=Id}" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+
+
+                    <StackPanel Grid.Row="1" HorizontalAlignment="Right" Orientation="Horizontal">
+                        <Button Style="{StaticResource MenuBarButton}" 
+                                Content="Register"
+                                Command="{Binding RegisterCommand}"/>
+                        
+                        <Button Style="{StaticResource MenuBarButton}" 
+                                    Content="Cancel"
+                                Command="{Binding CancelCommand}"/>
+                    </StackPanel>
+                </Grid>
+
+            </Grid>
+
+        </Border>
+
+    </Grid>
+</UserControl>

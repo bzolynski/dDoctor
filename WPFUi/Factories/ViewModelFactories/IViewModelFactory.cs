@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using WPFUi.ViewModels;
+﻿using WPFUi.ViewModels;
 
 namespace WPFUi.Factories.ViewModelFactories
 {

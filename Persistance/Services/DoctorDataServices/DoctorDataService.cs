@@ -1,11 +1,8 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using Persistance.Services.Common;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Persistance.Services.DoctorDataServices
@@ -50,7 +47,21 @@ namespace Persistance.Services.DoctorDataServices
             using (var context = _dbContextFactory.CreateDbContext())
             {
                 return await context.Doctors
-                    .Include(d => d.Schedules.Select(s => s.Specialization))
+                    .OrderBy(d => d.LastName)
+                    .ToListAsync();
+            }
+        }
+
+
+
+        public async Task<IEnumerable<Doctor>> GetDoctorsWhoHaveSchedule()
+        {
+            using (var context = _dbContextFactory.CreateDbContext())
+            {
+                return await context.Doctors
+                    .Include(d => d.Schedules)
+                    .OrderBy(d => d.LastName)
+                    .Where(d => d.Schedules.Count > 0)
                     .ToListAsync();
             }
         }
@@ -60,8 +71,9 @@ namespace Persistance.Services.DoctorDataServices
             using (var context = _dbContextFactory.CreateDbContext())
             {
                 return await context.Doctors
-                    .Include(d => d.Schedules.Select(s => s.Specialization).Where(s => s.Id == specializationId))
+                    .Where(d => d.Schedules.Any(sc => sc.SpecializationId == specializationId))
                     .ToListAsync();
+                    
             }
         }
     }

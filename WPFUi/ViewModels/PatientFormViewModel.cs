@@ -2,9 +2,6 @@
 using Application.Services.PatientServices;
 using AutoMapper;
 using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using WPFUi.Commands.Common;
@@ -14,12 +11,17 @@ namespace WPFUi.ViewModels
 {
     public class PatientFormViewModel : ViewModelBase
     {
+
+        // Private fields
+        #region Private fields
+
         private readonly PatientsViewModel _patientsViewModel;
         private readonly PatientDisplayModel _patient;
         private readonly IPatientService _patientService;
         private readonly IMapper _mapper;
         private readonly IDateTimeService _dateTimeService;
 
+        #endregion
 
         // Bindings
         #region Bindings
@@ -37,7 +39,7 @@ namespace WPFUi.ViewModels
         // Commands
         #region Commands
         public ICommand SubmitFormCommand{ get; set; }
-        public ICommand CancelFormCommand { get; set; }
+        public ICommand CloseFormCommand { get; set; }
 
         #endregion
 
@@ -45,12 +47,13 @@ namespace WPFUi.ViewModels
         #region Constructors
         private PatientFormViewModel(IPatientService patientService, IMapper mapper, IDateTimeService dateTimeService)
         {
-            CancelFormCommand = new RelayCommand(CancelForm);
+            CloseFormCommand = new RelayCommand(CancelForm);
             _patientService = patientService;
             _mapper = mapper;
             _dateTimeService = dateTimeService;
         }
 
+        // For new
         public PatientFormViewModel(PatientsViewModel patientsViewModel, IPatientService patientService, IMapper mapper, IDateTimeService dateTimeService) : this(patientService, mapper, dateTimeService)
         {
             _patientsViewModel = patientsViewModel;
@@ -60,6 +63,7 @@ namespace WPFUi.ViewModels
             SubmitFormCommand = new AsyncRelayCommand(SubmitNewPatientForm, (ex) => { throw ex; });
         }
 
+        //For edit
         public PatientFormViewModel(PatientsViewModel patientsViewModel, PatientDisplayModel patient, IPatientService patientService, IMapper mapper, IDateTimeService dateTimeService) : this(patientService, mapper, dateTimeService)
         {
             _patientsViewModel = patientsViewModel;
@@ -83,7 +87,7 @@ namespace WPFUi.ViewModels
 
         // Methods
         #region Methods
-        private async Task SubmitNewPatientForm()
+        private async Task SubmitNewPatientForm(object obj)
         {
             var newPatient = await _patientService.CreatePatient(new Domain.Entities.Patient
             {
@@ -105,7 +109,7 @@ namespace WPFUi.ViewModels
             CloseForm();
         }
 
-        private async Task SubmitEditPatientForm()
+        private async Task SubmitEditPatientForm(object obj)
         {
             var editedPatient = await _patientService.UpdatePatient(_patient.Id, new Domain.Entities.Patient
             {
@@ -140,7 +144,6 @@ namespace WPFUi.ViewModels
         private void CloseForm()
         {
             _patientsViewModel.PatientFormViewModel = null;
-
         }
 
         #endregion

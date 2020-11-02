@@ -1,0 +1,146 @@
+﻿<UserControl x:Class="WPFUi.Controls.NavigationBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:navigator="clr-namespace:WPFUi.States.Navigation"
+             xmlns:local="clr-namespace:WPFUi.Controls"
+             xmlns:components="clr-namespace:WPFUi.Components"
+             mc:Ignorable="d" 
+             d:DesignHeight="100" d:DesignWidth="800">
+
+    <Grid >
+        <Grid Background="{StaticResource TopMenuLinearGradient}"
+              Height="auto">
+            <Grid.ColumnDefinitions >
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions >
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+
+            <Border Grid.ColumnSpan="3"
+                    BorderBrush="Black" 
+                    BorderThickness="0 0 0 1"
+                    Padding="3">
+                <Grid>
+                    <Menu HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent" >
+                        <MenuItem Command="{Binding UpdateCurrentViewModelCommand}"
+                              CommandParameter="{x:Static navigator:ViewType.Home}">
+                            <MenuItem.Header>
+                                <StackPanel Orientation="Vertical">
+                                    <Image Height="50" Source="C:\Users\barto\Desktop\dDoctor\dDoctor\WPFUi\Assets\Icons\008-house.png" />
+                                    <TextBlock Text="Home" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </MenuItem.Header>
+                        </MenuItem>
+
+                        <!-- Patient -->
+                        <MenuItem>
+                            <MenuItem.Header>
+                                <StackPanel Orientation="Vertical">
+                                    <Image Height="50" Source="C:\Users\barto\Desktop\dDoctor\dDoctor\WPFUi\Assets\Icons\029-nurse.png" />
+                                    <TextBlock Text="Patients" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </MenuItem.Header>
+
+                            <!-- Add patient -->
+                            <MenuItem Header="Add patient"
+                                  Command="{Binding UpdateCurrentViewModelCommand}"
+                                  CommandParameter="{x:Static navigator:ViewType.AddPatient}" />
+
+                            <!-- Patient list -->
+                            <MenuItem Header="Patients list"
+                                  Command="{Binding UpdateCurrentViewModelCommand}"
+                                  CommandParameter="{x:Static navigator:ViewType.Patients}" />
+
+                        </MenuItem>
+
+                        <!-- Appointment -->
+                        <MenuItem>
+                            <MenuItem.Header>
+                                <StackPanel Orientation="Vertical">
+                                    <Image Height="50" Source="C:\Users\barto\Desktop\dDoctor\dDoctor\WPFUi\Assets\Icons\101-appointment-2.png" />
+                                    <TextBlock Text="Appointments" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </MenuItem.Header>
+                            <MenuItem Header="Appointment list"
+                                  Command="{Binding UpdateCurrentViewModelCommand}"
+                                  CommandParameter="{x:Static navigator:ViewType.Schedule}">
+
+                            </MenuItem>
+                            <MenuItem Header="Add appointment"
+                                  Command="{Binding UpdateCurrentViewModelCommand}"
+                                  CommandParameter="{x:Static navigator:ViewType.AddAppointment}">
+
+
+
+                            </MenuItem>
+                        </MenuItem>
+
+                    </Menu>
+
+                    <Menu HorizontalAlignment="Right" VerticalAlignment="Top" Background="Transparent" >
+                        
+                        
+
+                        <!-- Appointment -->
+                        <MenuItem >
+                            <MenuItem.Header>
+                                <StackPanel Orientation="Vertical">
+                                    <Image Height="50" Source="C:\Users\barto\Desktop\dDoctor\dDoctor\WPFUi\Assets\Icons\settings.png" />
+                                    <TextBlock Text="Management" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                                
+                            </MenuItem.Header>
+
+                            <MenuItem Header="Manage users"  />
+
+
+                            <MenuItem Header="Manage schedules" 
+                                      Command="{Binding UpdateCurrentViewModelCommand}"
+                                      CommandParameter="{x:Static navigator:ViewType.ManageSchedules}"/>
+
+
+                        </MenuItem>
+
+                        <Separator />
+
+                        <!-- Logout -->
+                        <MenuItem >
+                            <MenuItem.Header>
+                                <StackPanel Orientation="Vertical">
+                                    <Image Height="50" Source="C:\Users\barto\Desktop\dDoctor\dDoctor\WPFUi\Assets\Icons\012-car-key.png" />
+                                    <TextBlock Text="Logout" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </MenuItem.Header>
+                        </MenuItem>
+                        
+                        <!-- Exit -->
+                        <MenuItem Command="{Binding CloseApplicationCommand}" >
+                            <MenuItem.Header>
+                                <StackPanel Orientation="Vertical">
+                                    <Image Height="50" Source="C:\Users\barto\Desktop\dDoctor\dDoctor\WPFUi\Assets\Icons\close.png" />
+                                    <TextBlock Text="Exit" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </MenuItem.Header>
+                        </MenuItem>
+
+                    </Menu>
+
+
+
+                </Grid>
+               
+                
+            </Border>
+                
+
+
+        </Grid>
+
+    </Grid>
+</UserControl>

@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WPFUi.States.Navigation
+﻿namespace WPFUi.States.Navigation
 {
     public enum ViewType
     {
         Home,
         Patients,
-        Schedule
+        Schedule,
+        AddPatient,
+        AddAppointment,
+        ManageSchedules,
+        GenerateSchedule
     }
 }

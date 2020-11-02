@@ -1,14 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
 using WPFUi.ViewModels;
 
 namespace WPFUi.Views
@@ -21,6 +11,16 @@ namespace WPFUi.Views
         public ShellView()
         {
             InitializeComponent();
+
+            Loaded += ShellView_Loaded;
+        }
+
+        private void ShellView_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ShellViewModel viewModel)
+            {
+                viewModel.Close += () => this.Close();
+            }
         }
     }
 }

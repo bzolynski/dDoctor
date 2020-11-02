@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:WPFUi"
              xmlns:viewModels="clr-namespace:WPFUi.ViewModels"
+             xmlns:scheduleManagementViewModels="clr-namespace:WPFUi.ViewModels.ScheduleManagementVMs"
              xmlns:views="clr-namespace:WPFUi.Views"
              xmlns:controls="clr-namespace:WPFUi.Controls">
     <Application.Resources>
@@ -14,6 +15,8 @@
                 <ResourceDictionary Source="/Styles/Colors.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
+            <FontFamily x:Key="FontAwesome">/Assets/Fonts/FontAwesome.otf#Font Awesome 5 Free Regular</FontFamily>
+            
             <DataTemplate DataType="{x:Type viewModels:HomeViewModel}">
                 <views:HomeView />
             </DataTemplate>
@@ -25,11 +28,33 @@
             <DataTemplate DataType="{x:Type viewModels:ScheduleViewModel}">
                 <views:ScheduleView />
             </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModels:AddPatientViewModel}">
+                <views:AddPatientView />
+            </DataTemplate>
             
+            <DataTemplate DataType="{x:Type viewModels:AddAppointmentViewModel}">
+                <views:AddAppointmentView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type scheduleManagementViewModels:ManageSchedulesViewModel}">
+                <views:ManageSchedulesView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type scheduleManagementViewModels:GenerateScheduleViewModel}">
+                <views:GenerateScheduleView />
+            </DataTemplate>
+
             <DataTemplate DataType="{x:Type viewModels:PatientFormViewModel}">
                 <controls:PatientForm />
             </DataTemplate>
             
+            <DataTemplate DataType="{x:Type viewModels:RegisterViewModel}">
+                <controls:RegisterControl />
+            </DataTemplate>
+            
+            
+
         </ResourceDictionary>
         
     </Application.Resources>

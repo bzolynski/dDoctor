@@ -4,7 +4,6 @@ using Persistance.Services.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Persistance.Services.ScheduleDataServices
@@ -48,6 +47,7 @@ namespace Persistance.Services.ScheduleDataServices
             }
         }
 
+
         public async Task<IEnumerable<Schedule>> GetAll()
         {
             using (var context = _dbContextFactory.CreateDbContext())
@@ -61,7 +61,8 @@ namespace Persistance.Services.ScheduleDataServices
             }
         }
 
-        public async Task<IEnumerable<Schedule>> GetManyByDoctor(int doctorId)
+
+        public async Task<IEnumerable<Schedule>> GetManyByDoctorId(int doctorId)
         {
             using (var context = _dbContextFactory.CreateDbContext())
             {
@@ -69,46 +70,45 @@ namespace Persistance.Services.ScheduleDataServices
                     .Include(s => s.Reservations)
                     .ThenInclude(sh => sh.Patient)
                     .Include(s => s.Specialization)
-                    .Include(s => s.Doctor).Where(d => d.Id == doctorId)
-                    .ToListAsync();
-            }
-        }
-
-        public async Task<IEnumerable<Schedule>> GetManyBySpecialization(int specializationId)
-        {
-            using (var context = _dbContextFactory.CreateDbContext())
-            {
-                return await context.Schedules
-                    .Include(s => s.Reservations)
-                    .ThenInclude(sh => sh.Patient)
-                    .Include(s => s.Specialization).Where(sp => sp.Id == specializationId)
                     .Include(s => s.Doctor)
+                    .Where(sc => sc.DoctorId == doctorId)
                     .ToListAsync();
             }
         }
 
-        public async Task<IEnumerable<Schedule>> GetManyByDoctorAndSpecialization(int doctorId, int specializationId)
+
+
+
+        public async Task<IEnumerable<Schedule>> GetManyBySpecializationAndDoctor(int doctorId, int specializationId)
         {
             using (var context = _dbContextFactory.CreateDbContext())
             {
                 return await context.Schedules
-                    .Include(s => s.Reservations)
-                    .ThenInclude(sh => sh.Patient)
-                    .Include(s => s.Specialization).Where(sp => sp.Id == specializationId)
-                    .Include(s => s.Doctor).Where(d => d.Id == doctorId)
+                    .Include(s => s.Specialization)
+                    .Include(s => s.Doctor)
+                    .Where(x => x.DoctorId == doctorId && x.SpecializationId == specializationId)
                     .ToListAsync();
             }
         }
 
-        public async Task<Reservation> CreateReservation(Reservation reservation)
+        public async Task<IEnumerable<Reservation>> GetSpecifiedReservations(int doctorId, int specializationId, DateTime date)
         {
-            return await _reservationNonQueryDataService.Create(reservation);
+            using (var context = _dbContextFactory.CreateDbContext())
+            {
+                return await context.Reservations
+                    .Where(r => r.Schedule.DoctorId == doctorId && r.Schedule.SpecializationId == specializationId && r.Schedule.Date == date.Date)
+                    .ToListAsync();
+            }
         }
 
-        public async Task<bool> DeleteReservation(int id)
+        public async Task CreateReservations(IEnumerable<Reservation> reservations)
         {
-            return await _reservationNonQueryDataService.Delete(id);
+            using (var context = _dbContextFactory.CreateDbContext())
+            {
+                context.Reservations.AddRange(reservations);
 
+                await context.SaveChangesAsync();
+            }
         }
     }
 }

@@ -1,51 +1,48 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Input;
 using WPFUi.Commands;
+using WPFUi.Commands.Common;
 using WPFUi.Factories.ViewModelFactories;
 using WPFUi.States.Navigation;
+using WPFUi.Views;
 
 namespace WPFUi.ViewModels
 {
     public class ShellViewModel : ViewModelBase
     {
         // Private fields
+        #region Private fields
+
         private readonly INavigator _navigator;
-        private bool _isExpandedNavigationVisible;
-        private bool _isShortNavigationVisible;
+
+        #endregion
 
         // States
+        #region States
+
         public ViewModelBase CurrentViewModel => _navigator.CurrentViewModel;
 
-        // Bindings
-        
-        public bool IsShortNavigationVisible
-        {
-            get { return _isShortNavigationVisible; }
-            set
-            {
-                _isShortNavigationVisible = value;
-                OnPropertyChanged(nameof(IsShortNavigationVisible));
-            }
-        }
+        #endregion
 
-        public bool IsExpandedNavigationVisible
-        {
-            get { return _isExpandedNavigationVisible; }
-            set
-            {
-                _isExpandedNavigationVisible = value;
-                OnPropertyChanged(nameof(IsExpandedNavigationVisible));
-                IsShortNavigationVisible = !value;
-                OnPropertyChanged(nameof(IsShortNavigationVisible));
-            }
-        }
+
+        // Bindings
+        #region Bindings
+
+        #endregion
 
         // Commands
-        public ICommand UpdateCurrentViewModelCommand { get; set; }
+        #region Commands
 
-        //Constructor
+        public Action Close { get; set; }
+
+        public ICommand UpdateCurrentViewModelCommand { get; set; }
+        public ICommand CloseApplicationCommand { get; set; }
+        #endregion
+
+
+        // Constructors
+        #region Constructors
+
         public ShellViewModel(INavigator navigator, IRootViewModelFactory viewModelFactory)
         {
             _navigator = navigator;
@@ -53,15 +50,26 @@ namespace WPFUi.ViewModels
             _navigator.CurrentViewModel = viewModelFactory.CreateViewModel(ViewType.Home);
 
             UpdateCurrentViewModelCommand = new UpdateCurrentViewModelCommand(_navigator, viewModelFactory);
+
+            CloseApplicationCommand = new RelayCommand(CloseApplication);
+        }
+
+        #endregion
+
+        // Methods
+        #region Methods
+
+        private void CloseApplication(object obj)
+        {
+            Close?.Invoke();
         }
 
         private void Navigator_StateChanged()
         {
             OnPropertyChanged(nameof(CurrentViewModel));
-            if (_navigator.CurrentViewModel is HomeViewModel)
-                IsExpandedNavigationVisible = true;
-            else
-                IsExpandedNavigationVisible = false;
         }
+        #endregion
+
+
     }
 }

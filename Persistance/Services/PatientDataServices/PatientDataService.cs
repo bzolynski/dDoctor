@@ -1,9 +1,8 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Persistance.Services.Common;
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Persistance.Services.PatientDataServices
@@ -52,6 +51,7 @@ namespace Persistance.Services.PatientDataServices
             {
                 var entities = await context.Patients
                     .Include(p => p.Address)
+                    .OrderBy(p => p.LastName)
                     .ToListAsync();
 
                 return entities;

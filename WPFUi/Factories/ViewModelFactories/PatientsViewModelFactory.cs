@@ -1,9 +1,6 @@
 ﻿using Application.Services;
 using Application.Services.PatientServices;
 using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using WPFUi.ViewModels;
 
 namespace WPFUi.Factories.ViewModelFactories

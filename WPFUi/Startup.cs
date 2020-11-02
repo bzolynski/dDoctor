@@ -1,24 +1,20 @@
-﻿using Application.Services;
-using Application.Services.PatientServices;
+﻿using Application;
+using Persistance;
 using AutoMapper;
-using Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Persistance;
-using Persistance.Services.AddressDataServices;
-using Persistance.Services.Common;
-using Persistance.Services.DoctorDataServices;
-using Persistance.Services.PatientDataServices;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Text;
 using WPFUi.Factories.ViewModelFactories;
 using WPFUi.States.Navigation;
 using WPFUi.ViewModels;
 using WPFUi.Views;
+using Application.Services.PatientServices;
+using Application.Services;
+using WPFUi.ViewModels.ScheduleManagementVMs;
+using Application.Services.DoctorServices;
+using Application.Services.ScheduleServices;
 
 namespace WPFUi
 {
@@ -38,6 +34,9 @@ namespace WPFUi
         {
             IServiceCollection services = new ServiceCollection();
 
+            services.AddApplication();
+            services.AddPersistance(Configuration);
+
             services.AddSingleton(Configuration);
 
             services.AddSingleton<ShellView>();
@@ -49,29 +48,30 @@ namespace WPFUi
             services.AddSingleton<ScheduleView>();
             services.AddSingleton<ScheduleViewModel>();
 
-            services.AddAutoMapper(Assembly.GetExecutingAssembly());
-
-            var connectionString = Configuration.GetConnectionString("Default");
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
-            services.AddScoped<ApplicationDbContextFactory>();
-
-            services.AddScoped<NonQueryDataService<Patient>>();
-            services.AddScoped<NonQueryDataService<Address>>();
-            services.AddScoped<NonQueryDataService<Doctor>>();
-
-            services.AddTransient<IPatientService, PatientService>();
-            services.AddTransient<IDateTimeService, DateTimeService>();
-            services.AddTransient<IAgeService, AgeServices>();
-
-            services.AddScoped<IAddressDataService, AddressDataService>();
-            services.AddScoped<IPatientDataService, PatientDataService>();
-            services.AddScoped<IDoctorDataService, DoctorDataService>();
+            services.AddSingleton<RenavigatorViewModelFactory<GenerateScheduleViewModel>>();
+            services.AddSingleton<RenavigatorViewModelFactory<ManageSchedulesViewModel>>();
+            services.AddSingleton<RenavigatorViewModelFactory<PatientsViewModel>>();
 
             services.AddScoped<IRootViewModelFactory, RootViewModelFactory>();
             services.AddScoped<IViewModelFactory<HomeViewModel>, HomeViewModelFactory>();
             services.AddScoped<IViewModelFactory<PatientsViewModel>, PatientsViewModelFactory>();
             services.AddScoped<IViewModelFactory<ScheduleViewModel>, ScheduleViewModelFactory>();
+            services.AddScoped<IViewModelFactory<AddAppointmentViewModel>, AddAppointmentViewModelFactory>();
+            services.AddScoped<IViewModelFactory<AddPatientViewModel>>(services => new AddPatientViewModelFactory(
+                    services.GetRequiredService<IPatientService>(),
+                    services.GetRequiredService<IDateTimeService>(),
+                    services.GetRequiredService<RenavigatorViewModelFactory<PatientsViewModel>>()));
+            services.AddScoped<IViewModelFactory<ManageSchedulesViewModel>>(services => new ManageSchedulesViewModelFactory(
+                services.GetRequiredService<IDoctorService>(),
+                services.GetRequiredService<IScheduleService>(),
+                services.GetRequiredService<IDateTimeService>(),
+                services.GetRequiredService<IMapper>(),
+                services.GetRequiredService<RenavigatorViewModelFactory<GenerateScheduleViewModel>>()));
 
+            services.AddScoped<IViewModelFactory<GenerateScheduleViewModel>, GenerateScheduleViewModelFactory>();
+
+
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             // States
             services.AddSingleton<INavigator, Navigator>();

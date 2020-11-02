@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Input;
-using WPFUi.Commands;
+﻿using System.Windows.Input;
 using WPFUi.Commands.Common;
-using WPFUi.Factories.ViewModelFactories;
-using WPFUi.States.Navigation;
 
 namespace WPFUi.ViewModels
 {

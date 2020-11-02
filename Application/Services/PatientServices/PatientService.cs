@@ -1,11 +1,8 @@
-﻿using AutoMapper;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Persistance.Services.AddressDataServices;
 using Persistance.Services.PatientDataServices;
-using System;
 using System.Collections.Generic;
-using System.Runtime.Loader;
-using System.Text;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 
 namespace Application.Services.PatientServices
@@ -44,6 +41,8 @@ namespace Application.Services.PatientServices
             return await _patientDataService.GetAll();
         }
 
-        
+ 
+
+
     }
 }

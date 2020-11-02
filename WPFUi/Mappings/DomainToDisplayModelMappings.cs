@@ -1,8 +1,5 @@
 ﻿using AutoMapper;
 using Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using WPFUi.Models;
 
 namespace WPFUi.Mappings
@@ -12,6 +9,9 @@ namespace WPFUi.Mappings
         public DomainToDisplayModelMappings()
         {
             CreateMap<Patient, PatientDisplayModel>();
+
+            CreateMap<Doctor, ManageScheduleDoctorModel>();
+            CreateMap<Doctor, DoctorPickerModel>();
         }
     }
 }
