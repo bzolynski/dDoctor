@@ -22,6 +22,7 @@
                       Command="{Binding DataContext.DeletePatientCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
                       CommandParameter="{Binding}" />
         </ContextMenu>
+        
         <Style x:Key="DefaultRowStyle" TargetType="{x:Type DataGridRow}">
             <Setter Property="ContextMenu" Value="{StaticResource RowContextMenu}" />
         </Style>
@@ -116,42 +117,79 @@
 
 
                         <Grid Grid.Column="1" VerticalAlignment="Top">
-                            <components:PatientsPageBottomBoxLayout Grid.Column="1"
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+                        <components:PatientsPageBottomBoxLayout Grid.Row="0"
                                                                     DataContext="{Binding SelectedPatient}"
                                                                     Label="PATIENT DETAILS">
 
-                                <StackPanel Orientation="Vertical" >
+                            <StackPanel Orientation="Vertical" >
 
 
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Style="{StaticResource BottomSectionOfPatientView}"
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Style="{StaticResource BottomSectionOfPatientView}"
                                                Text="Date of birth: " />
-                                        <TextBlock Text="{Binding Path=BirthDateString}" />
-                                    </StackPanel>
-
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Style="{StaticResource BottomSectionOfPatientView}"
-                                               Text="Address: " />
-                                        <TextBlock Text="{Binding Path=FullAddressWithPostCode}" />
-                                    </StackPanel>
-
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Style="{StaticResource BottomSectionOfPatientView}"
-                                               Text="Phone number: " />
-                                        <TextBlock Text="{Binding Path=PhoneNumber}" />
-                                    </StackPanel>
-
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Style="{StaticResource BottomSectionOfPatientView}"
-                                               Text="Email: " />
-                                        <TextBlock Text="{Binding Path=Email}" />
-                                    </StackPanel>
-
+                                    <TextBlock Text="{Binding Path=BirthDateString}" />
                                 </StackPanel>
 
-                            </components:PatientsPageBottomBoxLayout>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Style="{StaticResource BottomSectionOfPatientView}"
+                                               Text="Address: " />
+                                    <TextBlock Text="{Binding Path=FullAddressWithPostCode}" />
+                                </StackPanel>
 
-                            <ContentControl Content="{Binding PatientFormViewModel}" />
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Style="{StaticResource BottomSectionOfPatientView}"
+                                               Text="Phone number: " />
+                                    <TextBlock Text="{Binding Path=PhoneNumber}" />
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Style="{StaticResource BottomSectionOfPatientView}"
+                                               Text="Email: " />
+                                    <TextBlock Text="{Binding Path=Email}" />
+                                </StackPanel>
+
+                            </StackPanel>
+
+                        </components:PatientsPageBottomBoxLayout>
+
+
+                        <components:PatientsPageBottomBoxLayout Grid.Row="1" Label="PATIENT RESERVATIONS" >
+
+                            <DataGrid Height="200"
+                                      HorizontalAlignment="Left"
+                                      Padding="8"
+                                      ItemsSource="{Binding Reservations}" 
+                                      CanUserAddRows="False" 
+                                      CanUserDeleteRows="False"
+                                      CanUserResizeColumns="False"
+                                      CanUserResizeRows="False"
+                                      AutoGenerateColumns="False"  
+                                      SelectionMode="Single"
+                                      IsReadOnly="True"
+                                      RowHeaderWidth="15">
+
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Date" Binding="{Binding Path=Schedule.Date, StringFormat={}dd-MM-yyyy}" Width="80" />
+                                    <DataGridTextColumn Header="Hour" Binding="{Binding Path=Hour, StringFormat={}hh\\:mm}" Width="50" />
+                                    <DataGridTextColumn Header="Doctor" Width="*">
+                                        <DataGridTextColumn.Binding>
+                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                <Binding Path="Schedule.Doctor.LastName"/>
+                                                <Binding Path="Schedule.Doctor.FirstName"/>
+                                            </MultiBinding>
+                                        </DataGridTextColumn.Binding>
+                                    </DataGridTextColumn>
+                                    <DataGridTextColumn Header="Specialization" Binding="{Binding Path=Schedule.Specialization.Name}" Width="*" />
+
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </components:PatientsPageBottomBoxLayout>
+                            
+                        <ContentControl Grid.RowSpan="2" Content="{Binding PatientFormViewModel}" />
                         </Grid>
                         
                     </Grid>

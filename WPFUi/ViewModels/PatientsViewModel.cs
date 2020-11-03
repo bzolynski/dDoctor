@@ -1,5 +1,6 @@
 ﻿using Application.Services;
 using Application.Services.PatientServices;
+using Application.Services.ReservationServices;
 using AutoMapper;
 using Domain.Entities;
 using System;
@@ -24,6 +25,7 @@ namespace WPFUi.ViewModels
         private readonly IPatientService _patientService;
         private readonly IMapper _mapper;
         private readonly IDateTimeService _dateTimeService;
+        private readonly IReservationService _reservationService;
 
         #endregion
 
@@ -33,6 +35,7 @@ namespace WPFUi.ViewModels
         // TODO: PatientDisplayList sort after edit or add
         public ObservableCollection<PatientDisplayModel> PatientsList { get; set; }
         public ObservableCollection<PatientDisplayModel> PatientsDisplayList { get; set; }
+        public ObservableCollection<Reservation> Reservations { get; set; }
 
         public PatientFormViewModel PatientFormViewModel
         {
@@ -52,7 +55,9 @@ namespace WPFUi.ViewModels
                 _selectedPatient = value;
 
                 OnPropertyChanged(nameof(SelectedPatient));
-                
+
+                if (value != null)
+                    LoadReservations();
             }
         }
  
@@ -83,13 +88,13 @@ namespace WPFUi.ViewModels
 
         // Constructors
         #region Constructors
-        public PatientsViewModel(IPatientService patientService, IMapper mapper, IDateTimeService dateTimeService, IAgeService ageService)
+        public PatientsViewModel(IPatientService patientService, IMapper mapper, IDateTimeService dateTimeService, IReservationService reservationService)
         {
 
             _patientService = patientService;
             _mapper = mapper;
             _dateTimeService = dateTimeService;
-
+            _reservationService = reservationService;
             OpenEditPatientFormCommand = new RelayCommand(OpenEditPatientForm);
             DeletePatientCommand = new AsyncRelayCommand(DeletePatient,(ex) => throw ex);
             ReloadPatientListCommand = new RelayCommand(ReloadPatientList);
@@ -111,6 +116,18 @@ namespace WPFUi.ViewModels
                     PatientsDisplayList = new ObservableCollection<PatientDisplayModel>(PatientsList);
                     OnPropertyChanged(nameof(PatientsList));                    
                     OnPropertyChanged(nameof(PatientsDisplayList));
+                }
+            });
+        }
+
+        private void LoadReservations()
+        {
+            _reservationService.GetManyByPatient(_selectedPatient.Id).ContinueWith(task =>
+            {
+                if (task.Exception == null)
+                {
+                    Reservations = new ObservableCollection<Reservation>(task.Result);
+                    OnPropertyChanged(nameof(Reservations));
                 }
             });
         }
@@ -149,6 +166,7 @@ namespace WPFUi.ViewModels
         {
             PatientsDisplayList.Clear();
             PatientsList.Clear();
+            Reservations.Clear();
             LoadPatients();
         }
         #endregion

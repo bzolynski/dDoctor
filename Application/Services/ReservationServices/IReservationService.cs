@@ -10,5 +10,8 @@ namespace Application.Services.ReservationServices
     {
         public Task<Reservation> Create(Reservation reservation);
         public Task<Reservation> RegisterPatient(Reservation reservation, int patientId);
+        public Task<IEnumerable<Reservation>> GetManyByPatient(int patientId);
+        public Task<IEnumerable<Reservation>> GetAppointmentsByDate(DateTime date);
+        public Task<Reservation> CancelAppointment(Reservation reservation);
     }
 }

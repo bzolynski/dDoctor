@@ -67,18 +67,13 @@
                                     <TextBlock Text="Appointments" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                 </StackPanel>
                             </MenuItem.Header>
-                            <MenuItem Header="Appointment list"
-                                  Command="{Binding UpdateCurrentViewModelCommand}"
-                                  CommandParameter="{x:Static navigator:ViewType.Schedule}">
-
-                            </MenuItem>
                             <MenuItem Header="Add appointment"
                                   Command="{Binding UpdateCurrentViewModelCommand}"
-                                  CommandParameter="{x:Static navigator:ViewType.AddAppointment}">
-
-
-
-                            </MenuItem>
+                                  CommandParameter="{x:Static navigator:ViewType.AddAppointment}"/>
+                            
+                            <MenuItem Header="View appointments"
+                                  Command="{Binding UpdateCurrentViewModelCommand}"
+                                  CommandParameter="{x:Static navigator:ViewType.ViewAppointments}"/>
                         </MenuItem>
 
                     </Menu>

@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:WPFUi.Components"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Background="{StaticResource LightPurpleSolidColorBrush}">
+    <Grid>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
@@ -32,7 +32,6 @@
                               
                               
                               ItemsSource="{Binding DoctorDisplayList}" 
-                              Background="{StaticResource LightPurpleSolidColorBrush}"
                               SelectedItem="{Binding SelectedDoctor, Mode=OneWayToSource}"
                               CanUserAddRows="False" 
                               CanUserDeleteRows="False"

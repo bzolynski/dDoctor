@@ -8,7 +8,7 @@ using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using WPFUi.ViewModels;
+using WPFUi.ViewModels.AppointmentVMs;
 
 namespace WPFUi.Factories.ViewModelFactories
 {

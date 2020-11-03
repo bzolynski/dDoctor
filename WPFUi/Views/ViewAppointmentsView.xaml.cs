@@ -11,14 +11,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WPFUi.Controls
+namespace WPFUi.Views
 {
     /// <summary>
-    /// Interaction logic for RegisterControl.xaml
+    /// Interaction logic for ViewAppointmentsView.xaml
     /// </summary>
-    public partial class RegisterControl : UserControl
+    public partial class ViewAppointmentsView : UserControl
     {
-        public RegisterControl()
+        public ViewAppointmentsView()
         {
             InitializeComponent();
         }

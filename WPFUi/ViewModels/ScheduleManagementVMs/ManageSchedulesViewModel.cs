@@ -6,6 +6,7 @@ using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -17,20 +18,25 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
 {
     public class ManageSchedulesViewModel : ViewModelBase
     {
-        private readonly IDoctorService _doctorService;
-        private readonly IScheduleService _scheduleService;
-        private readonly IDateTimeService _dateTimeService;
-        private readonly IMapper _mapper;
-        private readonly IRenavigator _generateScheduleRenavigator;
+
 
         // Private fields
         #region Private fields
+
+        private string _searchText;
+        private DateTime _dateFrom;
+        private DateTime _dateTo;
+
+        private readonly IDoctorService _doctorService;
+        private readonly IScheduleService _scheduleService;
+        private readonly IMapper _mapper;
+        private readonly IRenavigator _generateScheduleRenavigator;
 
         #endregion
 
         // Bindings
         #region Bindings
-        public ObservableCollection<Doctor> Doctors { get; set; }
+        public List<Doctor> Doctors { get; set; }
         public ObservableCollection<ManageScheduleDoctorModel> DoctorDisplayModels { get; set; }
         public ObservableCollection<Schedule> Schedules { get; set; }
 
@@ -60,12 +66,46 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
                 _selectedDoctor = value;
                 OnPropertyChanged(nameof(SelectedDoctor));
                 if (value != null)
-                    LoadSchedule(value.Id, DateFrom, DateTo);
+                    LoadSchedule();
             }
         }
 
-        public DateTime DateFrom { get; set; }
-        public DateTime DateTo { get; set; }
+        public string SearchText
+        {
+            get { return _searchText; }
+            set
+            {
+                _searchText = value;
+                OnPropertyChanged(nameof(SearchText));
+                DoctorSearch();
+            }
+        }
+
+        
+
+        public DateTime DateFrom
+        {
+            get { return _dateFrom; }
+            set 
+            { 
+                _dateFrom = value; 
+                if(_selectedDoctor != null)
+                    LoadSchedule();
+            }
+        }
+
+
+        public DateTime DateTo
+        {
+            get { return _dateTo; }
+            set 
+            { 
+                _dateTo = value;
+                if (_selectedDoctor != null)
+                    LoadSchedule();
+            }
+        }
+
 
         #endregion
 
@@ -78,28 +118,20 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
 
         // Constructors
         #region Constructors
-        private ManageSchedulesViewModel(IDoctorService doctorService, IScheduleService scheduleService, IDateTimeService dateTimeService, IMapper mapper, IRenavigator generateScheduleRenavigator)
+        public ManageSchedulesViewModel(IDoctorService doctorService, IScheduleService scheduleService, IDateTimeService dateTimeService, IMapper mapper, IRenavigator generateScheduleRenavigator)
         {
             _doctorService = doctorService;
             _scheduleService = scheduleService;
-            _dateTimeService = dateTimeService;
             _mapper = mapper;
             _generateScheduleRenavigator = generateScheduleRenavigator;
+
             DeleteSelectedScheduleDayCommand = new AsyncRelayCommand(DeleteSelectedScheduleDay, (ex) => throw ex);
             GenerateNewScheduleCommand = new RelayCommand(GenerateNewSchedule);
+
+            LoadDoctors();
+
             DateFrom = new DateTime(dateTimeService.Now.Year, dateTimeService.Now.Month, 1);
             DateTo = new DateTime(dateTimeService.Now.Year, dateTimeService.Now.Month, DateTime.DaysInMonth(dateTimeService.Now.Year, dateTimeService.Now.Month));
-        }
-
-
-
-        public static ManageSchedulesViewModel LoadManageSchedulesViewModel(IDoctorService doctorService, IScheduleService scheduleService, IDateTimeService dateTimeService, IMapper mapper, IRenavigator generateScheduleRenavigator)
-        {
-            var manageSchedulesViewModel = new ManageSchedulesViewModel(doctorService, scheduleService, dateTimeService, mapper, generateScheduleRenavigator);
-
-            manageSchedulesViewModel.LoadDoctors();
-
-            return manageSchedulesViewModel;
         }
 
         #endregion
@@ -113,16 +145,16 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
             {
                 if (task.Exception == null)
                 {
-                    Doctors = new ObservableCollection<Doctor>(task.Result);
+                    Doctors = new List<Doctor>(task.Result);
                     DoctorDisplayModels = new ObservableCollection<ManageScheduleDoctorModel>(_mapper.Map<ObservableCollection<ManageScheduleDoctorModel>>(task.Result));
                     OnPropertyChanged(nameof(DoctorDisplayModels));
                 }
             });
         }
 
-        private void LoadSchedule(int doctorId, DateTime dateFrom, DateTime dateTo)
+        private void LoadSchedule()
         {
-            _scheduleService.GetSchedulesInSpecifiedDateRangeByDoctorId(doctorId, dateFrom, dateTo).ContinueWith(task =>
+            _scheduleService.GetSchedulesInSpecifiedDateRangeByDoctorId(_selectedDoctor.Id, _dateFrom, _dateTo).ContinueWith(task =>
             {
                 if (task.Exception == null)
                 {
@@ -138,6 +170,17 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
             {
 
             }
+        }
+
+        private void DoctorSearch()
+        {
+            DoctorDisplayModels = new ObservableCollection<ManageScheduleDoctorModel>(
+                _mapper.Map<List<ManageScheduleDoctorModel>>(Doctors.Where(
+                    x => x.FirstName.ToUpper().Contains(SearchText.ToUpper()) || 
+                    x.LastName.ToUpper().Contains(SearchText.ToUpper()) || 
+                    x.NPWZ.ToString().Contains(SearchText.ToUpper()))));
+
+            OnPropertyChanged(nameof(DoctorDisplayModels));
         }
 
         private void GenerateNewSchedule(object obj)

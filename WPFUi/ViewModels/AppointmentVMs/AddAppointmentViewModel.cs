@@ -16,7 +16,7 @@ using System.Windows.Input;
 using WPFUi.Commands.Common;
 using WPFUi.Models;
 
-namespace WPFUi.ViewModels
+namespace WPFUi.ViewModels.AppointmentVMs
 {
     public class AddAppointmentViewModel : ViewModelBase
     {
@@ -75,7 +75,7 @@ namespace WPFUi.ViewModels
             {
                 _selectedSpecialization = value;
                 OnPropertyChanged(nameof(SelectedSpecialization));
-                if(value != null)
+                if (value != null)
                 {
                     CanSelectDate = false;
                     CanSelectHour = false;
@@ -102,9 +102,12 @@ namespace WPFUi.ViewModels
                 {
                     CanSelectDate = true;
                     CanSelectHour = false;
+
+                    DatePickerText = "Select date";
+                    _selectedDate = Today;
                     SelectedReservation = null;
 
-                    LoadSchedule(SelectedSpecialization.Id, value.Id);                   
+                    LoadSchedule(_selectedSpecialization.Id, value.Id);
                 }
 
             }
@@ -114,7 +117,7 @@ namespace WPFUi.ViewModels
             get { return _selectedDate; }
             set
             {
-                    
+
                 if (SelectedSpecialization != null && SelectedDoctor != null)
                 {
                     OnPropertyChanged(nameof(SelectedDate));
@@ -123,7 +126,7 @@ namespace WPFUi.ViewModels
                     SelectedReservation = null;
 
                     CanSelectHour = true;
-                    LoadReservations(SelectedSpecialization.Id, SelectedDoctor.Id, value);    
+                    LoadReservations(_selectedSpecialization.Id, _selectedDoctor.Id, value);
                 }
             }
         }
@@ -138,7 +141,7 @@ namespace WPFUi.ViewModels
             }
         }
 
-        
+
 
         public bool CanSelectDoctor
         {
@@ -183,12 +186,12 @@ namespace WPFUi.ViewModels
         #region Constructors
 
         public AddAppointmentViewModel(
-            ISpecializationService specializationService, 
-            IDoctorService doctorService, 
-            IScheduleService scheduleService, 
-            IDateTimeService dateTimeService, 
-            IPatientService patientService, 
-            IReservationService reservationService, 
+            ISpecializationService specializationService,
+            IDoctorService doctorService,
+            IScheduleService scheduleService,
+            IDateTimeService dateTimeService,
+            IPatientService patientService,
+            IReservationService reservationService,
             IMapper mapper)
         {
             _specializationService = specializationService;
@@ -210,7 +213,7 @@ namespace WPFUi.ViewModels
 
         }
 
-        
+
 
         #endregion
 
@@ -240,6 +243,7 @@ namespace WPFUi.ViewModels
                 return true;
             return false;
         }
+
         private async Task AddAppointment(object obj)
         {
             await _reservationService.RegisterPatient(SelectedReservation, SelectedPatient.Id);
@@ -293,6 +297,7 @@ namespace WPFUi.ViewModels
 
             SelectedSpecialization = null;
             SelectedDoctor = null;
+
             _selectedDate = Today;
             DatePickerText = "Select date";
             SelectedReservation = null;

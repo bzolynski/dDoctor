@@ -9,10 +9,10 @@ namespace Persistance.Configuration
         public void Configure(EntityTypeBuilder<Reservation> builder)
         {
             builder.HasOne(r => r.Patient)
-                .WithOne(p => p.ScheduleHour)
-                .HasForeignKey<Reservation>(r => r.PatientId);
+                .WithMany(p => p.Reservations)
+                .HasForeignKey(r => r.PatientId);
 
-            builder.HasIndex(r => r.PatientId).IsUnique(false);
+            //builder.HasIndex(r => r.PatientId).IsUnique(false);
 
             
                 

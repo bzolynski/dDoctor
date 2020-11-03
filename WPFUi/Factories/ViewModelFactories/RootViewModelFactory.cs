@@ -1,6 +1,7 @@
 ﻿using System;
 using WPFUi.States.Navigation;
 using WPFUi.ViewModels;
+using WPFUi.ViewModels.AppointmentVMs;
 using WPFUi.ViewModels.ScheduleManagementVMs;
 
 namespace WPFUi.Factories.ViewModelFactories
@@ -9,27 +10,27 @@ namespace WPFUi.Factories.ViewModelFactories
     {
         private readonly IViewModelFactory<HomeViewModel> _homeViewModelFactory;
         private readonly IViewModelFactory<PatientsViewModel> _patientsViewModelFactory;
-        private readonly IViewModelFactory<ScheduleViewModel> _scheduleViewModelFactory;
         private readonly IViewModelFactory<AddPatientViewModel> _addPatientViewModelFactory;
         private readonly IViewModelFactory<AddAppointmentViewModel> _appointmenrViewModelFactory;
         private readonly IViewModelFactory<ManageSchedulesViewModel> _manageScheduleViewModelFactory;
         private readonly IViewModelFactory<GenerateScheduleViewModel> _generateScheduleViewModelFactory;
+        private readonly IViewModelFactory<ViewAppointmentsViewModel> _viewAppointmentsViewModelFactory;
 
         public RootViewModelFactory(IViewModelFactory<HomeViewModel> homeViewModelFactory,
             IViewModelFactory<PatientsViewModel> patientsViewModelFactory, 
-            IViewModelFactory<ScheduleViewModel> scheduleViewModelFactory, 
             IViewModelFactory<AddPatientViewModel> addPatientViewModelFactory, 
             IViewModelFactory<AddAppointmentViewModel> appointmenrViewModelFactory,
             IViewModelFactory<ManageSchedulesViewModel> manageScheduleViewModelFactory,
-            IViewModelFactory<GenerateScheduleViewModel> generateScheduleViewModelFactory)
+            IViewModelFactory<GenerateScheduleViewModel> generateScheduleViewModelFactory,
+            IViewModelFactory<ViewAppointmentsViewModel> viewAppointmentsViewModelFactory)
         {
             _homeViewModelFactory = homeViewModelFactory;
             _patientsViewModelFactory = patientsViewModelFactory;
-            _scheduleViewModelFactory = scheduleViewModelFactory;
             _addPatientViewModelFactory = addPatientViewModelFactory;
             _appointmenrViewModelFactory = appointmenrViewModelFactory;
             _manageScheduleViewModelFactory = manageScheduleViewModelFactory;
             _generateScheduleViewModelFactory = generateScheduleViewModelFactory;
+            _viewAppointmentsViewModelFactory = viewAppointmentsViewModelFactory;
         }
         public ViewModelBase CreateViewModel(ViewType viewType)
         {
@@ -39,8 +40,6 @@ namespace WPFUi.Factories.ViewModelFactories
                     return _homeViewModelFactory.CreateViewModel();
                 case ViewType.Patients:
                     return _patientsViewModelFactory.CreateViewModel();
-                case ViewType.Schedule:
-                    return _scheduleViewModelFactory.CreateViewModel();
                 case ViewType.AddPatient:
                     return _addPatientViewModelFactory.CreateViewModel();
                 case ViewType.AddAppointment:
@@ -49,6 +48,8 @@ namespace WPFUi.Factories.ViewModelFactories
                     return _manageScheduleViewModelFactory.CreateViewModel();
                 case ViewType.GenerateSchedule:
                     return _generateScheduleViewModelFactory.CreateViewModel();
+                case ViewType.ViewAppointments:
+                    return _viewAppointmentsViewModelFactory.CreateViewModel();
                 default:
                     throw new Exception(); // TODO: Custom exception
             }

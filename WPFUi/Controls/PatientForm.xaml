@@ -30,7 +30,8 @@
             
             <components:LabelLayoutForFormInputs Label="Last name">
                 <TextBox Style="{StaticResource FormTextBox}"
-                         Text="{Binding LastName}" />
+                         Text="{Binding LastName}" 
+                         />
             </components:LabelLayoutForFormInputs>
 
 

@@ -1,5 +1,6 @@
 ﻿using Domain.Entities.Common;
 using System;
+using System.Collections.Generic;
 
 namespace Domain.Entities
 {
@@ -13,7 +14,7 @@ namespace Domain.Entities
         public Address Address { get; set; }
         public int AddressId { get; set; }
 
-        public Reservation ScheduleHour { get; set; }
+        public ICollection<Reservation> Reservations { get; set; }
 
     }
 }

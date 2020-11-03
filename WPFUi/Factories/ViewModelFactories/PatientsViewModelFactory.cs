@@ -1,5 +1,6 @@
 ﻿using Application.Services;
 using Application.Services.PatientServices;
+using Application.Services.ReservationServices;
 using AutoMapper;
 using WPFUi.ViewModels;
 
@@ -10,18 +11,18 @@ namespace WPFUi.Factories.ViewModelFactories
         private readonly IPatientService _patientService;
         private readonly IMapper _mapper;
         private readonly IDateTimeService _dateTimeService;
-        private readonly IAgeService _ageService;
+        private readonly IReservationService _reservationService;
 
-        public PatientsViewModelFactory(IPatientService patientService, IMapper mapper, IDateTimeService dateTimeService, IAgeService ageService)
+        public PatientsViewModelFactory(IPatientService patientService, IMapper mapper, IDateTimeService dateTimeService, IReservationService reservationService)
         {
             _patientService = patientService;
             _mapper = mapper;
             _dateTimeService = dateTimeService;
-            _ageService = ageService;
+            _reservationService = reservationService;
         }
         public PatientsViewModel CreateViewModel()
         {
-            return new PatientsViewModel(_patientService, _mapper, _dateTimeService, _ageService);
+            return new PatientsViewModel(_patientService, _mapper, _dateTimeService, _reservationService);
         }
     }
 }

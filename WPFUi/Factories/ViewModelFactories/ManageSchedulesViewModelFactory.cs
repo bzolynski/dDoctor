@@ -33,7 +33,7 @@ namespace WPFUi.Factories.ViewModelFactories
         }
         public ManageSchedulesViewModel CreateViewModel()
         {
-            return ManageSchedulesViewModel.LoadManageSchedulesViewModel(
+            return new ManageSchedulesViewModel(
                 _doctorService, 
                 _scheduleService, 
                 _dateTimeService, 

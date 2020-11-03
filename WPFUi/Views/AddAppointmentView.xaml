@@ -25,8 +25,8 @@
             <Setter Property="Margin" Value="5" />
         </Style>
     </UserControl.Resources>
-    
-    <Grid Background="{StaticResource LightPurpleSolidColorBrush}">
+
+    <Grid Background="#f0f0f0">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
@@ -57,10 +57,27 @@
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
 
-                        <!-- Specialization picker -->
+                        <!-- Patient -->
                         <Grid Grid.Row="0"
+                          Style="{StaticResource AddAppointmentGrid}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+
+
+                            <TextBlock Grid.Column="0" Style="{StaticResource AddAppointmentTextBlock}" 
+                                       Text="Patient: " />
+
+                            <TextBlock Grid.Column="1" Style="{StaticResource AddAppointmentTextBlock}" 
+                                      Text="{Binding SelectedPatient.FullName}" />
+                        </Grid>
+                        
+                        <!-- Specialization picker -->
+                        <Grid Grid.Row="1"
                           Style="{StaticResource AddAppointmentGrid}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -84,7 +101,7 @@
                         </Grid>
 
                         <!-- Doctor picker -->
-                        <Grid Grid.Row="1"
+                        <Grid Grid.Row="2"
                           Style="{StaticResource AddAppointmentGrid}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -100,14 +117,21 @@
                                   IsEnabled="{Binding CanSelectDoctor}">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding FirstName}" />
+                                        <TextBlock>
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0} {1}">
+                                                    <Binding Path="LastName" />
+                                                    <Binding Path="FirstName" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
                         </Grid>
 
                         <!-- Date picker -->
-                        <Grid Grid.Row="2"
+                        <Grid Grid.Row="3"
                               
                               Style="{StaticResource AddAppointmentGrid}">
                             <Grid.ColumnDefinitions>
@@ -166,7 +190,7 @@
                         </Grid>
 
                         <!-- Hour picker -->
-                        <Grid Grid.Row="3"
+                        <Grid Grid.Row="4"
                           Style="{StaticResource AddAppointmentGrid}"
                               IsEnabled="{Binding CanSelectHour}">
                             <Grid.ColumnDefinitions>
@@ -211,59 +235,36 @@
                 <!-- TODO: ~~Confirmation -->
                 <Grid Grid.Row="1">
                     <Border Style="{StaticResource MainDarkBorder}"
-                        Grid.Row="0" Margin="100 20 100 40"
-                        Padding="30">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="auto"/>
-                                <RowDefinition Height="auto"/>
-                                <RowDefinition Height="auto"/>
-                            </Grid.RowDefinitions>
+                        Grid.Row="0" Margin="150 20 150 40"
+                        Padding="20 20 20 20">
 
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" >
+                            <TextBlock Style="{StaticResource AddAppointmentTextBlock}"
+                                       HorizontalAlignment="Center"
+                                           Text="{Binding DatePickerText}" />
 
-                            <Grid Grid.Row="0"
-                          Style="{StaticResource AddAppointmentGrid}">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="auto"/>
-                                </Grid.ColumnDefinitions>
+                            <TextBlock Style="{StaticResource AddAppointmentTextBlock}" 
+                                       HorizontalAlignment="Center"
+                                       Margin="0 8">
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{}{0} {1} ({2})">
+                                        <Binding Path="SelectedDoctor.LastName" />
+                                        <Binding Path="SelectedDoctor.FirstName" />
+                                        <Binding Path="SelectedSpecialization.Name" />
 
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
 
-                                <TextBlock Grid.Column="0" Style="{StaticResource AddAppointmentTextBlock}" 
-                                       Text="Date: " />
+                            <TextBlock
+                                           Style="{StaticResource AddAppointmentTextBlock}" 
+                                           Text="{Binding SelectedReservation.Hour, StringFormat={}hh\\:mm}" 
+                                HorizontalAlignment="Center"/>
 
-                                
-                            </Grid>
-
-                            <Grid Grid.Row="1"
-                          Style="{StaticResource AddAppointmentGrid}">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="auto"/>
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock Grid.Column="0" Style="{StaticResource AddAppointmentTextBlock}" 
-                                       Text="Hour: " />
-
-                                
-                            </Grid>
-
-                            <Grid Grid.Row="2" Style="{StaticResource AddAppointmentGrid}">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="auto"/>
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock Grid.Column="0" Style="{StaticResource AddAppointmentTextBlock}" 
-                                       Text="Doctor: "/>
-
-                                
-
-                            </Grid>
-
-
-
-                        </Grid>
+                            
+                        </StackPanel>
+                        
+                       
 
                     </Border>
 

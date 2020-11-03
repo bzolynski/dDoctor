@@ -84,7 +84,7 @@ namespace Application.Services.ScheduleServices
         {
             var schedules = await _scheduleDataService.GetManyByDoctorId(doctorId);
 
-            return schedules.Where(sc => sc.Date > dateFrom.Date && sc.Date < dateTo);
+            return schedules.Where(sc => sc.Date >= dateFrom.Date && sc.Date <= dateTo);
         }
     }
 }

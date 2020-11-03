@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:WPFUi"
              xmlns:viewModels="clr-namespace:WPFUi.ViewModels"
-             xmlns:scheduleManagementViewModels="clr-namespace:WPFUi.ViewModels.ScheduleManagementVMs"
+             xmlns:scheduleVMs="clr-namespace:WPFUi.ViewModels.ScheduleManagementVMs"
+             xmlns:appointmentVMs="clr-namespace:WPFUi.ViewModels.AppointmentVMs"
              xmlns:views="clr-namespace:WPFUi.Views"
              xmlns:controls="clr-namespace:WPFUi.Controls">
     <Application.Resources>
@@ -25,34 +26,29 @@
                 <views:PatientsView />
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type viewModels:ScheduleViewModel}">
-                <views:ScheduleView />
-            </DataTemplate>
-
             <DataTemplate DataType="{x:Type viewModels:AddPatientViewModel}">
                 <views:AddPatientView />
             </DataTemplate>
-            
-            <DataTemplate DataType="{x:Type viewModels:AddAppointmentViewModel}">
+
+            <DataTemplate DataType="{x:Type appointmentVMs:AddAppointmentViewModel}">
                 <views:AddAppointmentView />
             </DataTemplate>
+            
+            <DataTemplate DataType="{x:Type appointmentVMs:ViewAppointmentsViewModel}">
+                <views:ViewAppointmentsView />
+            </DataTemplate>
 
-            <DataTemplate DataType="{x:Type scheduleManagementViewModels:ManageSchedulesViewModel}">
+            <DataTemplate DataType="{x:Type scheduleVMs:ManageSchedulesViewModel}">
                 <views:ManageSchedulesView />
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type scheduleManagementViewModels:GenerateScheduleViewModel}">
+            <DataTemplate DataType="{x:Type scheduleVMs:GenerateScheduleViewModel}">
                 <views:GenerateScheduleView />
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type viewModels:PatientFormViewModel}">
                 <controls:PatientForm />
             </DataTemplate>
-            
-            <DataTemplate DataType="{x:Type viewModels:RegisterViewModel}">
-                <controls:RegisterControl />
-            </DataTemplate>
-            
             
 
         </ResourceDictionary>
