@@ -83,7 +83,7 @@ namespace WPFUi.ViewModels
 
         // Constructors
         #region Constructors
-        private PatientsViewModel(IPatientService patientService, IMapper mapper, IDateTimeService dateTimeService, IAgeService ageService)
+        public PatientsViewModel(IPatientService patientService, IMapper mapper, IDateTimeService dateTimeService, IAgeService ageService)
         {
 
             _patientService = patientService;
@@ -94,17 +94,9 @@ namespace WPFUi.ViewModels
             DeletePatientCommand = new AsyncRelayCommand(DeletePatient,(ex) => throw ex);
             ReloadPatientListCommand = new RelayCommand(ReloadPatientList);
 
+            LoadPatients();
         }
 
-
-        public static PatientsViewModel LoadPatientsViewModel(IPatientService patientService, IMapper mapper, IDateTimeService dateTimeService, IAgeService ageService)
-        {
-            var patientsViewModel = new PatientsViewModel(patientService, mapper, dateTimeService, ageService);
-
-            patientsViewModel.LoadPatients();
-
-            return patientsViewModel;
-        }
         #endregion
 
         // Methods

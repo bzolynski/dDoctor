@@ -6,6 +6,7 @@ using Persistance.Services.AddressDataServices;
 using Persistance.Services.Common;
 using Persistance.Services.DoctorDataServices;
 using Persistance.Services.PatientDataServices;
+using Persistance.Services.ReservationDataService;
 using Persistance.Services.ScheduleDataServices;
 using Persistance.Services.SpecializationDataServices;
 
@@ -31,6 +32,7 @@ namespace Persistance
             services.AddScoped<IScheduleDataService, ScheduleDataService>();
             services.AddScoped<IDoctorDataService, DoctorDataService>();
             services.AddScoped<ISpecializationDataService, SpecializationDataService>();
+            services.AddScoped<IReservationDataService, ReservationDataService>();
         }
     }
 }

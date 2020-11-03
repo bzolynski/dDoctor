@@ -79,15 +79,17 @@ namespace Persistance.Services.ScheduleDataServices
 
 
 
-        public async Task<IEnumerable<Schedule>> GetManyBySpecializationAndDoctor(int doctorId, int specializationId)
+        public async Task<IEnumerable<Schedule>> GetManyBySpecializationAndDoctor(int specializationId, int doctorId)
         {
             using (var context = _dbContextFactory.CreateDbContext())
             {
-                return await context.Schedules
+                var schedule =  await context.Schedules
                     .Include(s => s.Specialization)
                     .Include(s => s.Doctor)
                     .Where(x => x.DoctorId == doctorId && x.SpecializationId == specializationId)
                     .ToListAsync();
+
+                return schedule;
             }
         }
 
@@ -97,6 +99,7 @@ namespace Persistance.Services.ScheduleDataServices
             {
                 return await context.Reservations
                     .Where(r => r.Schedule.DoctorId == doctorId && r.Schedule.SpecializationId == specializationId && r.Schedule.Date == date.Date)
+                    .OrderBy(r => r.Hour)
                     .ToListAsync();
             }
         }

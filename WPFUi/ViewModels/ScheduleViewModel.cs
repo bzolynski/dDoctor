@@ -108,7 +108,7 @@ namespace WPFUi.ViewModels
 
         // Constructors
         #region Constructors
-        private ScheduleViewModel(IDateTimeService dateTimeService, IDoctorService doctorService, IScheduleService scheduleService, ISpecializationService specializationService, IPatientService patientService)
+        public ScheduleViewModel(IDateTimeService dateTimeService, IDoctorService doctorService, IScheduleService scheduleService, ISpecializationService specializationService, IPatientService patientService)
         {
             _scheduleService = scheduleService;
             _doctorService = doctorService;
@@ -121,20 +121,9 @@ namespace WPFUi.ViewModels
 
             Register = new RelayCommand(TestRegister, CanTestRegister);
 
-
-
+            LoadDoctors();
+            LoadSpecializations();
         }        
-
-        public static ScheduleViewModel LoadScheduleViewModel(IDateTimeService dateTimeService, IDoctorService doctorService, IScheduleService scheduleService, ISpecializationService specializationService, IPatientService patientService)
-        {
-            var scheduleViewModel = new ScheduleViewModel(dateTimeService, doctorService, scheduleService, specializationService, patientService);
-
-            scheduleViewModel.LoadDoctors();
-            scheduleViewModel.LoadSpecializations();
-
-
-            return scheduleViewModel;
-        }
 
         #endregion
 
@@ -155,7 +144,7 @@ namespace WPFUi.ViewModels
 
         private void TestRegister(object obj)
         {
-            RegisterViewModel = RegisterViewModel.LoadRegisterViewModel(this, _patientService);
+            RegisterViewModel = new RegisterViewModel(this, _patientService);
         }
 
 

@@ -53,7 +53,7 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
         // Commands
         #region Commands
 
-        public ICommand TestCheckboxCommand { get; set; }
+        public ICommand SelectDaysOfWeekCommand { get; set; }
         public ICommand GenerateScheduleCommand { get; set; }
         #endregion
 
@@ -64,11 +64,11 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
 
             if (SelectedDaysOfWeek == null)
                 SelectedDaysOfWeek = new List<DayOfWeek>();
-            DoctorPicker = DoctorPickerViewModel.LoadDoctorPickerViewModel(doctorService, mapper);
+            DoctorPicker = new DoctorPickerViewModel(doctorService, mapper);
 
-            DoctorPicker.PropertyChanged += DoctorPicker_PropertyChanged;
+            DoctorPicker.PropertyChanged += DoctorPicker_SelectedDoctorChanged;
 
-            TestCheckboxCommand = new RelayCommand(TestCheckbox);
+            SelectDaysOfWeekCommand = new RelayCommand(SelectDaysOfWeek);
             GenerateScheduleCommand = new AsyncRelayCommand(GenerateSchedule, (ex) => throw ex);
             _scheduleService = scheduleService;
             _specializationService = specializationService;
@@ -83,22 +83,6 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
 
             LoadSpecializations();
         }
-
-        
-
-        private void TestCheckbox(object obj)
-        {
-            var parameters = (object[])obj;
-            if (parameters[1] is DayOfWeek dayOfWeek)
-            {
-                if ((bool)parameters[0] == true)
-                    SelectedDaysOfWeek.Add(dayOfWeek);
-                else
-                    SelectedDaysOfWeek.Remove(dayOfWeek);
-             
-            }
-        }
-
 
         #endregion
 
@@ -119,10 +103,23 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
 
         private async Task GenerateSchedule(object arg)
         {
-            await _scheduleService.Create(SelectedDoctor.Id, SelectedSpecialization.Id, StartHour.TimeOfDay, EndHour.TimeOfDay, MaxTimePerPatient, StartDate, EndDate, SelectedDaysOfWeek);
+            await _scheduleService.GenerateSchedules(SelectedDoctor.Id, SelectedSpecialization.Id, StartHour.TimeOfDay, EndHour.TimeOfDay, MaxTimePerPatient, StartDate, EndDate, SelectedDaysOfWeek);
         }
 
-        private void DoctorPicker_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void SelectDaysOfWeek(object obj)
+        {
+            var parameters = (object[])obj;
+            if (parameters[1] is DayOfWeek dayOfWeek)
+            {
+                if ((bool)parameters[0] == true)
+                    SelectedDaysOfWeek.Add(dayOfWeek);
+                else
+                    SelectedDaysOfWeek.Remove(dayOfWeek);
+
+            }
+        }
+
+        private void DoctorPicker_SelectedDoctorChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             OnPropertyChanged(nameof(SelectedDoctor));
         }

@@ -21,7 +21,7 @@ namespace WPFUi.Factories.ViewModelFactories
         }
         public PatientsViewModel CreateViewModel()
         {
-            return PatientsViewModel.LoadPatientsViewModel(_patientService, _mapper, _dateTimeService, _ageService);
+            return new PatientsViewModel(_patientService, _mapper, _dateTimeService, _ageService);
         }
     }
 }

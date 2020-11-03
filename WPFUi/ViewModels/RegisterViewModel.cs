@@ -45,7 +45,7 @@ namespace WPFUi.ViewModels
 
         // Constructors
         #region Constructors
-        private RegisterViewModel(ScheduleViewModel scheduleViewModel, IPatientService patientService)
+        public RegisterViewModel(ScheduleViewModel scheduleViewModel, IPatientService patientService)
         {
             _scheduleViewModel = scheduleViewModel;
             _patientService = patientService;
@@ -55,12 +55,6 @@ namespace WPFUi.ViewModels
             CancelCommand = new RelayCommand(Cancel);
         }
 
-        public static RegisterViewModel LoadRegisterViewModel(ScheduleViewModel scheduleViewModel, IPatientService patientService)
-        {
-            var registerViewModel = new RegisterViewModel(scheduleViewModel, patientService);
-
-            return registerViewModel;
-        }
 
         #endregion
 

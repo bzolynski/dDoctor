@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.Services.ReservationServices;
+using Domain.Entities;
 using Persistance.Services.ScheduleDataServices;
 using System;
 using System.Collections.Generic;
@@ -10,29 +11,22 @@ namespace Application.Services.ScheduleServices
     public class ScheduleService : IScheduleService
     {
         private readonly IScheduleDataService _scheduleDataService;
+        private readonly IReservationService _reservationService;
 
-        public ScheduleService(IScheduleDataService scheduleDataService)
+        public ScheduleService(IScheduleDataService scheduleDataService, IReservationService reservationService)
         {
             _scheduleDataService = scheduleDataService;
+            _reservationService = reservationService;
         }
 
-        public async Task Create(int doctorId, int specializationId, TimeSpan startHour, TimeSpan endHour, TimeSpan maxTimePerPatient, DateTime startDay, DateTime endDay, List<DayOfWeek> daysOfWeek)
+        public async Task GenerateSchedules (int doctorId, int specializationId, TimeSpan startHour, TimeSpan endHour, TimeSpan maxTimePerPatient, DateTime startDay, DateTime endDay, List<DayOfWeek> daysOfWeek)
         {
             
-
-            List<Reservation> reservationsToGenerate = new List<Reservation>();
-
-            
-
-            List<DateTime> datesToGenerate = new List<DateTime>();
-
-            int scheduleId = -1;
-
-            for (var dt = startDay; dt < endDay; dt = dt.AddDays(1))
+            for (var dt = startDay; dt <= endDay; dt = dt.AddDays(1))
             {
                 if (daysOfWeek.Contains(dt.DayOfWeek))
                 {
-                    var cos = await _scheduleDataService.Create(new Schedule
+                    var schedule = await _scheduleDataService.Create(new Schedule
                     {
                         DoctorId = doctorId,
                         SpecializationId = specializationId,
@@ -44,32 +38,15 @@ namespace Application.Services.ScheduleServices
 
                     for (var ts = startHour; ts < endHour; ts += maxTimePerPatient)
                     {
-                        reservationsToGenerate.Add(new Reservation
+                        
+                        await _reservationService.Create(new Reservation
                         {
                             Hour = ts,
-                            ScheduleId = cos.Id
+                            ScheduleId = schedule.Id
                         });
                     }
-
-                    await _scheduleDataService.CreateReservations(reservationsToGenerate);
-
-                    reservationsToGenerate.Clear();
-
                 }
             }
-
-
-            //var schedule = new Schedule
-            //{
-            //    DoctorId = doctorId,
-            //    SpecializationId = specializationId,
-            //    MaxTimePerPatient = maxTimePerPatient,
-            //    Reservations = reservationsToGenerate,
-            //    StartHour = startHour,
-            //    EndHour = endHour,
-            //};
-
-            
         }
 
         //public async Task<IEnumerable<Schedule>> GetSchedule(int? doctorId, int? specializationId, DateTime date)

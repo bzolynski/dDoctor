@@ -12,6 +12,8 @@ namespace Persistance.Configuration
                 .WithOne(p => p.ScheduleHour)
                 .HasForeignKey<Reservation>(r => r.PatientId);
 
+            builder.HasIndex(r => r.PatientId).IsUnique(false);
+
             
                 
         }

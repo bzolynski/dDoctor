@@ -25,7 +25,7 @@ namespace WPFUi.Factories.ViewModelFactories
         }
         public ScheduleViewModel CreateViewModel()
         {
-            return ScheduleViewModel.LoadScheduleViewModel(_dateTimeService, _doctorService, _scheduleService, _specializationService, _patientService);
+            return new ScheduleViewModel(_dateTimeService, _doctorService, _scheduleService, _specializationService, _patientService);
         }
     }
 }

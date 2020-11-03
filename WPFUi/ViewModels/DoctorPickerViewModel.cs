@@ -59,20 +59,14 @@ namespace WPFUi.ViewModels
         // Constructors
         #region Constructors
 
-        private DoctorPickerViewModel(IDoctorService doctorService, IMapper mapper)
+        public DoctorPickerViewModel(IDoctorService doctorService, IMapper mapper)
         {
             _doctorService = doctorService;
             _mapper = mapper;
+
+            LoadDoctors();
         }
 
-        public static DoctorPickerViewModel LoadDoctorPickerViewModel(IDoctorService doctorService, IMapper mapper)
-        {
-            var doctorPickerViewModel = new DoctorPickerViewModel(doctorService, mapper);
-
-            doctorPickerViewModel.LoadDoctors();
-
-            return doctorPickerViewModel;
-        }
 
         #endregion
 

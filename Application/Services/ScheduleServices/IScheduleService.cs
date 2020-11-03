@@ -20,7 +20,19 @@ namespace Application.Services.ScheduleServices
         /// <returns>List of schedules</returns>
         Task<IEnumerable<Schedule>> GetSchedulesInSpecifiedDateRangeByDoctorId(int doctorId, DateTime dateFrom, DateTime dateTo);
 
-        public Task Create(int doctorId, int specializationId, TimeSpan startHour, TimeSpan endHour, TimeSpan maxTimePerPatient, DateTime startDay, DateTime endDay, List<DayOfWeek> daysOfWeek);
+        /// <summary>
+        /// Generates schedules for given doctor and specialization between given dates
+        /// </summary>
+        /// <param name="doctorId">Id of a doctor</param>
+        /// <param name="specializationId">Id of specialization</param>
+        /// <param name="startHour">Hour of first appointment</param>
+        /// <param name="endHour">Hour by which the doctor should be done with last patient</param>
+        /// <param name="maxTimePerPatient">Time given for patient</param>
+        /// <param name="startDay">Date from when the schedule should be generated</param>
+        /// <param name="endDay">Date by which the timesheet should be generated</param>
+        /// <param name="daysOfWeek">Days of the week in which doctor takes on patients</param>
+        /// <returns></returns>
+        public Task GenerateSchedules (int doctorId, int specializationId, TimeSpan startHour, TimeSpan endHour, TimeSpan maxTimePerPatient, DateTime startDay, DateTime endDay, List<DayOfWeek> daysOfWeek);
 
 
     }

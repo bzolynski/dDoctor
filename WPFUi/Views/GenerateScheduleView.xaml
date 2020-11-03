@@ -67,7 +67,7 @@
                             <DataTemplate>
                                 <CheckBox Margin="10"
                                           Content="{Binding}"                                           
-                                          Command="{Binding Path=DataContext.TestCheckboxCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}">
+                                          Command="{Binding Path=DataContext.SelectDaysOfWeekCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}">
                                     <CheckBox.CommandParameter>
                                         <MultiBinding Converter="{StaticResource MultiBindingConverter}">
                                             <Binding Path="IsChecked" RelativeSource="{RelativeSource Self}" />

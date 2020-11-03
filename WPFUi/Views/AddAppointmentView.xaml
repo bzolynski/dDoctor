@@ -182,7 +182,7 @@
                                       SelectedItem="{Binding SelectedReservation}">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Hour, StringFormat={}HH:mm}" />
+                                        <TextBlock Text="{Binding Hour, StringFormat={}hh\\:mm}" />
                                     </DataTemplate>
 
 
@@ -248,8 +248,7 @@
                                 
                             </Grid>
 
-                            <Grid Grid.Row="2"
-                          Style="{StaticResource AddAppointmentGrid}">
+                            <Grid Grid.Row="2" Style="{StaticResource AddAppointmentGrid}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="auto"/>
@@ -284,6 +283,7 @@
                 <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button Style="{StaticResource MenuBarButton}" 
                             Content="Accept"
+                            Command="{Binding AddAppointmentCommand}"
                             Margin="0 0 10 0"/>
                     <Button Style="{StaticResource MenuBarButton}"
                             Content="Cancel"/>
