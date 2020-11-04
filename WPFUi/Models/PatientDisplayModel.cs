@@ -8,9 +8,10 @@ namespace WPFUi.Models
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string PhoneNumber { get; set; }
+        public int? PhoneNumber { get; set; }
         public string Email { get; set; }
-        
+        public string Comments { get; set; }
+
         public string BirthDateString 
         {
             get { return BirthDate.ToString("dd'-'MM'-'yyyy"); }
@@ -18,8 +19,8 @@ namespace WPFUi.Models
 
 
         public string FullName => $"{ LastName } { FirstName }";
-        public string FullAddress => $"{ Address.City }, { Address.Street }";
-        public string FullAddressWithPostCode => $"{ Address.PostCode } { Address.City }, { Address.Street }";
+        public string FullAddress => $"{ Address.City }, { Address.Street } { Address.BuildingNumber } { Address.FlatNumber } ";
+        public string FullAddressWithPostCode => $"{ Address.PostCode } { Address.City }, { Address.Street } { Address.BuildingNumber } { Address.FlatNumber }";
 
 
         public DateTime BirthDate { get; set; }

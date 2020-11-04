@@ -66,12 +66,26 @@
                                    Foreground="{StaticResource MainFontSolidColorBrush}"
                                    FontSize="26"/>
 
-                                <Button Margin="10 0 0 0" Style="{StaticResource MenuBarButton}" 
+                            <Button Margin="10 0 0 0" Style="{StaticResource MenuBarButton}" 
                                         Content="Reload"
                                         Command="{Binding ReloadPatientListCommand}" />
+                                
 
-                                <TextBox Width="100" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
-                            </StackPanel>
+                            <TextBox Width="100" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+
+                            <Button Margin="10 0 0 0" Style="{StaticResource MenuBarButton}" 
+                                        Content="Add"
+                                        Command="{Binding OpenAddPatientFormCommand}" />
+                                
+                            <Button Margin="10 0 0 0" Style="{StaticResource MenuBarButton}" 
+                                        Content="Edit"
+                                        Command="{Binding OpenEditPatientFormCommand}"
+                                    CommandParameter="{Binding SelectedPatient}"/>
+                                
+                            <Button Margin="10 0 0 0" Style="{StaticResource MenuBarButton}" 
+                                        Content="Delete"
+                                        Command="{Binding DeletePatientCommand}" />
+                        </StackPanel>
 
                             
 
@@ -82,7 +96,7 @@
 
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"  />
+                            <ColumnDefinition Width="*"  />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
@@ -106,8 +120,8 @@
 
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Last name" Binding="{Binding Path=LastName}" />
-                                <DataGridTextColumn Header="First name" Binding="{Binding Path=FirstName}" />
-                                <DataGridTextColumn Header="Address" Binding="{Binding Path=FullAddress}"/>
+                                <DataGridTextColumn Header="First name" Binding="{Binding Path=FirstName}"  />
+                                <DataGridTextColumn Header="Address" Binding="{Binding Path=FullAddress}" Width="*" />
                                 <DataGridTextColumn Header="Birth date" Binding="{Binding Path=BirthDateString}" />
                                 <DataGridTextColumn Header="Phone number" Binding="{Binding Path=PhoneNumber}" />
                                 <DataGridTextColumn Header="Email" Binding="{Binding Path=Email}" />
@@ -152,6 +166,15 @@
                                     <TextBlock Text="{Binding Path=Email}" />
                                 </StackPanel>
 
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Style="{StaticResource BottomSectionOfPatientView}"
+                                               Text="Comments: " />
+                                    <Border BorderBrush="Black" BorderThickness="0.3">
+                                        <TextBlock Height="80" Margin="10" Text="{Binding Path=Comments}" />
+                                        
+                                    </Border>
+                                </StackPanel>
+
                             </StackPanel>
 
                         </components:PatientsPageBottomBoxLayout>
@@ -189,7 +212,7 @@
                             </DataGrid>
                         </components:PatientsPageBottomBoxLayout>
                             
-                        <ContentControl Grid.RowSpan="2" Content="{Binding PatientFormViewModel}" />
+                        
                         </Grid>
                         
                     </Grid>
@@ -201,6 +224,6 @@
         </Border>
 
         <!-- Patient form -->
-        
+        <ContentControl Grid.RowSpan="2" Content="{Binding PatientFormViewModel}" />
     </Grid>
 </UserControl>

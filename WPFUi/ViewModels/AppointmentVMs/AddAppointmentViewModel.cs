@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using WPFUi.Commands.Common;
 using WPFUi.Models;
+using WPFUi.States.Navigation;
 
 namespace WPFUi.ViewModels.AppointmentVMs
 {
@@ -36,6 +37,7 @@ namespace WPFUi.ViewModels.AppointmentVMs
         private readonly IScheduleService _scheduleService;
         private readonly IDateTimeService _dateTimeService;
         private readonly IReservationService _reservationService;
+        private readonly IRenavigator _homeRenavigator;
         private readonly ISpecializationService _specializationService;
 
         #endregion
@@ -180,6 +182,7 @@ namespace WPFUi.ViewModels.AppointmentVMs
         #region Commands
 
         public ICommand AddAppointmentCommand { get; set; }
+        public ICommand CloseCommand { get; set; }
         #endregion
 
         // Constructors
@@ -192,26 +195,30 @@ namespace WPFUi.ViewModels.AppointmentVMs
             IDateTimeService dateTimeService,
             IPatientService patientService,
             IReservationService reservationService,
-            IMapper mapper)
+            IMapper mapper,
+            IRenavigator homeRenavigator)
         {
             _specializationService = specializationService;
             _doctorService = doctorService;
             _scheduleService = scheduleService;
             _dateTimeService = dateTimeService;
             _reservationService = reservationService;
+            _homeRenavigator = homeRenavigator;
 
             // TODO: Do smth with this - problem with updating datepicker when select "today date"
             _selectedDate = Today;
             PatientPicker = new PatientPickerViewModel(patientService, mapper);
 
             AddAppointmentCommand = new AsyncRelayCommand(AddAppointment, CanAddAppointment, (ex) => throw ex);
-
+            CloseCommand = new RelayCommand(Close);
             PatientPicker.SelectedPatientChanged += PatientPicker_SelectedPatientChanged;
 
             LoadSpecializations();
 
 
         }
+
+        
 
 
 
@@ -302,6 +309,11 @@ namespace WPFUi.ViewModels.AppointmentVMs
             DatePickerText = "Select date";
             SelectedReservation = null;
 
+        }
+
+        private void Close(object obj)
+        {
+            _homeRenavigator.Renavigate();
         }
         #endregion
     }

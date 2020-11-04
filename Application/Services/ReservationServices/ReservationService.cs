@@ -37,6 +37,8 @@ namespace Application.Services.ReservationServices
             return await _reservationDataService.GetManyByDateWithAllDetails(date);
         }
 
+        
+
         public async Task<Reservation> CancelAppointment(Reservation reservation)
         {
             return await _reservationDataService.Update(reservation.Id, new Reservation { Hour = reservation.Hour, ScheduleId = reservation.ScheduleId });

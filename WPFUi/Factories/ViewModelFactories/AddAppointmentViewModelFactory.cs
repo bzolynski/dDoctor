@@ -8,6 +8,7 @@ using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using WPFUi.States.Navigation;
 using WPFUi.ViewModels.AppointmentVMs;
 
 namespace WPFUi.Factories.ViewModelFactories
@@ -21,6 +22,7 @@ namespace WPFUi.Factories.ViewModelFactories
         private readonly IPatientService _patientService;
         private readonly IReservationService _reservationService;
         private readonly IMapper _mapper;
+        private readonly IRenavigator _renavigator;
 
         public AddAppointmentViewModelFactory(
             ISpecializationService specializationService, 
@@ -29,7 +31,8 @@ namespace WPFUi.Factories.ViewModelFactories
             IDateTimeService dateTimeService, 
             IPatientService patientService,
             IReservationService reservationService,
-            IMapper mapper)
+            IMapper mapper,
+            IRenavigator renavigator)
         {
             _specializationService = specializationService;
             _doctorService = doctorService;
@@ -38,6 +41,7 @@ namespace WPFUi.Factories.ViewModelFactories
             _patientService = patientService;
             _reservationService = reservationService;
             _mapper = mapper;
+            _renavigator = renavigator;
         }
         public AddAppointmentViewModel CreateViewModel()
         {
@@ -48,7 +52,8 @@ namespace WPFUi.Factories.ViewModelFactories
                 _dateTimeService, 
                 _patientService,
                 _reservationService,
-                _mapper);
+                _mapper,
+                _renavigator);
         }
     }
 }

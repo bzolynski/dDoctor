@@ -19,7 +19,7 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Vertical" 
-                    Margin="50"
+                    Margin="50 50 50 0"
                     Grid.Column="0" Grid.Row="0">
 
             <StackPanel.Resources>
@@ -53,8 +53,11 @@
             <components:LabelLayoutForFormInputs Label="Birth date">
                 <DatePicker SelectedDate="{Binding BirthDate}"/>
             </components:LabelLayoutForFormInputs>
-            
-            
+
+            <components:LabelLayoutForFormInputs Label="Comments (optional)" />
+            <TextBox Text="{Binding Comments}" Height="100" TextWrapping="Wrap" />
+
+
         </StackPanel>
         
         <!-- Separator -->
@@ -90,6 +93,16 @@
             <components:LabelLayoutForFormInputs Label="Street">
                 <TextBox Style="{StaticResource FormTextBox}" 
                          Text="{Binding Street}"/>
+            </components:LabelLayoutForFormInputs>
+            
+            <components:LabelLayoutForFormInputs Label="Building number" >
+                <TextBox Style="{StaticResource FormTextBox}" 
+                     Text="{Binding BuildingNumber}"/>
+            </components:LabelLayoutForFormInputs>
+            
+            <components:LabelLayoutForFormInputs Label="Flat number" >
+                <TextBox Style="{StaticResource FormTextBox}" 
+                     Text="{Binding FlatNumber}"/>
             </components:LabelLayoutForFormInputs>
         </StackPanel>
 

@@ -81,6 +81,7 @@ namespace WPFUi.ViewModels
         #region Commands
 
         public ICommand OpenEditPatientFormCommand { get; set; }
+        public ICommand OpenAddPatientFormCommand { get; set; }
         public ICommand DeletePatientCommand { get; set; }
         public ICommand ReloadPatientListCommand { get; set; }
 
@@ -95,9 +96,13 @@ namespace WPFUi.ViewModels
             _mapper = mapper;
             _dateTimeService = dateTimeService;
             _reservationService = reservationService;
-            OpenEditPatientFormCommand = new RelayCommand(OpenEditPatientForm);
-            DeletePatientCommand = new AsyncRelayCommand(DeletePatient,(ex) => throw ex);
+
+            OpenEditPatientFormCommand = new RelayCommand(OpenEditPatientForm, CanOpenEditPatientForm);
+            OpenAddPatientFormCommand = new RelayCommand(OpenAddPatientForm);
+            DeletePatientCommand = new AsyncRelayCommand(DeletePatient, CanDeletePatient,(ex) => throw ex);
             ReloadPatientListCommand = new RelayCommand(ReloadPatientList);
+
+
 
             LoadPatients();
         }
@@ -132,26 +137,53 @@ namespace WPFUi.ViewModels
             });
         }
 
+        private bool CanDeletePatient(object obj)
+        {
+            // TODO: Check if patient has reservations or past visits
+            if (SelectedPatient == null || Reservations.Count > 0)
+                return false;
+            return true;
+        }
+
         private async Task DeletePatient(object obj)
         {
-            if (obj is PatientDisplayModel)
-            {
-                var patient = (PatientDisplayModel)obj;
-                await _patientService.DeletePatient(patient.Id);
+   
+
+                await _patientService.DeletePatient(_selectedPatient.Id);
 
                 PatientsList.Remove(SelectedPatient);
                 PatientsDisplayList.Remove(SelectedPatient);
 
-            }
+            
+            
+            
+        }
+
+        private void OpenAddPatientForm(object obj)
+        {                
+            PatientFormViewModel = new PatientFormViewModel(_patientService, _mapper, _dateTimeService);
+
+            PatientFormViewModel.FormSubmited += PatientFormViewModel_FormSubmited;
+
+
+        }
+
+        
+
+        private bool CanOpenEditPatientForm(object obj)
+        {
+            if (SelectedPatient == null)
+                return false;
+            return true;
         }
 
         private void OpenEditPatientForm(object obj)
         {
-            if (obj is PatientDisplayModel)
-            {
-                var patient = (PatientDisplayModel)obj;
-                PatientFormViewModel = new PatientFormViewModel(this, patient, _patientService, _mapper, _dateTimeService);
-            }
+            
+                PatientFormViewModel = new PatientFormViewModel(_selectedPatient, _patientService, _mapper, _dateTimeService);
+
+            PatientFormViewModel.FormSubmited += PatientFormViewModel_FormSubmited;
+
         }
 
         private void PatientSearch()
@@ -162,12 +194,18 @@ namespace WPFUi.ViewModels
             OnPropertyChanged(nameof(PatientsDisplayList));
         }
 
-        private void ReloadPatientList(object obj)
+        private void ReloadPatientList(object obj = null)
         {
-            PatientsDisplayList.Clear();
-            PatientsList.Clear();
-            Reservations.Clear();
+            PatientsDisplayList?.Clear();
+            PatientsList?.Clear();
+            Reservations?.Clear();
             LoadPatients();
+        }
+
+        private void PatientFormViewModel_FormSubmited()
+        {
+            ReloadPatientList();
+            PatientFormViewModel = null;
         }
         #endregion
     }

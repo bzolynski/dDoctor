@@ -47,11 +47,6 @@
                                 </StackPanel>
                             </MenuItem.Header>
 
-                            <!-- Add patient -->
-                            <MenuItem Header="Add patient"
-                                  Command="{Binding UpdateCurrentViewModelCommand}"
-                                  CommandParameter="{x:Static navigator:ViewType.AddPatient}" />
-
                             <!-- Patient list -->
                             <MenuItem Header="Patients list"
                                   Command="{Binding UpdateCurrentViewModelCommand}"

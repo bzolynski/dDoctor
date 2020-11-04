@@ -25,6 +25,11 @@
                         <Run Text="{Binding Patient.Address.Street}" />
                     </TextBlock>
 
+                    <TextBlock>
+                        <Run Text="Comments:" />
+                        <Run Text="{Binding Patient.Comments}" />
+                    </TextBlock>
+
 
                 </StackPanel>
             </Grid>

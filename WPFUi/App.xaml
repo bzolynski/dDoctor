@@ -26,10 +26,6 @@
                 <views:PatientsView />
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type viewModels:AddPatientViewModel}">
-                <views:AddPatientView />
-            </DataTemplate>
-
             <DataTemplate DataType="{x:Type appointmentVMs:AddAppointmentViewModel}">
                 <views:AddAppointmentView />
             </DataTemplate>

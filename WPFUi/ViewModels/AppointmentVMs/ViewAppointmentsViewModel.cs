@@ -92,12 +92,14 @@ namespace WPFUi.ViewModels.AppointmentVMs
             SelectedDate = dateTimeService.Now;
 
             ResetFiltersCommand = new RelayCommand(ResetFilters);
-            CancelAppointmentCommand = new AsyncRelayCommand(CancelAppointment, (ex) => throw ex);
+            CancelAppointmentCommand = new AsyncRelayCommand(CancelAppointment, CanCancelAppointment, (ex) => throw ex);
             CloseCommand = new RelayCommand(Close);
 
             LoadAppointments();
 
         }
+
+        
 
 
         #endregion
@@ -116,6 +118,13 @@ namespace WPFUi.ViewModels.AppointmentVMs
                     OnPropertyChanged(nameof(ReservationsDisplay));
                 }
             });
+        }
+
+        private bool CanCancelAppointment(object obj)
+        {
+            if (_selectedReservation == null)
+                return false;
+            return true;
         }
 
         private async Task CancelAppointment(object arg)

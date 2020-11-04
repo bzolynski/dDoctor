@@ -1,6 +1,7 @@
 ﻿using Application.Services;
 using Application.Services.PatientServices;
 using AutoMapper;
+using Domain.Entities;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -15,7 +16,6 @@ namespace WPFUi.ViewModels
         // Private fields
         #region Private fields
 
-        private readonly PatientsViewModel _patientsViewModel;
         private readonly PatientDisplayModel _patient;
         private readonly IPatientService _patientService;
         private readonly IMapper _mapper;
@@ -23,21 +23,27 @@ namespace WPFUi.ViewModels
 
         #endregion
 
-        // Bindings
-        #region Bindings
+        // Properties
+        #region Properties
         public string LastName { get; set; }
         public string FirstName { get; set; }
-        public string PhoneNumber { get; set; }
+        public int? PhoneNumber { get; set; }
         public string Email { get; set; }
         public DateTime BirthDate { get; set; }
+        public string Comments { get; set; }
         public string PostCode { get; set; }
         public string City { get; set; }
         public string Street { get; set; }
+        public int BuildingNumber { get; set; }
+        public int? FlatNumber { get; set; }
 
         #endregion
 
         // Commands
         #region Commands
+
+        public event Action FormSubmited;
+
         public ICommand SubmitFormCommand{ get; set; }
         public ICommand CloseFormCommand { get; set; }
 
@@ -45,18 +51,16 @@ namespace WPFUi.ViewModels
 
         // Constructors
         #region Constructors
-        private PatientFormViewModel(IPatientService patientService, IMapper mapper, IDateTimeService dateTimeService)
+       
+
+        // For new
+        public PatientFormViewModel(IPatientService patientService, IMapper mapper, IDateTimeService dateTimeService)
         {
+
             CloseFormCommand = new RelayCommand(CancelForm);
             _patientService = patientService;
             _mapper = mapper;
             _dateTimeService = dateTimeService;
-        }
-
-        // For new
-        public PatientFormViewModel(PatientsViewModel patientsViewModel, IPatientService patientService, IMapper mapper, IDateTimeService dateTimeService) : this(patientService, mapper, dateTimeService)
-        {
-            _patientsViewModel = patientsViewModel;
 
             BirthDate = _dateTimeService.Now;
 
@@ -64,9 +68,8 @@ namespace WPFUi.ViewModels
         }
 
         //For edit
-        public PatientFormViewModel(PatientsViewModel patientsViewModel, PatientDisplayModel patient, IPatientService patientService, IMapper mapper, IDateTimeService dateTimeService) : this(patientService, mapper, dateTimeService)
+        public PatientFormViewModel(PatientDisplayModel patient, IPatientService patientService, IMapper mapper, IDateTimeService dateTimeService) : this(patientService, mapper, dateTimeService)
         {
-            _patientsViewModel = patientsViewModel;
             _patient = patient;
 
 
@@ -74,10 +77,13 @@ namespace WPFUi.ViewModels
             FirstName = patient.FirstName;
             PhoneNumber = patient.PhoneNumber;
             Email = patient.Email;
+            Comments = patient.Comments;
             BirthDate = patient.BirthDate;
             PostCode = patient.Address.PostCode;
             City = patient.Address.City;
             Street = patient.Address.Street;
+            BuildingNumber = patient.Address.BuildingNumber;
+            FlatNumber = patient.Address.FlatNumber;
 
             SubmitFormCommand = new AsyncRelayCommand(SubmitEditPatientForm, (ex) => { throw ex; });
 
@@ -87,63 +93,58 @@ namespace WPFUi.ViewModels
 
         // Methods
         #region Methods
+
         private async Task SubmitNewPatientForm(object obj)
         {
-            var newPatient = await _patientService.CreatePatient(new Domain.Entities.Patient
+            var newPatient = await _patientService.CreatePatient(new Patient
             {
                 LastName = LastName,
                 FirstName = FirstName,
                 Email = Email,
                 PhoneNumber = PhoneNumber,
                 BirthDate = BirthDate,
-                Address = new Domain.Entities.Address
+                Comments = Comments,
+                Address = new Address
                 {
                     City = City,
                     PostCode = PostCode,
-                    Street = Street
+                    Street = Street,
+                    BuildingNumber = BuildingNumber,
+                    FlatNumber = FlatNumber
                 }
             });
 
-            _patientsViewModel.PatientsList.Add(_mapper.Map<PatientDisplayModel>(newPatient));
-            _patientsViewModel.PatientsDisplayList.Add(_mapper.Map<PatientDisplayModel>(newPatient));
-            CloseForm();
+            FormSubmited?.Invoke();
+
         }
 
         private async Task SubmitEditPatientForm(object obj)
         {
-            var editedPatient = await _patientService.UpdatePatient(_patient.Id, new Domain.Entities.Patient
+            var editedPatient = await _patientService.UpdatePatient(_patient.Id, new Patient
             {
                 LastName = LastName,
                 FirstName = FirstName,
                 Email = Email,
                 PhoneNumber = PhoneNumber,
                 BirthDate = BirthDate,
-                Address = new Domain.Entities.Address
+                Comments = Comments,
+                Address = new Address
                 {
                     City = City,
                     PostCode = PostCode,
-                    Street = Street
+                    Street = Street,
+                    BuildingNumber = BuildingNumber,
+                    FlatNumber = FlatNumber
                 }
             });
 
-            _patientsViewModel.PatientsList.Remove(_patient);
-            _patientsViewModel.PatientsList.Add(_mapper.Map<PatientDisplayModel>(editedPatient)); 
-            _patientsViewModel.PatientsDisplayList.Remove(_patient);
-            _patientsViewModel.PatientsDisplayList.Add(_mapper.Map<PatientDisplayModel>(editedPatient));
-
-            CloseForm();
-
+            FormSubmited?.Invoke();
         }
 
 
-        private void CancelForm(object param)
+        private void CancelForm(object obj)
         {
-            CloseForm();
-        }
-
-        private void CloseForm()
-        {
-            _patientsViewModel.PatientFormViewModel = null;
+            FormSubmited?.Invoke();
         }
 
         #endregion

@@ -17,6 +17,7 @@ using Application.Services.DoctorServices;
 using Application.Services.ScheduleServices;
 using WPFUi.ViewModels.AppointmentVMs;
 using Application.Services.ReservationServices;
+using Application.Services.SpecializationServices;
 
 namespace WPFUi
 {
@@ -41,6 +42,8 @@ namespace WPFUi
 
             services.AddSingleton(Configuration);
 
+            
+
             services.AddSingleton<ShellView>();
             services.AddSingleton<ShellViewModel>();
             services.AddSingleton<HomeView>();
@@ -56,17 +59,20 @@ namespace WPFUi
             services.AddScoped<IRootViewModelFactory, RootViewModelFactory>();
             services.AddScoped<IViewModelFactory<HomeViewModel>, HomeViewModelFactory>();
             services.AddScoped<IViewModelFactory<PatientsViewModel>, PatientsViewModelFactory>();
-            services.AddScoped<IViewModelFactory<AddAppointmentViewModel>, AddAppointmentViewModelFactory>();
+            services.AddScoped<IViewModelFactory<AddAppointmentViewModel>>(services => new AddAppointmentViewModelFactory(
+                services.GetRequiredService<ISpecializationService>(),
+                services.GetRequiredService<IDoctorService>(),
+                services.GetRequiredService<IScheduleService>(),
+                services.GetRequiredService<IDateTimeService>(),
+                services.GetRequiredService<IPatientService>(),
+                services.GetRequiredService<IReservationService>(),
+                services.GetRequiredService<IMapper>(),
+                services.GetRequiredService<RenavigatorViewModelFactory<HomeViewModel>>()));
 
             services.AddScoped<IViewModelFactory<ViewAppointmentsViewModel>>(services => new ViewAppointmentsViewModelFactory(
                     services.GetRequiredService<IReservationService>(),
                     services.GetRequiredService<IDateTimeService>(),
                     services.GetRequiredService<RenavigatorViewModelFactory<HomeViewModel>>()));
-
-            services.AddScoped<IViewModelFactory<AddPatientViewModel>>(services => new AddPatientViewModelFactory(
-                    services.GetRequiredService<IPatientService>(),
-                    services.GetRequiredService<IDateTimeService>(),
-                    services.GetRequiredService<RenavigatorViewModelFactory<PatientsViewModel>>()));
 
             services.AddScoped<IViewModelFactory<ManageSchedulesViewModel>>(services => new ManageSchedulesViewModelFactory(
                 services.GetRequiredService<IDoctorService>(),

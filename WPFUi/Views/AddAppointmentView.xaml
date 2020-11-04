@@ -287,7 +287,8 @@
                             Command="{Binding AddAppointmentCommand}"
                             Margin="0 0 10 0"/>
                     <Button Style="{StaticResource MenuBarButton}"
-                            Content="Cancel"/>
+                            Content="Close"
+                            Command="{Binding CloseCommand}"/>
                 </StackPanel>
             </Grid>
             

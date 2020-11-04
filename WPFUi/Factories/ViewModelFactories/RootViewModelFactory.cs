@@ -10,7 +10,6 @@ namespace WPFUi.Factories.ViewModelFactories
     {
         private readonly IViewModelFactory<HomeViewModel> _homeViewModelFactory;
         private readonly IViewModelFactory<PatientsViewModel> _patientsViewModelFactory;
-        private readonly IViewModelFactory<AddPatientViewModel> _addPatientViewModelFactory;
         private readonly IViewModelFactory<AddAppointmentViewModel> _appointmenrViewModelFactory;
         private readonly IViewModelFactory<ManageSchedulesViewModel> _manageScheduleViewModelFactory;
         private readonly IViewModelFactory<GenerateScheduleViewModel> _generateScheduleViewModelFactory;
@@ -18,7 +17,6 @@ namespace WPFUi.Factories.ViewModelFactories
 
         public RootViewModelFactory(IViewModelFactory<HomeViewModel> homeViewModelFactory,
             IViewModelFactory<PatientsViewModel> patientsViewModelFactory, 
-            IViewModelFactory<AddPatientViewModel> addPatientViewModelFactory, 
             IViewModelFactory<AddAppointmentViewModel> appointmenrViewModelFactory,
             IViewModelFactory<ManageSchedulesViewModel> manageScheduleViewModelFactory,
             IViewModelFactory<GenerateScheduleViewModel> generateScheduleViewModelFactory,
@@ -26,7 +24,6 @@ namespace WPFUi.Factories.ViewModelFactories
         {
             _homeViewModelFactory = homeViewModelFactory;
             _patientsViewModelFactory = patientsViewModelFactory;
-            _addPatientViewModelFactory = addPatientViewModelFactory;
             _appointmenrViewModelFactory = appointmenrViewModelFactory;
             _manageScheduleViewModelFactory = manageScheduleViewModelFactory;
             _generateScheduleViewModelFactory = generateScheduleViewModelFactory;
@@ -40,8 +37,6 @@ namespace WPFUi.Factories.ViewModelFactories
                     return _homeViewModelFactory.CreateViewModel();
                 case ViewType.Patients:
                     return _patientsViewModelFactory.CreateViewModel();
-                case ViewType.AddPatient:
-                    return _addPatientViewModelFactory.CreateViewModel();
                 case ViewType.AddAppointment:
                     return _appointmenrViewModelFactory.CreateViewModel();
                 case ViewType.ManageSchedules:

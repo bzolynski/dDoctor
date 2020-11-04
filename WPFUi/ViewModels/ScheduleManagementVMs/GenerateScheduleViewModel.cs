@@ -64,6 +64,7 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
 
             if (SelectedDaysOfWeek == null)
                 SelectedDaysOfWeek = new List<DayOfWeek>();
+
             DoctorPicker = new DoctorPickerViewModel(doctorService, mapper);
 
             DoctorPicker.PropertyChanged += DoctorPicker_SelectedDoctorChanged;
