@@ -2,9 +2,6 @@
 using Application.Services.ScheduleServices;
 using Application.Services.SpecializationServices;
 using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using WPFUi.ViewModels.ScheduleManagementVMs;
 
 namespace WPFUi.Factories.ViewModelFactories

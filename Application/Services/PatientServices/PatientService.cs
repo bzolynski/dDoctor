@@ -2,7 +2,6 @@
 using Persistance.Services.AddressDataServices;
 using Persistance.Services.PatientDataServices;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 
 namespace Application.Services.PatientServices

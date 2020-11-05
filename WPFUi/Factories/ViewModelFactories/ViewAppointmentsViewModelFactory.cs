@@ -1,8 +1,5 @@
 ﻿using Application.Services;
 using Application.Services.ReservationServices;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using WPFUi.States.Navigation;
 using WPFUi.ViewModels.AppointmentVMs;
 

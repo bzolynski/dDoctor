@@ -18,6 +18,8 @@ using Application.Services.ScheduleServices;
 using WPFUi.ViewModels.AppointmentVMs;
 using Application.Services.ReservationServices;
 using Application.Services.SpecializationServices;
+using WPFUi.ViewModels.PatientVMs;
+using FluentValidation;
 
 namespace WPFUi
 {
@@ -37,12 +39,12 @@ namespace WPFUi
         {
             IServiceCollection services = new ServiceCollection();
 
+            services.AddSingleton(Configuration);
+
             services.AddApplication();
             services.AddPersistance(Configuration);
 
-            services.AddSingleton(Configuration);
-
-            
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
             services.AddSingleton<ShellView>();
             services.AddSingleton<ShellViewModel>();

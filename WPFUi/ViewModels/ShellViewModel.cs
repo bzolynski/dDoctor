@@ -4,7 +4,6 @@ using WPFUi.Commands;
 using WPFUi.Commands.Common;
 using WPFUi.Factories.ViewModelFactories;
 using WPFUi.States.Navigation;
-using WPFUi.Views;
 
 namespace WPFUi.ViewModels
 {

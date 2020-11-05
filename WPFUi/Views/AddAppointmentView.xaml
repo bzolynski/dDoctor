@@ -4,14 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WPFUi.Views"
-             xmlns:components="clr-namespace:WPFUi.Components"
+             xmlns:components="clr-namespace:WPFUi.Controls.Components"
              xmlns:converters="clr-namespace:WPFUi.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <converters:DateTimeToBoolMultiConverter x:Key="DateTimeToBoolMultiConverter" />
-        <converters:CosToBoolConverter x:Key="CosToBoolConverter" />
-        <converters:DateToBoolConverter x:Key="DateToBoolConverter" />
+        <converters:NullToBoolConverter x:Key="NullToBoolConverter" />
 
         <Style TargetType="{x:Type TextBlock}" x:Key="AddAppointmentTextBlock">
             <Setter Property="FontSize" Value="18" />
@@ -216,7 +215,7 @@
                                     <Style TargetType="ComboBoxItem">
 
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding PatientId, Converter={StaticResource CosToBoolConverter}}" Value="False">
+                                            <DataTrigger Binding="{Binding PatientId, Converter={StaticResource NullToBoolConverter}}" Value="False">
                                                 <Setter Property="IsEnabled" Value="False" />
                                             </DataTrigger>
                                         </Style.Triggers>

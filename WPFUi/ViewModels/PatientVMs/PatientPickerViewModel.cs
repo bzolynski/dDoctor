@@ -1,13 +1,11 @@
 ﻿using Application.Services.PatientServices;
 using AutoMapper;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using WPFUi.Models;
 
-namespace WPFUi.ViewModels
+namespace WPFUi.ViewModels.PatientVMs
 {
     public class PatientPickerViewModel : ViewModelBase
     {

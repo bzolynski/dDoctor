@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WPFUi.States.Navigation
+﻿namespace WPFUi.States.Navigation
 {
     public interface IRenavigator
     {

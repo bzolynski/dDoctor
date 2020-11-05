@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WPFUi.Models
+﻿namespace WPFUi.Models
 {
     public class DoctorPickerModel
     {

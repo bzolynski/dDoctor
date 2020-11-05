@@ -2,9 +2,6 @@
 using Application.Services.DoctorServices;
 using Application.Services.ScheduleServices;
 using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using WPFUi.States.Navigation;
 using WPFUi.ViewModels.ScheduleManagementVMs;
 

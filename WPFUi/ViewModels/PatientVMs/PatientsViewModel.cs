@@ -3,15 +3,15 @@ using Application.Services.PatientServices;
 using Application.Services.ReservationServices;
 using AutoMapper;
 using Domain.Entities;
-using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using WPFUi.Commands.Common;
 using WPFUi.Models;
+using WPFUi.Validators;
 
-namespace WPFUi.ViewModels
+namespace WPFUi.ViewModels.PatientVMs
 {
     public class PatientsViewModel : ViewModelBase
     {
@@ -26,6 +26,7 @@ namespace WPFUi.ViewModels
         private readonly IMapper _mapper;
         private readonly IDateTimeService _dateTimeService;
         private readonly IReservationService _reservationService;
+        private readonly PatientFormValidator _validationRules;
 
         #endregion
 
@@ -40,9 +41,9 @@ namespace WPFUi.ViewModels
         public PatientFormViewModel PatientFormViewModel
         {
             get { return _patientFormViewModel; }
-            set 
-            { 
-                _patientFormViewModel = value;             
+            set
+            {
+                _patientFormViewModel = value;
                 OnPropertyChanged(nameof(PatientFormViewModel));
             }
         }
@@ -50,8 +51,8 @@ namespace WPFUi.ViewModels
         public PatientDisplayModel SelectedPatient
         {
             get { return _selectedPatient; }
-            set 
-            { 
+            set
+            {
                 _selectedPatient = value;
 
                 OnPropertyChanged(nameof(SelectedPatient));
@@ -60,7 +61,7 @@ namespace WPFUi.ViewModels
                     LoadReservations();
             }
         }
- 
+
         public string SearchText
         {
             get { return _searchText; }
@@ -89,17 +90,18 @@ namespace WPFUi.ViewModels
 
         // Constructors
         #region Constructors
-        public PatientsViewModel(IPatientService patientService, IMapper mapper, IDateTimeService dateTimeService, IReservationService reservationService)
+        public PatientsViewModel(IPatientService patientService, IMapper mapper, IDateTimeService dateTimeService, IReservationService reservationService, PatientFormValidator validationRules)
         {
 
             _patientService = patientService;
             _mapper = mapper;
             _dateTimeService = dateTimeService;
             _reservationService = reservationService;
+            _validationRules = validationRules;
 
             OpenEditPatientFormCommand = new RelayCommand(OpenEditPatientForm, CanOpenEditPatientForm);
             OpenAddPatientFormCommand = new RelayCommand(OpenAddPatientForm);
-            DeletePatientCommand = new AsyncRelayCommand(DeletePatient, CanDeletePatient,(ex) => throw ex);
+            DeletePatientCommand = new AsyncRelayCommand(DeletePatient, CanDeletePatient, (ex) => throw ex);
             ReloadPatientListCommand = new RelayCommand(ReloadPatientList);
 
 
@@ -119,7 +121,7 @@ namespace WPFUi.ViewModels
                 {
                     PatientsList = new ObservableCollection<PatientDisplayModel>(_mapper.Map<ObservableCollection<PatientDisplayModel>>(task.Result));
                     PatientsDisplayList = new ObservableCollection<PatientDisplayModel>(PatientsList);
-                    OnPropertyChanged(nameof(PatientsList));                    
+                    OnPropertyChanged(nameof(PatientsList));
                     OnPropertyChanged(nameof(PatientsDisplayList));
                 }
             });
@@ -147,28 +149,28 @@ namespace WPFUi.ViewModels
 
         private async Task DeletePatient(object obj)
         {
-   
 
-                await _patientService.DeletePatient(_selectedPatient.Id);
 
-                PatientsList.Remove(SelectedPatient);
-                PatientsDisplayList.Remove(SelectedPatient);
+            await _patientService.DeletePatient(_selectedPatient.Id);
 
-            
-            
-            
+            PatientsList.Remove(SelectedPatient);
+            PatientsDisplayList.Remove(SelectedPatient);
+
+
+
+
         }
 
         private void OpenAddPatientForm(object obj)
-        {                
-            PatientFormViewModel = new PatientFormViewModel(_patientService, _mapper, _dateTimeService);
+        {
+            PatientFormViewModel = new PatientFormViewModel(_patientService, _dateTimeService, _validationRules);
 
             PatientFormViewModel.FormSubmited += PatientFormViewModel_FormSubmited;
 
 
         }
 
-        
+
 
         private bool CanOpenEditPatientForm(object obj)
         {
@@ -179,8 +181,8 @@ namespace WPFUi.ViewModels
 
         private void OpenEditPatientForm(object obj)
         {
-            
-                PatientFormViewModel = new PatientFormViewModel(_selectedPatient, _patientService, _mapper, _dateTimeService);
+
+            PatientFormViewModel = new PatientFormViewModel(_selectedPatient, _patientService, _dateTimeService, _validationRules);
 
             PatientFormViewModel.FormSubmited += PatientFormViewModel_FormSubmited;
 
@@ -189,7 +191,7 @@ namespace WPFUi.ViewModels
         private void PatientSearch()
         {
             PatientsDisplayList = new ObservableCollection<PatientDisplayModel>(PatientsList
-               .Where(x => x.FullName.ToUpper().Contains(SearchText.ToUpper()) || 
+               .Where(x => x.FullName.ToUpper().Contains(SearchText.ToUpper()) ||
                x.FullAddressWithPostCode.ToUpper().Contains(SearchText.ToUpper())));
             OnPropertyChanged(nameof(PatientsDisplayList));
         }

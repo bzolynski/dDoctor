@@ -5,9 +5,6 @@ using Application.Services.ReservationServices;
 using Application.Services.ScheduleServices;
 using Application.Services.SpecializationServices;
 using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using WPFUi.States.Navigation;
 using WPFUi.ViewModels.AppointmentVMs;
 

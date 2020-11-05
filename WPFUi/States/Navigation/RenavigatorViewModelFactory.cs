@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using WPFUi.Factories.ViewModelFactories;
+﻿using WPFUi.Factories.ViewModelFactories;
 using WPFUi.ViewModels;
 
 namespace WPFUi.States.Navigation

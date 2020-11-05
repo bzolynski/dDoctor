@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WPFUi.Controls"
              xmlns:xceed="http://schemas.xceed.com/wpf/xaml/toolkit"
-             xmlns:components="clr-namespace:WPFUi.Components"
+             xmlns:components="clr-namespace:WPFUi.Controls.Components"
              xmlns:system="clr-namespace:System;assembly=mscorlib" 
              xmlns:converters="clr-namespace:WPFUi.Converters"
              mc:Ignorable="d" 

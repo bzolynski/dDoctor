@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace WPFUi.Components
+namespace WPFUi.Controls.Components
 {
     /// <summary>
     /// Interaction logic for PatientsPageBottomBoxLayout.xaml
