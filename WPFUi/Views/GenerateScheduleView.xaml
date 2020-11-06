@@ -20,87 +20,172 @@
                 <x:Type TypeName="system:DayOfWeek" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
+
+        <Style x:Key="TextBlockStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="FontSize" Value="18" />
+        </Style>
     </UserControl.Resources>
 
     <Grid Background="#f0f0f0">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        
+        <Grid Margin="10">
 
-        <Grid Grid.Row="0">
-            <components:DoctorPicker DataContext="{Binding DoctorPicker}" />
-        </Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
 
-        <Grid Grid.Row="1" Background="WhiteSmoke">
-            <StackPanel Orientation="Vertical">
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-                <StackPanel Orientation="Horizontal">
-                    <DatePicker SelectedDate="{Binding StartDate, Mode=OneWayToSource}" />
-                    <DatePicker SelectedDate="{Binding EndDate, Mode=OneWayToSource}" />
+            <Grid Grid.Row="0" Grid.ColumnSpan="2" Background="Navy" Height="50" Margin="0 0 0 10">
+                <TextBlock Text="Generate schedule" 
+                           FontSize="30"
+                           Foreground="WhiteSmoke"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center" />
+            </Grid>
+            
+            <Grid Grid.Column="0" 
+                  Grid.Row="1"
+                  Grid.RowSpan="2"
+                  Margin="0 40 10 0">
+                
+                <StackPanel Orientation="Vertical">
 
-                </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 0 0 30">
+                        <StackPanel Orientation="Horizontal" Margin="10 0">
+                            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Start date: " VerticalAlignment="Center"/>
+                            <DatePicker SelectedDate="{Binding StartDate, Mode=OneWayToSource}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="10 0">
+                            <TextBlock Style="{StaticResource TextBlockStyle}" Text="End date: " VerticalAlignment="Center"/>
+                            <DatePicker SelectedDate="{Binding EndDate, Mode=OneWayToSource}" />
+                        </StackPanel>
 
-                <!-- Time picker -->
-                <StackPanel Orientation="Horizontal">
-                    
-                    <!-- TODO: Create own TimePicker -->
-                    <xceed:TimePicker Value="{Binding Path=StartHour, Mode=OneWayToSource}" Width="100" />
-                    <xceed:TimePicker Value="{Binding Path=EndHour, Mode=OneWayToSource}" Width="100" />
-                    
-                    
-                    
-                </StackPanel>
-                <ComboBox ItemsSource="{Binding TimeIntervalsList}"
-                          SelectedItem="{Binding MaxTimePerPatient}">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock  Text="{Binding StringFormat={}mm}" />
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
+                    </StackPanel>
 
-                <Border Style="{StaticResource MainDarkBorder}" HorizontalAlignment="Center">
-                    <ItemsControl ItemsSource="{Binding  Source={StaticResource DayOfWeek}}">
-                        
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <CheckBox Margin="10"
+                    <!-- Time picker -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 0 0 30">
+
+                        <!-- TODO: Create own TimePicker -->
+
+                        <StackPanel Orientation="Horizontal" Margin="10 0">
+                            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Start hour: " VerticalAlignment="Center"/>
+                            <xceed:TimePicker Value="{Binding Path=StartHour, Mode=OneWayToSource}" Width="100" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="10 0">
+                            <TextBlock Style="{StaticResource TextBlockStyle}" Text="End hour: " VerticalAlignment="Center"/>
+                            <xceed:TimePicker Value="{Binding Path=EndHour, Mode=OneWayToSource}" Width="100" />
+                        </StackPanel>
+
+
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 0 0 30">
+
+                        <!-- TODO: Create own TimePicker -->
+
+                        <TextBlock Style="{StaticResource TextBlockStyle}" Text="Time per patient: " VerticalAlignment="Center"/>
+                        <ComboBox ItemsSource="{Binding TimeIntervalsList}"
+                                  SelectedItem="{Binding MaxTimePerPatient}"
+                                  Width="100">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock  Text="{Binding StringFormat={}mm}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
+                    </StackPanel>
+
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="0 0 0 30">
+
+                        <TextBlock Style="{StaticResource TextBlockStyle}" 
+                                   Margin="0 0 0 5"
+                                   Text="Select days of week: " 
+                                   HorizontalAlignment="Center"/>
+
+                        <Border Style="{StaticResource MainDarkBorder}" HorizontalAlignment="Center">
+
+                            <ItemsControl ItemsSource="{Binding  Source={StaticResource DayOfWeek}}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <CheckBox Margin="10"
                                           Content="{Binding}"                                           
                                           Command="{Binding Path=DataContext.SelectDaysOfWeekCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}">
-                                    <CheckBox.CommandParameter>
-                                        <MultiBinding Converter="{StaticResource MultiBindingConverter}">
-                                            <Binding Path="IsChecked" RelativeSource="{RelativeSource Self}" />
-                                            <Binding Path="Content" RelativeSource="{RelativeSource Self}" />
-                                        </MultiBinding>
-                                    </CheckBox.CommandParameter>
-                                    
-                                </CheckBox>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Horizontal" />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                    </ItemsControl>
-                </Border>
+                                            <CheckBox.CommandParameter>
+                                                <MultiBinding Converter="{StaticResource MultiBindingConverter}">
+                                                    <Binding Path="IsChecked" RelativeSource="{RelativeSource Self}" />
+                                                    <Binding Path="Content" RelativeSource="{RelativeSource Self}" />
+                                                </MultiBinding>
+                                            </CheckBox.CommandParameter>
+                                        </CheckBox>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
 
-                <ComboBox ItemsSource="{Binding Specializations}"
-                          SelectedItem="{Binding SelectedSpecialization}">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Name}" />
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
-            </StackPanel>
+                        </Border>
 
-            <Button Style="{StaticResource MenuBarButton}"
+                    </StackPanel>
+
+
+                    
+
+                    
+                </StackPanel>
+
+                
+
+            </Grid>
+
+            <Grid Grid.Column="1" Grid.Row="1" Margin="10 0 0 0">
+                <StackPanel Orientation="Vertical">
+                    <components:DoctorPicker DataContext="{Binding DoctorPicker}" />
+
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="0 15 0 30">
+
+                        <!-- TODO: Create own TimePicker -->
+
+                        <TextBlock Style="{StaticResource TextBlockStyle}" 
+                                   Text="Select specialization: " 
+                                   HorizontalAlignment="Center"/>
+
+                        <ComboBox Width="250" 
+                                  ItemsSource="{Binding Specializations}"
+                                  SelectedItem="{Binding SelectedSpecialization}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+                    
+                    
+                    
+                </StackPanel>
+            </Grid>
+
+            <Grid Grid.Row="3" Grid.Column="0" Margin="0 0 10 0">
+                <Button Style="{StaticResource MenuBarButton}"
+                    Command="{Binding CancelCommand}"
+                    Content="Cancel"/>
+            </Grid>
+            <Grid Grid.Row="3" Grid.Column="1" Margin="10 0 0 0">
+                <Button Style="{StaticResource MenuBarButton}"
                     Command="{Binding GenerateScheduleCommand}"
                     Content="Generate"/>
-
+            </Grid>
         </Grid>
-        
     </Grid>
 </UserControl>

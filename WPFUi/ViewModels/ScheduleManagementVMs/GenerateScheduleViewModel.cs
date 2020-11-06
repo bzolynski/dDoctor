@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using WPFUi.Commands.Common;
 using WPFUi.Models;
+using WPFUi.States.Navigation;
 
 namespace WPFUi.ViewModels.ScheduleManagementVMs
 {
@@ -17,6 +18,7 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
     {
         private readonly IScheduleService _scheduleService;
         private readonly ISpecializationService _specializationService;
+        private readonly IRenavigator _manageSchedulesRenavigator;
 
         // Private fields
         #region Private fields
@@ -54,11 +56,17 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
 
         public ICommand SelectDaysOfWeekCommand { get; set; }
         public ICommand GenerateScheduleCommand { get; set; }
+        public ICommand CancelCommand { get; set; }
         #endregion
 
         // Constructors
         #region Constructors
-        public GenerateScheduleViewModel(IScheduleService scheduleService, IDoctorService doctorService, ISpecializationService specializationService, IMapper mapper)
+        public GenerateScheduleViewModel(
+            IScheduleService scheduleService, 
+            IDoctorService doctorService, 
+            ISpecializationService specializationService, 
+            IMapper mapper,
+            IRenavigator manageSchedulesRenavigator)
         {
 
             if (SelectedDaysOfWeek == null)
@@ -69,9 +77,12 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
             DoctorPicker.PropertyChanged += DoctorPicker_SelectedDoctorChanged;
 
             SelectDaysOfWeekCommand = new RelayCommand(SelectDaysOfWeek);
+            CancelCommand = new RelayCommand(Cancel);
             GenerateScheduleCommand = new AsyncRelayCommand(GenerateSchedule, (ex) => throw ex);
+
             _scheduleService = scheduleService;
             _specializationService = specializationService;
+            _manageSchedulesRenavigator = manageSchedulesRenavigator;
 
             TimeIntervalsList = new List<TimeSpan>
             {
@@ -83,6 +94,8 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
 
             LoadSpecializations();
         }
+
+        
 
         #endregion
 
@@ -122,6 +135,11 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
         private void DoctorPicker_SelectedDoctorChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             OnPropertyChanged(nameof(SelectedDoctor));
+        }
+
+        private void Cancel(object obj)
+        {
+            _manageSchedulesRenavigator.Renavigate();
         }
 
         #endregion
