@@ -26,12 +26,12 @@ namespace WPFUi.Validators
 
             RuleFor(x => x.PhoneNumber)
                 .Cascade(CascadeMode.Stop);
-               // .Must(BeValidNumber).WithMessage("Invalid number");
+            // .Must(BeValidNumber).WithMessage("Invalid number");
 
             // TODO: Custom REGEX for email
             RuleFor(x => x.Email)
                 .Cascade(CascadeMode.Stop)
-                .EmailAddress(FluentValidation.Validators.EmailValidationMode.AspNetCoreCompatible).WithMessage("Invalid email");
+                .EmailAddress(FluentValidation.Validators.EmailValidationMode.AspNetCoreCompatible).WithMessage("Invalid email").When(x => x.Email?.Length > 0);
 
             RuleFor(x => x.BirthDate)
                 .Cascade(CascadeMode.Stop)
@@ -61,6 +61,7 @@ namespace WPFUi.Validators
 
         }
 
+      
 
         private bool BeValidAge(DateTime date)
         {

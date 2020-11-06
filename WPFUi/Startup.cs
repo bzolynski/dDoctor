@@ -61,6 +61,7 @@ namespace WPFUi
             services.AddScoped<IRootViewModelFactory, RootViewModelFactory>();
             services.AddScoped<IViewModelFactory<HomeViewModel>, HomeViewModelFactory>();
             services.AddScoped<IViewModelFactory<PatientsViewModel>, PatientsViewModelFactory>();
+
             services.AddScoped<IViewModelFactory<AddAppointmentViewModel>>(services => new AddAppointmentViewModelFactory(
                 services.GetRequiredService<ISpecializationService>(),
                 services.GetRequiredService<IDoctorService>(),
@@ -83,7 +84,12 @@ namespace WPFUi
                 services.GetRequiredService<IMapper>(),
                 services.GetRequiredService<RenavigatorViewModelFactory<GenerateScheduleViewModel>>()));
 
-            services.AddScoped<IViewModelFactory<GenerateScheduleViewModel>, GenerateScheduleViewModelFactory>();
+            services.AddScoped<IViewModelFactory<GenerateScheduleViewModel>>(services => new GenerateScheduleViewModelFactory(
+                services.GetRequiredService<IScheduleService>(),
+                services.GetRequiredService<IDoctorService>(),
+                services.GetRequiredService<ISpecializationService>(),
+                services.GetRequiredService<IMapper>(),
+                services.GetRequiredService<RenavigatorViewModelFactory<HomeViewModel>>()));
 
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
