@@ -39,6 +39,10 @@
                 <views:ManageSchedulesView />
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type viewModels:ManageUsersViewModel}">
+                <views:ManageUsersView />
+            </DataTemplate>
+
             <DataTemplate DataType="{x:Type scheduleVMs:GenerateScheduleViewModel}">
                 <views:GenerateScheduleView />
             </DataTemplate>

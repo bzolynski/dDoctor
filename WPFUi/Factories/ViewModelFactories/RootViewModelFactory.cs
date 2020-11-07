@@ -15,13 +15,16 @@ namespace WPFUi.Factories.ViewModelFactories
         private readonly IViewModelFactory<ManageSchedulesViewModel> _manageScheduleViewModelFactory;
         private readonly IViewModelFactory<GenerateScheduleViewModel> _generateScheduleViewModelFactory;
         private readonly IViewModelFactory<ViewAppointmentsViewModel> _viewAppointmentsViewModelFactory;
+        private readonly IViewModelFactory<ManageUsersViewModel> _manageUsersViewModelFactory;
 
-        public RootViewModelFactory(IViewModelFactory<HomeViewModel> homeViewModelFactory,
+        public RootViewModelFactory(
+            IViewModelFactory<HomeViewModel> homeViewModelFactory,
             IViewModelFactory<PatientsViewModel> patientsViewModelFactory, 
             IViewModelFactory<AddAppointmentViewModel> appointmenrViewModelFactory,
             IViewModelFactory<ManageSchedulesViewModel> manageScheduleViewModelFactory,
             IViewModelFactory<GenerateScheduleViewModel> generateScheduleViewModelFactory,
-            IViewModelFactory<ViewAppointmentsViewModel> viewAppointmentsViewModelFactory)
+            IViewModelFactory<ViewAppointmentsViewModel> viewAppointmentsViewModelFactory,
+            IViewModelFactory<ManageUsersViewModel> manageUsersViewModelFactory)
         {
             _homeViewModelFactory = homeViewModelFactory;
             _patientsViewModelFactory = patientsViewModelFactory;
@@ -29,6 +32,7 @@ namespace WPFUi.Factories.ViewModelFactories
             _manageScheduleViewModelFactory = manageScheduleViewModelFactory;
             _generateScheduleViewModelFactory = generateScheduleViewModelFactory;
             _viewAppointmentsViewModelFactory = viewAppointmentsViewModelFactory;
+            _manageUsersViewModelFactory = manageUsersViewModelFactory;
         }
         public ViewModelBase CreateViewModel(ViewType viewType)
         {
@@ -46,6 +50,8 @@ namespace WPFUi.Factories.ViewModelFactories
                     return _generateScheduleViewModelFactory.CreateViewModel();
                 case ViewType.ViewAppointments:
                     return _viewAppointmentsViewModelFactory.CreateViewModel();
+                case ViewType.ManageUsers:
+                    return _manageUsersViewModelFactory.CreateViewModel();
                 default:
                     throw new Exception(); // TODO: Custom exception
             }

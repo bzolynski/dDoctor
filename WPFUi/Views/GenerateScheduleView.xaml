@@ -154,8 +154,6 @@
 
                     <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="0 15 0 30">
 
-                        <!-- TODO: Create own TimePicker -->
-
                         <TextBlock Style="{StaticResource TextBlockStyle}" 
                                    Text="Select specialization: " 
                                    HorizontalAlignment="Center"/>

@@ -91,6 +91,7 @@ namespace WPFUi
                 services.GetRequiredService<IMapper>(),
                 services.GetRequiredService<RenavigatorViewModelFactory<HomeViewModel>>()));
 
+            services.AddScoped<IViewModelFactory<ManageUsersViewModel>, ManageUsersViewModelFactory>();
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 

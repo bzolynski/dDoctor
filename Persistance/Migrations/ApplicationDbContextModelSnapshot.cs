@@ -19,6 +19,30 @@ namespace Persistance.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("Domain.Entities.Account", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AccountType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Accounts");
+                });
+
             modelBuilder.Entity("Domain.Entities.Address", b =>
                 {
                     b.Property<int>("Id")
@@ -63,7 +87,13 @@ namespace Persistance.Migrations
                     b.Property<int>("NPWZ")
                         .HasColumnType("int");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Doctors");
                 });
@@ -102,6 +132,30 @@ namespace Persistance.Migrations
                         .IsUnique();
 
                     b.ToTable("Patients");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Registrant", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Registrants");
                 });
 
             modelBuilder.Entity("Domain.Entities.Reservation", b =>
@@ -184,12 +238,30 @@ namespace Persistance.Migrations
                     b.ToTable("Specializations");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Doctor", b =>
+                {
+                    b.HasOne("Domain.Entities.Account", "Account")
+                        .WithOne("Doctor")
+                        .HasForeignKey("Domain.Entities.Doctor", "UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Entities.Patient", b =>
                 {
                     b.HasOne("Domain.Entities.Address", "Address")
                         .WithOne("Patient")
                         .HasForeignKey("Domain.Entities.Patient", "AddressId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.Registrant", b =>
+                {
+                    b.HasOne("Domain.Entities.Account", "Account")
+                        .WithOne("Registrant")
+                        .HasForeignKey("Domain.Entities.Registrant", "UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 

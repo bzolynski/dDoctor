@@ -10,8 +10,8 @@ using Persistance;
 namespace Persistance.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201030152734_Doctors3")]
-    partial class Doctors3
+    [Migration("20201107212639_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,6 +21,30 @@ namespace Persistance.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("Domain.Entities.Account", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AccountType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Accounts");
+                });
+
             modelBuilder.Entity("Domain.Entities.Address", b =>
                 {
                     b.Property<int>("Id")
@@ -28,7 +52,14 @@ namespace Persistance.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("BuildingNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FlatNumber")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PostCode")
@@ -58,7 +89,13 @@ namespace Persistance.Migrations
                     b.Property<int>("NPWZ")
                         .HasColumnType("int");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Doctors");
                 });
@@ -76,6 +113,9 @@ namespace Persistance.Migrations
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Comments")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
@@ -85,8 +125,8 @@ namespace Persistance.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("PhoneNumber")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -96,6 +136,30 @@ namespace Persistance.Migrations
                     b.ToTable("Patients");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Registrant", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Registrants");
+                });
+
             modelBuilder.Entity("Domain.Entities.Reservation", b =>
                 {
                     b.Property<int>("Id")
@@ -103,10 +167,10 @@ namespace Persistance.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("Hour")
-                        .HasColumnType("datetime2");
+                    b.Property<TimeSpan>("Hour")
+                        .HasColumnType("time");
 
-                    b.Property<int>("PatientId")
+                    b.Property<int?>("PatientId")
                         .HasColumnType("int");
 
                     b.Property<int>("ScheduleId")
@@ -114,8 +178,7 @@ namespace Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PatientId")
-                        .IsUnique();
+                    b.HasIndex("PatientId");
 
                     b.HasIndex("ScheduleId");
 
@@ -129,14 +192,14 @@ namespace Persistance.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("DayOfWeek")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("DoctorId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("EndHour")
-                        .HasColumnType("datetime2");
+                    b.Property<TimeSpan>("EndHour")
+                        .HasColumnType("time");
 
                     b.Property<TimeSpan>("MaxTimePerPatient")
                         .HasColumnType("time");
@@ -144,8 +207,8 @@ namespace Persistance.Migrations
                     b.Property<int>("SpecializationId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("StartHour")
-                        .HasColumnType("datetime2");
+                    b.Property<TimeSpan>("StartHour")
+                        .HasColumnType("time");
 
                     b.HasKey("Id");
 
@@ -177,6 +240,15 @@ namespace Persistance.Migrations
                     b.ToTable("Specializations");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Doctor", b =>
+                {
+                    b.HasOne("Domain.Entities.Account", "Account")
+                        .WithOne("Doctor")
+                        .HasForeignKey("Domain.Entities.Doctor", "UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Entities.Patient", b =>
                 {
                     b.HasOne("Domain.Entities.Address", "Address")
@@ -186,13 +258,20 @@ namespace Persistance.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Domain.Entities.Registrant", b =>
+                {
+                    b.HasOne("Domain.Entities.Account", "Account")
+                        .WithOne("Registrant")
+                        .HasForeignKey("Domain.Entities.Registrant", "UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Entities.Reservation", b =>
                 {
                     b.HasOne("Domain.Entities.Patient", "Patient")
-                        .WithOne("ScheduleHour")
-                        .HasForeignKey("Domain.Entities.Reservation", "PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Reservations")
+                        .HasForeignKey("PatientId");
 
                     b.HasOne("Domain.Entities.Schedule", "Schedule")
                         .WithMany("Reservations")

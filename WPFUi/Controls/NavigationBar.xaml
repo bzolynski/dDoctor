@@ -87,7 +87,9 @@
                                 
                             </MenuItem.Header>
 
-                            <MenuItem Header="Manage users"  />
+                            <MenuItem Header="Manage users" 
+                                      Command="{Binding UpdateCurrentViewModelCommand}"
+                                      CommandParameter="{x:Static navigator:ViewType.ManageUsers}"/>
 
 
                             <MenuItem Header="Manage schedules" 

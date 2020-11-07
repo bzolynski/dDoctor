@@ -7,6 +7,7 @@
         AddAppointment,
         ViewAppointments,
         ManageSchedules,
-        GenerateSchedule
+        GenerateSchedule,
+        ManageUsers
     }
 }

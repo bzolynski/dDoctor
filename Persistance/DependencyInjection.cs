@@ -9,6 +9,7 @@ using Persistance.Services.PatientDataServices;
 using Persistance.Services.ReservationDataService;
 using Persistance.Services.ScheduleDataServices;
 using Persistance.Services.SpecializationDataServices;
+using Persistance.Services.UserDataServices;
 
 namespace Persistance
 {
@@ -26,6 +27,7 @@ namespace Persistance
             services.AddScoped<NonQueryDataService<Reservation>>();
             services.AddScoped<NonQueryDataService<Specialization>>();
             services.AddScoped<NonQueryDataService<Doctor>>();
+            services.AddScoped<NonQueryDataService<Account>>();
 
             services.AddScoped<IAddressDataService, AddressDataService>();
             services.AddScoped<IPatientDataService, PatientDataService>();
@@ -33,6 +35,7 @@ namespace Persistance
             services.AddScoped<IDoctorDataService, DoctorDataService>();
             services.AddScoped<ISpecializationDataService, SpecializationDataService>();
             services.AddScoped<IReservationDataService, ReservationDataService>();
+            services.AddScoped<IAccountDataService, AccountDataService>();
         }
     }
 }
