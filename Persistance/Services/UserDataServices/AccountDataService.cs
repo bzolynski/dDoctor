@@ -51,7 +51,10 @@ namespace Persistance.Services.UserDataServices
         {
             using (var context = _contextFactory.CreateDbContext())
             {
-                return await context.Accounts.ToListAsync();
+                return await context.Accounts
+                    .Include(a => a.Doctor)
+                    .Include(a => a.Registrant)
+                    .ToListAsync();
             }
 
         }

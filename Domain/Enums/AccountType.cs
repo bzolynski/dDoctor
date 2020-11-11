@@ -6,8 +6,9 @@ namespace Domain.Enums
 {
     public enum AccountType
     {
-        Admin,
+        Registrant,
         Doctor,
-        Registrant
+        Admin
+        
     }
 }

@@ -9,8 +9,10 @@ namespace Application.Services.UserService
 {
     public interface IAccountService
     {
-        public Task<RegistrationResult> CreateUser(string userName, string email, string password, string confirmPassword, AccountType accountType, Doctor doctor = null, Registrant registrant = null);
+        Task<RegistrationResult> CreateUser(string userName, string email, string password, string confirmPassword, AccountType accountType, string firstName, string lastName, string NPWZ = null);
+        Task<Account> Login(string username, string password);
+        Task<IEnumerable<Account>> GetAllUsers(string username);
+        Task<string> GenerateValidUserName(string firstName, string lastName);
 
-        public Task<Account> Login(string username, string password);
     }
 }

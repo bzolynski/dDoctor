@@ -3,6 +3,8 @@ using Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Persistance.Services.UserDataServices;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Application.Services.UserService
@@ -17,7 +19,8 @@ namespace Application.Services.UserService
             _accountDataService = accountDataService;
             _passwordHasher = passwordHasher;
         }
-        public async Task<RegistrationResult> CreateUser(string userName, string email, string password, string confirmPassword, AccountType accountType, Doctor doctor = null, Registrant registrant = null)
+
+        public async Task<RegistrationResult> CreateUser(string userName, string email, string password, string confirmPassword, AccountType accountType, string firstName, string lastName, string NPWZ = null)
         {
             if (password != confirmPassword)
                 return RegistrationResult.PasswordsDoNotMatch;
@@ -44,9 +47,20 @@ namespace Application.Services.UserService
                 case AccountType.Admin:
                     break;
                 case AccountType.Doctor:
+                    var doctor = new Doctor
+                    {
+                        FirstName = firstName,
+                        LastName = lastName,
+                        NPWZ = NPWZ
+                    };
                     account.Doctor = doctor;
                     break;
                 case AccountType.Registrant:
+                    var registrant = new Registrant
+                    {
+                        FirstName = firstName,
+                        LastName = lastName
+                    };
                     account.Registrant = registrant;
                     break;
                 default:
@@ -78,7 +92,39 @@ namespace Application.Services.UserService
 
             return account;
         }
+        
+        public async Task<string> GenerateValidUserName(string firstName, string lastName)
+        {
+            string username = "";
 
+            for (int i = 1; i < firstName.Length; i++)
+            {
+                username = $"{ firstName.Substring(0, i) }{ lastName }";
 
+                if (await CheckIfUsernameValid(username))
+                    break;
+
+                if (i == firstName.Length)
+                    for (int j = 0; j < 100; j++)
+                    {
+                        username = $"{ firstName }{ lastName }{j}";
+                        if (await CheckIfUsernameValid(username))
+                            break;
+                    }
+
+            }
+
+            return username;
+        }
+
+        private async Task<bool> CheckIfUsernameValid(string username)
+        {
+            return await _accountDataService.GetByUsername(username.ToUpper()) == null ? true : false;
+        }
+
+        public async Task<IEnumerable<Account>> GetAllUsers(string username)
+        {
+            return await _accountDataService.GetAll();
+        }
     }
 }

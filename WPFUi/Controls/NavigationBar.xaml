@@ -77,7 +77,7 @@
                         
                         
 
-                        <!-- Appointment -->
+                        <!-- Management -->
                         <MenuItem >
                             <MenuItem.Header>
                                 <StackPanel Orientation="Vertical">
@@ -95,6 +95,9 @@
                             <MenuItem Header="Manage schedules" 
                                       Command="{Binding UpdateCurrentViewModelCommand}"
                                       CommandParameter="{x:Static navigator:ViewType.ManageSchedules}"/>
+
+                            <MenuItem Header="Manage your account" 
+                                      />
 
 
                         </MenuItem>

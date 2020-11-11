@@ -4,18 +4,126 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WPFUi.Views"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:enums="clr-namespace:Domain.Enums;assembly=Domain"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    
+    <UserControl.Resources>
+        <ObjectDataProvider x:Key="accountTypeEnum" MethodName="GetValues" ObjectType="{x:Type system:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="enums:AccountType"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <Button Grid.Column="0" Style="{StaticResource MenuBarButton}"
-                Content="create"
-                    Command="{Binding TestCommand}" />
-        <Button Grid.Column="1" Style="{StaticResource MenuBarButton}"
-                Content="testdehashera"
-                    Command="{Binding Test2Command}" />
+
+        <!-- Side bar -->
+        <Grid Grid.Column="0" Width="230">
+            
+        </Grid>
+
+        <!-- Main content -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            
+            <!-- List -->
+            <Grid Grid.Row="0">
+                
+            </Grid>
+            
+            <!-- Separator -->
+            <Grid Grid.Row="1" Height="20" Background="Navy" />
+
+            <!-- Form -->
+            <Grid Grid.Row="2">
+                
+                <StackPanel Orientation="Vertical">
+
+                    <!-- Account type -->
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Account type: " />
+                        <ComboBox Width="100" ItemsSource="{Binding Source={StaticResource accountTypeEnum}}"
+                                  SelectedItem="{Binding SelectedAccountType, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                         ToolTip="{Binding ErrorCollection[SelectedAccountType]}"/>
+                    </StackPanel>
+
+                    <!-- Last name -->
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Last name: " />
+                        <TextBox Width="100" Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                         ToolTip="{Binding ErrorCollection[LastName]}" />
+                    </StackPanel>
+
+                    <!-- First name -->
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="First name: " />
+                        <TextBox Width="100" Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                         ToolTip="{Binding ErrorCollection[FirstName]}" />
+                    </StackPanel>
+
+                    <!-- Username -->
+                    <!-- first letter of first and full last name -->
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Username: " />
+                        <TextBox Width="100" IsEnabled="false" Text="{Binding UserName}" />
+                    </StackPanel>
+                    
+                    <!-- Email -->
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Email: " />
+                        <TextBox Width="100" Text="{Binding Email, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                         ToolTip="{Binding ErrorCollection[Email]}" />
+                    </StackPanel>
+                    
+                    <!-- Password -->
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Password: " />
+                        <TextBox Width="100" Text="{Binding Password, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                         ToolTip="{Binding ErrorCollection[Password]}" />
+                    </StackPanel>
+
+                    <!-- Confirm password -->
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Confirm password: " />
+                        <TextBox Width="100" Text="{Binding ConfirmPassword, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                         ToolTip="{Binding ErrorCollection[ConfirmPassword]}" />
+                    </StackPanel>
+
+                    <!-- NPWZ - visible only if doctor type is selected -->
+                    <StackPanel Orientation="Horizontal" 
+                                Visibility="{Binding IsNPWZEnabled, Converter={StaticResource BoolToVis}}"
+                                >
+                        <TextBlock Text="NPWZ: " />
+                        <TextBox Width="100" Text="{Binding NPWZ, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                         ToolTip="{Binding ErrorCollection[NPWZ]}" />
+                    </StackPanel>
+
+                </StackPanel>
+            </Grid>
+            
+            <!-- Buttons -->
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Button Style="{StaticResource MenuBarButton}" Content="Create"
+                        Command="{Binding CreateUserCommand}"/>
+
+            </Grid>
+        </Grid>
     </Grid>
 </UserControl>

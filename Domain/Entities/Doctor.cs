@@ -5,7 +5,7 @@ namespace Domain.Entities
 {
     public partial class Doctor : Person
     {
-        public int NPWZ { get; set; }
+        public string NPWZ { get; set; }
         public ICollection<Schedule> Schedules { get; set; }
 
         public Account Account { get; set; }

@@ -68,7 +68,7 @@ namespace WPFUi.Validators
             return date.Date <= DateTime.Now.Date;
         }
 
-        protected bool BeValidName(string name)
+        private bool BeValidName(string name)
         {
             return name.All(Char.IsLetter);
         }
