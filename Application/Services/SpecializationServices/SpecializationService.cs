@@ -17,5 +17,14 @@ namespace Application.Services.SpecializationServices
         {
             return await _specializationDataService.GetAll();
         }
+
+        public async Task<Specialization> Create(string specializationCode, string specializationName)
+        {
+            var specialization = new Specialization { Code = specializationCode, Name = specializationName };
+
+            var result = await _specializationDataService.Create(specialization);
+
+            return result;
+        }
     }
 }

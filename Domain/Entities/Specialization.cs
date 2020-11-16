@@ -5,7 +5,7 @@ namespace Domain.Entities
 {
     public class Specialization : BaseEntity
     {
-        public int Code { get; set; }
+        public string Code { get; set; }
         public string Name { get; set; }
 
         public ICollection<Schedule> Schedules { get; set; }

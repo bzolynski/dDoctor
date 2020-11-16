@@ -20,6 +20,7 @@ using Application.Services.ReservationServices;
 using Application.Services.SpecializationServices;
 using WPFUi.ViewModels.PatientVMs;
 using FluentValidation;
+using WPFUi.Validators;
 
 namespace WPFUi
 {
@@ -61,6 +62,7 @@ namespace WPFUi
             services.AddScoped<IRootViewModelFactory, RootViewModelFactory>();
             services.AddScoped<IViewModelFactory<HomeViewModel>, HomeViewModelFactory>();
             services.AddScoped<IViewModelFactory<PatientsViewModel>, PatientsViewModelFactory>();
+            services.AddScoped<SpecializationFormViewModel>();
 
             services.AddScoped<IViewModelFactory<AddAppointmentViewModel>>(services => new AddAppointmentViewModelFactory(
                 services.GetRequiredService<ISpecializationService>(),
@@ -89,7 +91,9 @@ namespace WPFUi
                 services.GetRequiredService<IDoctorService>(),
                 services.GetRequiredService<ISpecializationService>(),
                 services.GetRequiredService<IMapper>(),
-                services.GetRequiredService<RenavigatorViewModelFactory<HomeViewModel>>()));
+                services.GetRequiredService<RenavigatorViewModelFactory<HomeViewModel>>(),
+                services.GetRequiredService<SpecializationFormValidator>(),
+                services.GetRequiredService<GenerateScheduleValidator>()));
 
             services.AddScoped<IViewModelFactory<ManageUsersViewModel>, ManageUsersViewModelFactory>();
 

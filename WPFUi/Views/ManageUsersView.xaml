@@ -17,8 +17,8 @@
         </ObjectDataProvider>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </UserControl.Resources>
-    
-    <Grid>
+
+    <Grid Background="#f0f0f0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="*" />

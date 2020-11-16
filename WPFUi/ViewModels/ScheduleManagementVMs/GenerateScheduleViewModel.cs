@@ -6,22 +6,62 @@ using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using WPFUi.Commands.Common;
 using WPFUi.Models;
 using WPFUi.States.Navigation;
+using WPFUi.Validators;
 
 namespace WPFUi.ViewModels.ScheduleManagementVMs
 {
-    public class GenerateScheduleViewModel : ViewModelBase 
+    public class GenerateScheduleViewModel : ViewModelBase, IDataErrorInfo
     {
-        private readonly IScheduleService _scheduleService;
-        private readonly ISpecializationService _specializationService;
-        private readonly IRenavigator _manageSchedulesRenavigator;
+        // Validators
+        #region Validators
+
+        // TODO: Fix validation
+        public Dictionary<string, string> ErrorCollection { get; set; } = new Dictionary<string, string>();
+
+        private bool _canSubmit;
+
+        public string Error => null;
+
+        public string this[string propertyName]
+        {
+            get
+            {
+                var errorList = _generateScheduleValidator.Validate(this).Errors;
+
+                _canSubmit = errorList.Count > 0 ? false : true;
+
+                var error = errorList.FirstOrDefault(e => e.PropertyName == propertyName);
+
+                if (ErrorCollection.ContainsKey(propertyName) && error != null)
+                    ErrorCollection[propertyName] = error.ErrorMessage;
+                else if (error != null)
+                    ErrorCollection.Add(propertyName, error.ErrorMessage);
+                else
+                    ErrorCollection.Remove(propertyName);
+
+                OnPropertyChanged(nameof(ErrorCollection));
+
+                return error != null ? error.ErrorMessage : null;
+            }
+        }
+
+        #endregion
 
         // Private fields
         #region Private fields
+
+        private readonly IScheduleService _scheduleService;
+        private readonly ISpecializationService _specializationService;
+        private readonly IRenavigator _manageSchedulesRenavigator;
+        private readonly GenerateScheduleValidator _generateScheduleValidator;
+        private bool _isSpecializationFormVisible = false;
 
         #endregion
 
@@ -33,6 +73,7 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
         public ObservableCollection<Specialization> Specializations { get; set; }
 
         public Specialization SelectedSpecialization { get; set; }
+        public SpecializationFormViewModel SpecializationFormViewModel{ get; set; }
 
         public List<DayOfWeek> SelectedDaysOfWeek { get; set; }
 
@@ -49,6 +90,17 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
         public DateTime EndHour { get; set; }
 
 
+        public bool IsSpecializationFormVisible
+        {
+            get { return _isSpecializationFormVisible; }
+            set
+            {
+                _isSpecializationFormVisible = value;
+                OnPropertyChanged(nameof(IsSpecializationFormVisible));
+            }
+        }
+
+
         #endregion
 
         // Commands
@@ -57,6 +109,7 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
         public ICommand SelectDaysOfWeekCommand { get; set; }
         public ICommand GenerateScheduleCommand { get; set; }
         public ICommand CancelCommand { get; set; }
+        public ICommand ShowSpecializationFormCommand { get; set; }
         #endregion
 
         // Constructors
@@ -66,8 +119,16 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
             IDoctorService doctorService, 
             ISpecializationService specializationService, 
             IMapper mapper,
-            IRenavigator manageSchedulesRenavigator)
+            IRenavigator manageSchedulesRenavigator,
+            SpecializationFormValidator specializationFormValidator, 
+            GenerateScheduleValidator generateScheduleValidator)
         {
+
+            _scheduleService = scheduleService;
+            _specializationService = specializationService;
+            _manageSchedulesRenavigator = manageSchedulesRenavigator;
+            _generateScheduleValidator = generateScheduleValidator;
+            SpecializationFormViewModel = new SpecializationFormViewModel(specializationService, specializationFormValidator);
 
             if (SelectedDaysOfWeek == null)
                 SelectedDaysOfWeek = new List<DayOfWeek>();
@@ -78,11 +139,11 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
 
             SelectDaysOfWeekCommand = new RelayCommand(SelectDaysOfWeek);
             CancelCommand = new RelayCommand(Cancel);
-            GenerateScheduleCommand = new AsyncRelayCommand(GenerateSchedule, (ex) => throw ex);
+            GenerateScheduleCommand = new AsyncRelayCommand(GenerateSchedule, CanGenerateSchedule, (ex) => throw ex);
+            ShowSpecializationFormCommand = new RelayCommand(ShowSpecializationForm, CanShowSpecializationFormCommand);
 
-            _scheduleService = scheduleService;
-            _specializationService = specializationService;
-            _manageSchedulesRenavigator = manageSchedulesRenavigator;
+            SpecializationFormViewModel.SpecializationAdded += SpecializationFormViewModel_SpecializationAdded;
+            SpecializationFormViewModel.SpecializationFormClosed += SpecializationFormViewModel_SpecializationFormClosed;
 
             TimeIntervalsList = new List<TimeSpan>
             {
@@ -114,6 +175,11 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
             });
         }
 
+        private bool CanGenerateSchedule(object obj)
+        {
+            return _canSubmit;
+        }
+
         private async Task GenerateSchedule(object arg)
         {
             await _scheduleService.GenerateSchedules(SelectedDoctor.Id, SelectedSpecialization.Id, StartHour.TimeOfDay, EndHour.TimeOfDay, MaxTimePerPatient, StartDate, EndDate, SelectedDaysOfWeek);
@@ -140,6 +206,27 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
         private void Cancel(object obj)
         {
             _manageSchedulesRenavigator.Renavigate();
+        }
+
+        private void SpecializationFormViewModel_SpecializationFormClosed()
+        {
+            IsSpecializationFormVisible = false;
+        }
+
+        private void SpecializationFormViewModel_SpecializationAdded()
+        {
+            LoadSpecializations();
+            IsSpecializationFormVisible = false;
+        }
+
+        private bool CanShowSpecializationFormCommand(object obj)
+        {
+            return !IsSpecializationFormVisible;
+        }
+
+        private void ShowSpecializationForm(object obj)
+        {
+            IsSpecializationFormVisible = true;
         }
 
         #endregion

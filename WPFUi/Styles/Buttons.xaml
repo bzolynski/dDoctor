@@ -1,32 +1,33 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:WPFUi.Styles">
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:WPFUi.Styles">
 
 
     <Style x:Key="MenuBarButton" TargetType="{x:Type Button}">
         <Setter Property="Width" Value="auto" />
-        <Setter Property="Padding" Value="10 0" />
+        <Setter Property="Padding" Value="10,0" />
         <Setter Property="Height" Value="35" />
         <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="Background">
             <Setter.Value>
                 <LinearGradientBrush StartPoint="1,0" EndPoint="1,1">
-                    <GradientStop Color="White" Offset="0" />
-                    <GradientStop Color="#ebebeb" Offset="2" />
+                    <GradientStop Offset="0" Color="White" />
+                    <GradientStop Offset="2" Color="#ebebeb" />
                 </LinearGradientBrush>
             </Setter.Value>
-            
+
         </Setter>
-        <Style.Resources >
+        <Style.Resources>
             <Style TargetType="{x:Type Border}">
                 <Setter Property="CornerRadius" Value="5" />
             </Style>
         </Style.Resources>
 
-        
+
     </Style>
 
-    
+
 
     <Style x:Key="LinkButton" TargetType="{x:Type Button}">
         <Setter Property="Background" Value="Transparent" />
@@ -35,25 +36,25 @@
 
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="Button">                    
+                <ControlTemplate TargetType="Button">
                     <Border>
                         <Border.Style>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="3" />
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="LightBlue"/>
+                                        <Setter Property="Background" Value="LightBlue" />
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
                         </Border.Style>
                         <Grid Background="Transparent">
-                            <ContentPresenter></ContentPresenter>
+                            <ContentPresenter />
                         </Grid>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        
+
     </Style>
 </ResourceDictionary>
