@@ -1,8 +1,12 @@
 ﻿using Application.Services.PatientServices;
 using AutoMapper;
+using Domain.Entities;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using WPFUi.Commands.Common;
 using WPFUi.Models;
 
 namespace WPFUi.ViewModels.PatientVMs
@@ -14,9 +18,8 @@ namespace WPFUi.ViewModels.PatientVMs
         // Private fields
         #region Private fields
 
-        private PatientDisplayModel _selectedPatient;
         private string _searchPatientText;
-
+        private Patient _patient;
         private readonly IPatientService _patientService;
         private readonly IMapper _mapper;
 
@@ -25,19 +28,24 @@ namespace WPFUi.ViewModels.PatientVMs
         // Bindings
         #region Bindings
 
-        public ObservableCollection<PatientDisplayModel> PatientsList { get; set; }
-        public ObservableCollection<PatientDisplayModel> PatientsDisplayList { get; set; }
-
-        public PatientDisplayModel SelectedPatient
-        {
-            get { return _selectedPatient; }
-            set
+        public Patient Patient 
+        { 
+            get => _patient;
+            set 
             {
-                _selectedPatient = value;
-                OnPropertyChanged(nameof(SelectedPatient));
+                _patient = value;
                 SelectedPatientChanged?.Invoke();
             }
         }
+
+
+
+        public ObservableCollection<PatientDisplayModel> PatientsList { get; set; }
+        public ObservableCollection<PatientDisplayModel> PatientsDisplayList { get; set; }
+
+
+
+        public PatientDisplayModel SelectedDisplayPatient { get; set; }
 
         public string SearchText
         {
@@ -52,6 +60,12 @@ namespace WPFUi.ViewModels.PatientVMs
 
         #endregion
 
+        // Commands
+        #region Commands
+
+        public ICommand LoadPatientCommand { get; set; }
+        #endregion
+
         // Constructors
         #region Constructors
 
@@ -60,13 +74,23 @@ namespace WPFUi.ViewModels.PatientVMs
             _patientService = patientService;
             _mapper = mapper;
 
+            LoadPatientCommand = new AsyncRelayCommand(LoadPatient, (ex) => throw ex);
+
             LoadPatients();
         }
+
+
 
         #endregion
 
         // Methods
         #region Methods
+
+        private async Task LoadPatient(object arg)
+        {
+            Patient = await _patientService.GetById(SelectedDisplayPatient.Id);
+        }
+
         private void LoadPatients()
         {
             _patientService.GetAllPatients().ContinueWith(task =>
@@ -79,7 +103,7 @@ namespace WPFUi.ViewModels.PatientVMs
                     OnPropertyChanged(nameof(PatientsDisplayList));
                 }
             });
-        }
+        }              
 
         private void PatientSearch()
         {

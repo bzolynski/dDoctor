@@ -18,6 +18,10 @@ namespace Application.Services.PatientServices
             _addressDataService = addressDataService;
 
         }
+        public async Task<Patient> GetById(int id)
+        {
+            return await _patientDataService.Get(id);
+        }
 
         public async Task<Patient> CreatePatient(Patient patient)
         {

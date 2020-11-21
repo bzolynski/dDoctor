@@ -11,5 +11,6 @@ namespace Application.Services.PatientServices
 
         Task DeletePatient(int id);
         Task<IEnumerable<Patient>> GetAllPatients();
+        Task<Patient> GetById(int id);
     }
 }
