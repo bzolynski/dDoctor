@@ -127,7 +127,7 @@
                         CanUserDeleteRows="False"
                         CanUserResizeRows="False"
                         IsReadOnly="True"
-                        ItemsSource="{Binding PatientsDisplayList}"
+                        ItemsSource="{Binding PatientsCollectionView}"
                         RowHeaderWidth="15"
                         RowStyle="{StaticResource DefaultRowStyle}"
                         SelectedItem="{Binding SelectedPatient, Mode=OneWayToSource}"

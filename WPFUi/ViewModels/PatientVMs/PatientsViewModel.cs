@@ -3,10 +3,17 @@ using Application.Services.PatientServices;
 using Application.Services.ReservationServices;
 using AutoMapper;
 using Domain.Entities;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Threading;
 using WPFUi.Commands.Common;
 using WPFUi.Models;
 using WPFUi.Validators;
@@ -20,7 +27,8 @@ namespace WPFUi.ViewModels.PatientVMs
 
         private PatientFormViewModel _patientFormViewModel;
         private PatientDisplayModel _selectedPatient;
-        private string _searchText;
+        private List<PatientDisplayModel> _patients;
+        private string _searchText = string.Empty;
 
         private readonly IPatientService _patientService;
         private readonly IMapper _mapper;
@@ -34,8 +42,7 @@ namespace WPFUi.ViewModels.PatientVMs
         #region Bindings
 
         // TODO: PatientDisplayList sort after edit or add
-        public ObservableCollection<PatientDisplayModel> PatientsList { get; set; }
-        public ObservableCollection<PatientDisplayModel> PatientsDisplayList { get; set; }
+        public ICollectionView PatientsCollectionView { get; set; }
         public ObservableCollection<Reservation> Reservations { get; set; }
 
         public PatientFormViewModel PatientFormViewModel
@@ -69,7 +76,7 @@ namespace WPFUi.ViewModels.PatientVMs
             {
                 _searchText = value;
                 OnPropertyChanged(nameof(SearchText));
-                PatientSearch();
+                PatientsCollectionView.Refresh();
             }
         }
 
@@ -99,6 +106,11 @@ namespace WPFUi.ViewModels.PatientVMs
             _reservationService = reservationService;
             _validationRules = validationRules;
 
+            _patients = new List<PatientDisplayModel>();
+            PatientsCollectionView = CollectionViewSource.GetDefaultView(_patients);
+            PatientsCollectionView.Filter = FilterPatients;
+            PatientsCollectionView.SortDescriptions.Add(new SortDescription(nameof(PatientDisplayModel.LastName), ListSortDirection.Ascending));
+
             OpenEditPatientFormCommand = new RelayCommand(OpenEditPatientForm, CanOpenEditPatientForm);
             OpenAddPatientFormCommand = new RelayCommand(OpenAddPatientForm);
             DeletePatientCommand = new AsyncRelayCommand(DeletePatient, CanDeletePatient, (ex) => throw ex);
@@ -108,6 +120,9 @@ namespace WPFUi.ViewModels.PatientVMs
 
             LoadPatients();
         }
+
+        
+
 
         #endregion
 
@@ -119,11 +134,15 @@ namespace WPFUi.ViewModels.PatientVMs
             {
                 if (task.Exception == null)
                 {
-                    PatientsList = new ObservableCollection<PatientDisplayModel>(_mapper.Map<ObservableCollection<PatientDisplayModel>>(task.Result));
-                    PatientsDisplayList = new ObservableCollection<PatientDisplayModel>(PatientsList);
-                    OnPropertyChanged(nameof(PatientsList));
-                    OnPropertyChanged(nameof(PatientsDisplayList));
+                    foreach (var patient in task.Result)
+                    {
+                        _patients.Add(_mapper.Map<PatientDisplayModel>(patient));
+                    }
+
+                    System.Windows.Application.Current.Dispatcher.Invoke(new Action(() => PatientsCollectionView.Refresh()));
                 }
+
+                    
             });
         }
 
@@ -149,16 +168,9 @@ namespace WPFUi.ViewModels.PatientVMs
 
         private async Task DeletePatient(object obj)
         {
-
-
             await _patientService.DeletePatient(_selectedPatient.Id);
-
-            PatientsList.Remove(SelectedPatient);
-            PatientsDisplayList.Remove(SelectedPatient);
-
-
-
-
+            _patients.Remove(SelectedPatient);
+            PatientsCollectionView.Refresh();
         }
 
         private void OpenAddPatientForm(object obj)
@@ -166,8 +178,6 @@ namespace WPFUi.ViewModels.PatientVMs
             PatientFormViewModel = new PatientFormViewModel(_patientService, _dateTimeService, _validationRules);
 
             PatientFormViewModel.FormSubmited += PatientFormViewModel_FormSubmited;
-
-
         }
 
 
@@ -188,18 +198,16 @@ namespace WPFUi.ViewModels.PatientVMs
 
         }
 
-        private void PatientSearch()
+        private bool FilterPatients(object obj)
         {
-            PatientsDisplayList = new ObservableCollection<PatientDisplayModel>(PatientsList
-               .Where(x => x.FullName.ToUpper().Contains(SearchText.ToUpper()) ||
-               x.FullAddressWithPostCode.ToUpper().Contains(SearchText.ToUpper())));
-            OnPropertyChanged(nameof(PatientsDisplayList));
+            if (obj is PatientDisplayModel patient)
+                return patient.FullName.Contains(_searchText, StringComparison.InvariantCultureIgnoreCase) || patient.FullAddressWithPostCode.Contains(_searchText, StringComparison.InvariantCultureIgnoreCase);
+            return false;
         }
 
         private void ReloadPatientList(object obj = null)
         {
-            PatientsDisplayList?.Clear();
-            PatientsList?.Clear();
+            _patients?.Clear();
             Reservations?.Clear();
             LoadPatients();
         }

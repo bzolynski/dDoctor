@@ -80,7 +80,7 @@
                     CanUserDeleteRows="False"
                     CanUserResizeRows="False"
                     IsReadOnly="True"
-                    ItemsSource="{Binding DoctorDisplayModels}"
+                    ItemsSource="{Binding DoctorsCollectionView}"
                     RowHeaderWidth="15"
                     SelectedItem="{Binding SelectedDoctor, Mode=OneWayToSource}"
                     SelectionMode="Single">

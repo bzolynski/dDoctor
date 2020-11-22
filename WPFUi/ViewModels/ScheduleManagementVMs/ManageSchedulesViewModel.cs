@@ -6,8 +6,10 @@ using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using System.Windows.Input;
 using WPFUi.Commands.Common;
 using WPFUi.Models;
@@ -22,8 +24,9 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
         // Private fields
         #region Private fields
 
-        private string _searchText;
+        private string _searchText = string.Empty;
         private DateTime _dateFrom;
+        private List<ManageScheduleDoctorModel> _doctors;
         private DateTime _dateTo;
 
         private readonly IDoctorService _doctorService;
@@ -35,8 +38,9 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
 
         // Bindings
         #region Bindings
-        public List<Doctor> Doctors { get; set; }
-        public ObservableCollection<ManageScheduleDoctorModel> DoctorDisplayModels { get; set; }
+
+        public ICollectionView DoctorsCollectionView { get; set; }
+
         public ObservableCollection<Schedule> Schedules { get; set; }
 
         public GenerateScheduleViewModel GenerateSchedule { get; set; }
@@ -76,11 +80,9 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
             {
                 _searchText = value;
                 OnPropertyChanged(nameof(SearchText));
-                DoctorSearch();
+                DoctorsCollectionView.Refresh();
             }
-        }
-
-        
+        }               
 
         public DateTime DateFrom
         {
@@ -92,7 +94,6 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
                     LoadSchedule();
             }
         }
-
 
         public DateTime DateTo
         {
@@ -124,6 +125,11 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
             _mapper = mapper;
             _generateScheduleRenavigator = generateScheduleRenavigator;
 
+            _doctors = new List<ManageScheduleDoctorModel>();
+            DoctorsCollectionView = CollectionViewSource.GetDefaultView(_doctors);
+            DoctorsCollectionView.Filter = DoctorsFilter;
+            DoctorsCollectionView.SortDescriptions.Add(new SortDescription(nameof(ManageScheduleDoctorModel.LastName), ListSortDirection.Ascending));
+
             DeleteSelectedScheduleDayCommand = new AsyncRelayCommand(DeleteSelectedScheduleDay, (ex) => throw ex);
             GenerateNewScheduleCommand = new RelayCommand(GenerateNewSchedule);
 
@@ -132,6 +138,8 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
             DateFrom = new DateTime(dateTimeService.Now.Year, dateTimeService.Now.Month, 1);
             DateTo = new DateTime(dateTimeService.Now.Year, dateTimeService.Now.Month, DateTime.DaysInMonth(dateTimeService.Now.Year, dateTimeService.Now.Month));
         }
+
+        
 
         #endregion
 
@@ -144,9 +152,11 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
             {
                 if (task.Exception == null)
                 {
-                    Doctors = new List<Doctor>(task.Result);
-                    DoctorDisplayModels = new ObservableCollection<ManageScheduleDoctorModel>(_mapper.Map<ObservableCollection<ManageScheduleDoctorModel>>(task.Result));
-                    OnPropertyChanged(nameof(DoctorDisplayModels));
+                    foreach (var doctor in task.Result)
+                        _doctors.Add(_mapper.Map<ManageScheduleDoctorModel>(doctor));
+
+                    System.Windows.Application.Current.Dispatcher.Invoke(new Action(() => DoctorsCollectionView.Refresh()));
+                    
                 }
             });
         }
@@ -171,16 +181,14 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
             }
         }
 
-        private void DoctorSearch()
+        private bool DoctorsFilter(object obj)
         {
-            DoctorDisplayModels = new ObservableCollection<ManageScheduleDoctorModel>(
-                _mapper.Map<List<ManageScheduleDoctorModel>>(Doctors.Where(
-                    x => x.FirstName.ToUpper().Contains(SearchText.ToUpper()) || 
-                    x.LastName.ToUpper().Contains(SearchText.ToUpper()) || 
-                    x.NPWZ.ToString().Contains(SearchText.ToUpper()))));
+            if (obj is ManageScheduleDoctorModel doctor)
+                return doctor.FullName.Contains(_searchText, StringComparison.InvariantCultureIgnoreCase) || doctor.NPWZ.Contains(_searchText, StringComparison.InvariantCultureIgnoreCase);
 
-            OnPropertyChanged(nameof(DoctorDisplayModels));
+            return false;
         }
+               
 
         private void GenerateNewSchedule(object obj)
         {
