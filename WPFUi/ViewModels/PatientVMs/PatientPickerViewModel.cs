@@ -102,7 +102,7 @@ namespace WPFUi.ViewModels.PatientVMs
                     foreach (var patient in task.Result)
                         _patientsList.Add(_mapper.Map<PatientDisplayModel>(patient));
 
-                    PatientsCollectionView.Refresh();
+                    System.Windows.Application.Current.Dispatcher.Invoke(new Action(() => PatientsCollectionView.Refresh()));
                 }
             });
         }

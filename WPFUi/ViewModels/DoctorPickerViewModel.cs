@@ -89,7 +89,8 @@ namespace WPFUi.ViewModels
                     {
                         _doctorList.Add(_mapper.Map<DoctorPickerModel>(doctor));
                     }
-                    DoctorCollectionView.Refresh();
+
+                    System.Windows.Application.Current.Dispatcher.Invoke(new Action(() => DoctorCollectionView.Refresh()));
                 }
             });
 
