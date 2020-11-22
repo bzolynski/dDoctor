@@ -39,7 +39,7 @@
                     CanUserDeleteRows="False"
                     CanUserResizeRows="False"
                     IsReadOnly="True"
-                    ItemsSource="{Binding PatientsDisplayList}"
+                    ItemsSource="{Binding PatientsCollectionView}"
                     RowHeaderWidth="15"
                     SelectedCellsChanged="patientPicker_SelectedPatientChanged"
                     SelectedItem="{Binding SelectedDisplayPatient, Mode=OneWayToSource}"

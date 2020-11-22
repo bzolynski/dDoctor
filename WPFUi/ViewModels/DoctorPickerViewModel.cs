@@ -1,8 +1,12 @@
 ﻿using Application.Services.DoctorServices;
 using AutoMapper;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Windows.Data;
+using System.Windows.Documents;
 using WPFUi.Models;
 
 namespace WPFUi.ViewModels
@@ -14,8 +18,9 @@ namespace WPFUi.ViewModels
         // Private fields
         #region Private fields
 
+        private List<DoctorPickerModel> _doctorList;
         private DoctorPickerModel _selectedDoctor;
-        private string _searchText;
+        private string _searchText = string.Empty;
         
         private readonly IDoctorService _doctorService;
         private readonly IMapper _mapper;
@@ -24,10 +29,8 @@ namespace WPFUi.ViewModels
 
         // Bindings
         #region Bindings
-         
 
-        public ObservableCollection<DoctorPickerModel> DoctorList { get; set; }
-        public ObservableCollection<DoctorPickerModel> DoctorDisplayList { get; set; }
+        public ICollectionView DoctorCollectionView{ get; }
 
         public DoctorPickerModel SelectedDoctor
         {
@@ -47,7 +50,7 @@ namespace WPFUi.ViewModels
             {
                 _searchText = value;
                 OnPropertyChanged(nameof(SearchText));
-                DoctorSearch();
+                DoctorCollectionView.Refresh();
             }
         }
 
@@ -61,8 +64,15 @@ namespace WPFUi.ViewModels
             _doctorService = doctorService;
             _mapper = mapper;
 
+            _doctorList = new List<DoctorPickerModel>();
+            DoctorCollectionView = CollectionViewSource.GetDefaultView(_doctorList);
+            DoctorCollectionView.Filter = FilterDoctors;
+            DoctorCollectionView.SortDescriptions.Add(new SortDescription(nameof(DoctorPickerModel.LastName), ListSortDirection.Ascending));
+
             LoadDoctors();
         }
+
+        
 
 
         #endregion
@@ -75,19 +85,24 @@ namespace WPFUi.ViewModels
             {
                 if (task.Exception == null)
                 {
-                    DoctorList = new ObservableCollection<DoctorPickerModel>(_mapper.Map<ObservableCollection<DoctorPickerModel>>(task.Result));
-                    DoctorDisplayList = new ObservableCollection<DoctorPickerModel>(DoctorList);
-                    OnPropertyChanged(nameof(DoctorList));
-                    OnPropertyChanged(nameof(DoctorDisplayList));
+                    foreach (var doctor in task.Result)
+                    {
+                        _doctorList.Add(_mapper.Map<DoctorPickerModel>(doctor));
+                    }
+                    DoctorCollectionView.Refresh();
                 }
             });
+
         }
 
-        private void DoctorSearch()
+        private bool FilterDoctors(object obj)
         {
-            DoctorDisplayList = new ObservableCollection<DoctorPickerModel>(DoctorList
-               .Where(x => x.FullName.ToUpper().Contains(SearchText.ToUpper()) || x.NPWZ.ToUpper().Contains(SearchText.ToUpper())));
-            OnPropertyChanged(nameof(DoctorDisplayList));
+            if (obj is DoctorPickerModel doctor)
+            {
+                return doctor.FullName.Contains(_searchText, StringComparison.InvariantCultureIgnoreCase);
+            }
+
+            return false;
         }
         #endregion
     }

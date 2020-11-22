@@ -37,7 +37,7 @@
                     CanUserDeleteRows="False"
                     CanUserResizeRows="False"
                     IsReadOnly="True"
-                    ItemsSource="{Binding DoctorDisplayList}"
+                    ItemsSource="{Binding DoctorCollectionView}"
                     RowHeaderWidth="15"
                     SelectedItem="{Binding SelectedDoctor, Mode=OneWayToSource}"
                     SelectionMode="Single">
