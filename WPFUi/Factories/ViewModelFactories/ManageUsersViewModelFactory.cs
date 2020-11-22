@@ -1,7 +1,4 @@
 ﻿using Application.Services.UserService;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using WPFUi.Validators;
 using WPFUi.ViewModels;
 

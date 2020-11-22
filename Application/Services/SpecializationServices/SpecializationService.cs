@@ -26,5 +26,17 @@ namespace Application.Services.SpecializationServices
 
             return result;
         }
+
+        public async Task<Specialization> GetByCode(string code)
+        {
+            return await _specializationDataService.GetByCode(code);
+        }
+
+        public async Task<Specialization> GetByName(string name)
+        {
+            return await _specializationDataService.GetByName(name);
+
+        }
+
     }
 }

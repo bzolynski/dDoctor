@@ -157,7 +157,10 @@
                             Style="{StaticResource TextBlockStyle}"
                             Text="Select days of week: " />
 
-                        <Border HorizontalAlignment="Center" Style="{StaticResource MainDarkBorder}">
+                        <Border
+                            HorizontalAlignment="Center"
+                            Style="{StaticResource MainDarkBorder}"
+                            Validation.ValidationAdornerSiteFor="{Binding SelectedDaysOfWeek, UpdateSourceTrigger=PropertyChanged}">
 
                             <ItemsControl ItemsSource="{Binding Source={StaticResource DayOfWeek}}">
                                 <ItemsControl.ItemTemplate>
@@ -203,7 +206,7 @@
                 <StackPanel Orientation="Vertical">
 
                     <!--  Doctor picker  -->
-                    <components:DoctorPicker DataContext="{Binding DoctorPicker}" />
+                    <components:DoctorPicker DataContext="{Binding DoctorPicker}" Validation.ValidationAdornerSiteFor="{Binding SelectedDoctor}" />
 
                     <StackPanel
                         Margin="0,15,0,30"

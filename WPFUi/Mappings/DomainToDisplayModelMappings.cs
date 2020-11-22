@@ -12,6 +12,15 @@ namespace WPFUi.Mappings
 
             CreateMap<Doctor, ManageScheduleDoctorModel>();
             CreateMap<Doctor, DoctorPickerModel>();
+
+            CreateMap<Reservation, AppointmentViewReservationModel>()
+                .ForMember(model =>
+                    model.Time, x => x.MapFrom(y => $"{ y.Hour } - { y.Hour + y.Schedule.MaxTimePerPatient }"));
+
+            CreateMap<Schedule, AppointmentViewScheduleModel>()
+                .ForMember(model =>
+                    model.DoctorFullName, x => x.MapFrom(y => $"{ y.Doctor.LastName} { y.Doctor.FirstName }"));
+          
         }
     }
 }

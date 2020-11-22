@@ -12,6 +12,7 @@ namespace WPFUi.Views
         {
             InitializeComponent();
 
+
             Loaded += ShellView_Loaded;
         }
 

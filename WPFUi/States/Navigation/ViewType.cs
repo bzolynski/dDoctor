@@ -4,8 +4,7 @@
     {
         Home,
         Patients,
-        AddAppointment,
-        ViewAppointments,
+        Appointments,
         ManageSchedules,
         GenerateSchedule,
         ManageUsers

@@ -4,6 +4,7 @@ using Persistance.Services.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace Persistance.Services.ScheduleDataServices
@@ -75,7 +76,93 @@ namespace Persistance.Services.ScheduleDataServices
                     .ToListAsync();
             }
         }
+        // **************************************
+        #region Used by AppointmentViewModel
 
+        public async Task<IEnumerable<Schedule>> GetSchedulesForDates()
+        {
+            using (var context = _dbContextFactory.CreateDbContext())
+            {
+                var schedule = await context.Schedules
+                    .Include(s => s.Specialization)
+                    .Include(s => s.Doctor)
+                    .ToListAsync();
+
+                return schedule;
+            }
+        } 
+
+        public async Task<IEnumerable<Schedule>> GetManyByDate(DateTime date)
+        {
+            using (var context = _dbContextFactory.CreateDbContext())
+            {
+                var schedule = await context.Schedules
+                    .Include(s => s.Specialization)
+                    .Include(s => s.Doctor)
+                    .Include(s => s.Reservations)
+                    .ThenInclude(r => r.Patient)
+                    .ThenInclude(p => p.Address)
+                    .Where(x => x.Date.Date == date.Date)
+                    .ToListAsync();
+
+                return schedule;
+            }
+        }
+
+        public async Task<IEnumerable<Schedule>> GetManyByDateAndSpecializationAndDoctor(DateTime date, int specializationId, int doctorId)
+        {
+            using (var context = _dbContextFactory.CreateDbContext())
+            {
+                var schedule = await context.Schedules
+                    .Include(s => s.Specialization)
+                    .Include(s => s.Doctor)
+                    .Include(s => s.Reservations)
+                    .ThenInclude(r => r.Patient)
+                    .ThenInclude(p => p.Address)
+                    .Where(x => x.Date.Date == date.Date && x.DoctorId == doctorId && x.SpecializationId == specializationId)
+                    .ToListAsync();
+
+                return schedule;
+            }
+        }
+
+        public async Task<IEnumerable<Schedule>> GetManyByDateAndSpecialization(DateTime date, int specializationId)
+        {
+            using (var context = _dbContextFactory.CreateDbContext())
+            {
+                var schedule = await context.Schedules
+                    .Include(s => s.Specialization)
+                    .Include(s => s.Doctor)
+                    .Include(s => s.Reservations)
+                    .ThenInclude(r => r.Patient)
+                    .ThenInclude(p => p.Address)
+                    .Where(x => x.Date.Date == date.Date && x.SpecializationId == specializationId)
+                    .ToListAsync();
+
+                return schedule;
+            }
+        }
+
+        public async Task<IEnumerable<Schedule>> GetManyByDateAndDoctor(DateTime date, int doctorId)
+        {
+            using (var context = _dbContextFactory.CreateDbContext())
+            {
+                var schedule = await context.Schedules
+                    .Include(s => s.Specialization)
+                    .Include(s => s.Doctor)
+                    .Include(s => s.Reservations)
+                    .ThenInclude(r => r.Patient)
+                    .ThenInclude(p => p.Address)
+                    .Where(x => x.Date.Date == date.Date && x.DoctorId == doctorId)
+                    .ToListAsync();
+
+                return schedule;
+            }
+        }
+
+        
+
+        #endregion
 
 
 
@@ -92,6 +179,8 @@ namespace Persistance.Services.ScheduleDataServices
                 return schedule;
             }
         }
+
+        
 
         public async Task<IEnumerable<Reservation>> GetSpecifiedReservations(int doctorId, int specializationId, DateTime date)
         {

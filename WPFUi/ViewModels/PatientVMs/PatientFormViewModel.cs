@@ -1,6 +1,5 @@
 ﻿using Application.Services;
 using Application.Services.PatientServices;
-using AutoMapper;
 using Domain.Entities;
 using System;
 using System.Collections.Generic;

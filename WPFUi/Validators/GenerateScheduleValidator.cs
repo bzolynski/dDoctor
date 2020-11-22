@@ -1,7 +1,4 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using WPFUi.ViewModels.ScheduleManagementVMs;
 
 namespace WPFUi.Validators
@@ -28,15 +25,15 @@ namespace WPFUi.Validators
 
             RuleFor(x => x.MaxTimePerPatient)
                 .Cascade(CascadeMode.Stop)
-                .NotNull();
+                .Must((vm, time) => vm.TimeIntervalsList.Contains(time)).WithMessage("Select time for patient.");
 
             RuleFor(x => x.SelectedDaysOfWeek)
                 .Cascade(CascadeMode.Stop)
-                .NotNull();
+                .Must(days => days.Count > 0).WithMessage("At least one day must be selected");
 
             RuleFor(x => x.SelectedDoctor)
                 .Cascade(CascadeMode.Stop)
-                .NotNull();
+                .NotNull().WithMessage("Select doctor");
 
             RuleFor(x => x.SelectedSpecialization)
                 .Cascade(CascadeMode.Stop)

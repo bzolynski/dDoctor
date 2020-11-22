@@ -34,9 +34,17 @@ namespace Persistance.Services.ReservationDataService
             return await _nonQueryDataService.Update(id, entity);
         }
 
-        public Task<Reservation> Get(int id)
+        public async Task<Reservation> Get(int id)
         {
-            throw new NotImplementedException();
+            using (var context = _contextFactory.CreateDbContext())
+            {
+                return await context.Reservations
+                    .Include(r => r.Patient)
+                    .Include(r => r.Schedule)
+                    .ThenInclude(s => s.Specialization)
+                    .Include(r => r.Schedule.Doctor)
+                    .FirstOrDefaultAsync(r => r.Id == id);
+            }
         }
 
         public Task<IEnumerable<Reservation>> GetAll()

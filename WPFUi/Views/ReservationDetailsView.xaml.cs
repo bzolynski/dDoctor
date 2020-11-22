@@ -3,11 +3,11 @@
 namespace WPFUi.Views
 {
     /// <summary>
-    /// Interaction logic for ManageUsersView.xaml
+    /// Interaction logic for ReservationDetailsView.xaml
     /// </summary>
-    public partial class ManageUsersView : UserControl
+    public partial class ReservationDetailsView : UserControl
     {
-        public ManageUsersView()
+        public ReservationDetailsView()
         {
             InitializeComponent();
         }

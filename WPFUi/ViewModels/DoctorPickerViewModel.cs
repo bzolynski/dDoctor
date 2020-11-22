@@ -24,6 +24,7 @@ namespace WPFUi.ViewModels
 
         // Bindings
         #region Bindings
+         
 
         public ObservableCollection<DoctorPickerModel> DoctorList { get; set; }
         public ObservableCollection<DoctorPickerModel> DoctorDisplayList { get; set; }

@@ -1,7 +1,8 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:WPFUi.Styles">
-    
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:WPFUi.Styles">
+
     <Color x:Key="DarkBlue">#055287</Color>
     <Color x:Key="LightBlue">#e8f5ff</Color>
     <Color x:Key="LightPurple">#d4dcf0</Color>
@@ -16,27 +17,27 @@
     <SolidColorBrush x:Key="LightBlueSolidColorBlush" Color="{StaticResource LightBlue}" />
 
     <LinearGradientBrush x:Key="MainLinearGradient" StartPoint="0,0" EndPoint="1,1">
-        <GradientStop Color="{StaticResource DarkBlue}" Offset="0" />
-        <GradientStop Color="#8eafdb" Offset="1" />
+        <GradientStop Offset="0" Color="{StaticResource DarkBlue}" />
+        <GradientStop Offset="1" Color="#8eafdb" />
     </LinearGradientBrush>
 
     <LinearGradientBrush x:Key="TopMenuLinearGradient" StartPoint="1,0" EndPoint="1,1">
-        <GradientStop Color="#ffffff" Offset="0" />
-        <GradientStop Color="#e0e1e3" Offset="1" />
+        <GradientStop Offset="0" Color="#ffffff" />
+        <GradientStop Offset="1" Color="#e0e1e3" />
     </LinearGradientBrush>
 
 
 
-    <!-- BORDER STYLE -->
+    <!--  BORDER STYLE  -->
 
-    <Style x:Key="MainDarkBorder" TargetType="{x:Type Border}" >
+    <Style x:Key="MainDarkBorder" TargetType="{x:Type Border}">
         <Setter Property="BorderBrush" Value="{StaticResource DarkBlueSolidColorBrush}" />
         <Setter Property="BorderThickness" Value="1" />
     </Style>
-    
-    <!-- DataGrid -->
 
-    
-    
+    <!--  DataGrid  -->
+
+
+
 
 </ResourceDictionary> 

@@ -81,7 +81,7 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
 
         public List<TimeSpan> TimeIntervalsList { get; set; }
 
-        public DateTime StartDate { get; set; }
+        public DateTime StartDate { get; set; } 
         public DateTime EndDate { get; set; }
 
 
@@ -135,7 +135,7 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
 
             DoctorPicker = new DoctorPickerViewModel(doctorService, mapper);
 
-            DoctorPicker.PropertyChanged += DoctorPicker_SelectedDoctorChanged;
+            DoctorPicker.SelectedDoctorChanged += DoctorPicker_SelectedDoctorChanged;
 
             SelectDaysOfWeekCommand = new RelayCommand(SelectDaysOfWeek);
             CancelCommand = new RelayCommand(Cancel);
@@ -182,7 +182,7 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
 
         private async Task GenerateSchedule(object arg)
         {
-            await _scheduleService.GenerateSchedules(SelectedDoctor.Id, SelectedSpecialization.Id, StartHour.TimeOfDay, EndHour.TimeOfDay, MaxTimePerPatient, StartDate, EndDate, SelectedDaysOfWeek);
+            await _scheduleService.GenerateSchedules(SelectedDoctor.Id, SelectedSpecialization.Id, StartHour.TimeOfDay, EndHour.TimeOfDay, MaxTimePerPatient, StartDate, EndDate, SelectedDaysOfWeek.ToList());
         }
 
         private void SelectDaysOfWeek(object obj)
@@ -195,17 +195,18 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
                 else
                     SelectedDaysOfWeek.Remove(dayOfWeek);
 
+                OnPropertyChanged(nameof(SelectedDaysOfWeek));
             }
-        }
-
-        private void DoctorPicker_SelectedDoctorChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            OnPropertyChanged(nameof(SelectedDoctor));
-        }
+        }        
 
         private void Cancel(object obj)
         {
             _manageSchedulesRenavigator.Renavigate();
+        }
+
+        private void DoctorPicker_SelectedDoctorChanged()
+        {
+            OnPropertyChanged(nameof(SelectedDoctor));
         }
 
         private void SpecializationFormViewModel_SpecializationFormClosed()

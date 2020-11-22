@@ -44,10 +44,23 @@ namespace Persistance.Services.SpecializationDataServices
             using (var context = _dbContextFactory.CreateDbContext())
             {
                 return await context.Specializations.ToListAsync();
-
             }
         }
 
-        
+        public async Task<Specialization> GetByCode(string code)
+        {
+            using (var context = _dbContextFactory.CreateDbContext())
+            {
+                return await context.Specializations.FirstOrDefaultAsync(x => x.Code == code);
+            }
+        }
+
+        public async Task<Specialization> GetByName(string name)
+        {
+            using (var context = _dbContextFactory.CreateDbContext())
+            {
+                return await context.Specializations.FirstOrDefaultAsync(x => x.Name == name);
+            }
+        }
     }
 }

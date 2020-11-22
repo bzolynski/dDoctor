@@ -19,9 +19,9 @@ namespace Application.Services.ScheduleServices
             _reservationService = reservationService;
         }
 
-        public async Task GenerateSchedules (int doctorId, int specializationId, TimeSpan startHour, TimeSpan endHour, TimeSpan maxTimePerPatient, DateTime startDay, DateTime endDay, List<DayOfWeek> daysOfWeek)
+        public async Task GenerateSchedules(int doctorId, int specializationId, TimeSpan startHour, TimeSpan endHour, TimeSpan maxTimePerPatient, DateTime startDay, DateTime endDay, List<DayOfWeek> daysOfWeek)
         {
-            
+
             for (var dt = startDay; dt <= endDay; dt = dt.AddDays(1))
             {
                 if (daysOfWeek.Contains(dt.DayOfWeek))
@@ -38,7 +38,7 @@ namespace Application.Services.ScheduleServices
 
                     for (var ts = startHour; ts < endHour; ts += maxTimePerPatient)
                     {
-                        
+
                         await _reservationService.Create(new Reservation
                         {
                             Hour = ts,
@@ -49,29 +49,28 @@ namespace Application.Services.ScheduleServices
             }
         }
 
-        //public async Task<IEnumerable<Schedule>> GetSchedule(int? doctorId, int? specializationId, DateTime date)
-        //{
-        //    if (doctorId == null)
-        //        return await _scheduleDataService.GetManyBySpecialization((int)specializationId, date);
-        //    if (specializationId == null)
-        //        return await _scheduleDataService.GetManyByDoctor((int)doctorId, date);
 
-        //    return await _scheduleDataService.GetManyBySpecializationAndDoctor((int)doctorId, (int)specializationId);
-        //}
-
-
-
-        public async Task<IEnumerable<Schedule>> GetSchedulesBySpecializationAndDoctor(int specializationId, int doctorId)
+        // **************************************
+        #region Used by AppointmentViewModel
+        public async Task<IEnumerable<Schedule>> GetSchedules(DateTime date, Specialization specialization = null, Doctor doctor = null)
         {
-            return await _scheduleDataService.GetManyBySpecializationAndDoctor(specializationId, doctorId);
+            if (doctor != null & specialization != null)
+                return await _scheduleDataService.GetManyByDateAndSpecializationAndDoctor(date, specialization.Id, doctor.Id);
+            else if (doctor != null)
+                return await _scheduleDataService.GetManyByDateAndDoctor(date, doctor.Id);
+            else if (specialization != null)
+                return await _scheduleDataService.GetManyByDateAndSpecialization(date, specialization.Id);
+
+            return await _scheduleDataService.GetManyByDate(date);
         }
 
-        
-
-        public async Task<IEnumerable<Reservation>> GetSpecifiedReservations(int doctorId, int specializationId, DateTime date)
+        public async Task<IEnumerable<Schedule>> GetSchedulesForDates()
         {
-            return await _scheduleDataService.GetSpecifiedReservations(doctorId, specializationId, date);
+            return await _scheduleDataService.GetSchedulesForDates();
         }
+        #endregion
+
+
 
         /// <summary>
         /// Returns list of schedules needed for ManageSchedulesViewModel to display doctor's schedules.

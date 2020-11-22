@@ -3,11 +3,11 @@
 namespace WPFUi.Views
 {
     /// <summary>
-    /// Interaction logic for AddAppointmentView.xaml
+    /// Interaction logic for AppointmentsView.xaml
     /// </summary>
-    public partial class AddAppointmentView : UserControl
+    public partial class AppointmentsView : UserControl
     {
-        public AddAppointmentView()
+        public AppointmentsView()
         {
             InitializeComponent();
         }

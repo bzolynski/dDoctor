@@ -1,11 +1,9 @@
 ﻿using Application.Services.UserService;
-using Domain.Entities;
 using Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using WPFUi.Commands.Common;
@@ -25,10 +23,10 @@ namespace WPFUi.ViewModels
         private bool _canSubmit;
 
         public string this[string propertyName]
-        { 
+        {
             get
             {
-                
+
                 var errorList = _userFormValidator.Validate(this).Errors;
 
                 _canSubmit = errorList.Count > 0 ? false : true;
@@ -46,8 +44,8 @@ namespace WPFUi.ViewModels
 
                 return error != null ? error.ErrorMessage : null;
             }
-        } 
-        
+        }
+
 
         #endregion
 
@@ -62,7 +60,7 @@ namespace WPFUi.ViewModels
         private AccountType _accountType;
         private bool _isNPWZEnabled;
         private string _nPWZ;
-
+        private string _password;
         private readonly IAccountService _accountService;
 
 
@@ -109,7 +107,14 @@ namespace WPFUi.ViewModels
         }
 
         public string Email { get; set; }
-        public string Password { get; set; }
+        public string Password { 
+            get => _password; 
+            set 
+            {
+                _password = value;
+                OnPropertyChanged(nameof(ConfirmPassword));
+            } 
+        }
         public string ConfirmPassword { get; set; }
 
         public string NPWZ

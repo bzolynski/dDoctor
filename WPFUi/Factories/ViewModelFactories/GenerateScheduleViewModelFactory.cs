@@ -4,7 +4,6 @@ using Application.Services.SpecializationServices;
 using AutoMapper;
 using WPFUi.States.Navigation;
 using WPFUi.Validators;
-using WPFUi.ViewModels;
 using WPFUi.ViewModels.ScheduleManagementVMs;
 
 namespace WPFUi.Factories.ViewModelFactories

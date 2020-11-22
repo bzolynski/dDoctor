@@ -1,12 +1,14 @@
-﻿<UserControl x:Class="WPFUi.Controls.PatientForm"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:WPFUi.Controls"
-             xmlns:components="clr-namespace:WPFUi.Controls.Components"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+﻿<UserControl
+    x:Class="WPFUi.Controls.PatientForm"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:components="clr-namespace:WPFUi.Controls.Components"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WPFUi.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
     <Grid Background="#f2f3f8">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -17,124 +19,141 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        
 
-        
-        <StackPanel Orientation="Vertical" 
-                    Margin="50 50 50 0"
-                    Grid.Column="0" Grid.Row="0">
+
+
+        <StackPanel
+            Grid.Row="0"
+            Grid.Column="0"
+            Margin="50,50,50,0"
+            Orientation="Vertical">
 
             <StackPanel.Resources>
                 <Style TargetType="{x:Type components:LabelLayoutForFormInputs}">
-                    <Setter Property="Margin" Value="0 0 0 15"/>
+                    <Setter Property="Margin" Value="0,0,0,15" />
                 </Style>
             </StackPanel.Resources>
-            
+
             <components:LabelLayoutForFormInputs Label="Last name">
 
-                <TextBox Style="{StaticResource FormTextBox}"
-                         Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
-                         ToolTip="{Binding ErrorCollection[LastName]}" />
-                
+                <TextBox
+                    Style="{StaticResource FormTextBox}"
+                    Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                    ToolTip="{Binding ErrorCollection[LastName]}" />
+
             </components:LabelLayoutForFormInputs>
 
 
             <components:LabelLayoutForFormInputs Label="First name">
-                <TextBox Style="{StaticResource FormTextBox}" 
-                         Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                         ToolTip="{Binding ErrorCollection[FirstName]}" />
+                <TextBox
+                    Style="{StaticResource FormTextBox}"
+                    Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                    ToolTip="{Binding ErrorCollection[FirstName]}" />
             </components:LabelLayoutForFormInputs>
 
             <components:LabelLayoutForFormInputs Label="Phone number">
-                <TextBox Style="{StaticResource FormTextBox}" 
-                         Text="{Binding PhoneNumber, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, TargetNullValue=''}" 
-                         ToolTip="{Binding ErrorCollection[PhoneNumber]}" />
+                <TextBox
+                    Style="{StaticResource FormTextBox}"
+                    Text="{Binding PhoneNumber, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, TargetNullValue=''}"
+                    ToolTip="{Binding ErrorCollection[PhoneNumber]}" />
             </components:LabelLayoutForFormInputs>
 
             <components:LabelLayoutForFormInputs Label="Email">
-                <TextBox Style="{StaticResource FormTextBox}" 
-                         Text="{Binding Email, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
-                         ToolTip="{Binding ErrorCollection[Email]}" />
+                <TextBox
+                    Style="{StaticResource FormTextBox}"
+                    Text="{Binding Email, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                    ToolTip="{Binding ErrorCollection[Email]}" />
             </components:LabelLayoutForFormInputs>
 
             <components:LabelLayoutForFormInputs Label="Birth date">
-                <DatePicker SelectedDate="{Binding BirthDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
-                            ToolTip="{Binding ErrorCollection[BirthDate]}" />
+                <DatePicker SelectedDate="{Binding BirthDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" ToolTip="{Binding ErrorCollection[BirthDate]}" />
             </components:LabelLayoutForFormInputs>
 
             <components:LabelLayoutForFormInputs Label="Comments (optional)" />
-            <TextBox Text="{Binding Comments, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
-                     ToolTip="{Binding ErrorCollection[Comments]}"
-                     Height="100" TextWrapping="Wrap" />
+            <TextBox
+                Height="100"
+                Text="{Binding Comments, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                TextWrapping="Wrap"
+                ToolTip="{Binding ErrorCollection[Comments]}" />
 
 
         </StackPanel>
-        
-        <!-- Separator -->
+
+        <!--  Separator  -->
         <Border Grid.Column="1" Width="0.8">
             <Border.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                    <GradientStop Color="White" Offset="0" />
-                    <GradientStop Color="DarkGray" Offset="0.2" />
-                    <GradientStop Color="DarkGray" Offset="0.8" />
-                    <GradientStop Color="White" Offset="1" />
+                    <GradientStop Offset="0" Color="White" />
+                    <GradientStop Offset="0.2" Color="DarkGray" />
+                    <GradientStop Offset="0.8" Color="DarkGray" />
+                    <GradientStop Offset="1" Color="White" />
                 </LinearGradientBrush>
             </Border.Background>
         </Border>
-        
-        <StackPanel Orientation="Vertical" 
-                    Margin="50"
-                    Grid.Column="2" Grid.Row="0">
+
+        <StackPanel
+            Grid.Row="0"
+            Grid.Column="2"
+            Margin="50"
+            Orientation="Vertical">
             <StackPanel.Resources>
                 <Style TargetType="{x:Type components:LabelLayoutForFormInputs}">
-                    <Setter Property="Margin" Value="0 0 0 15"/>
+                    <Setter Property="Margin" Value="0,0,0,15" />
                 </Style>
             </StackPanel.Resources>
             <components:LabelLayoutForFormInputs Label="Post code">
-                <TextBox Style="{StaticResource FormTextBox}" 
-                         Text="{Binding PostCode, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                         ToolTip="{Binding ErrorCollection[PostCode]}" />
+                <TextBox
+                    Style="{StaticResource FormTextBox}"
+                    Text="{Binding PostCode, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                    ToolTip="{Binding ErrorCollection[PostCode]}" />
             </components:LabelLayoutForFormInputs>
 
             <components:LabelLayoutForFormInputs Label="City">
-                <TextBox Style="{StaticResource FormTextBox}" 
-                         Text="{Binding City, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                         ToolTip="{Binding ErrorCollection[City]}" />
+                <TextBox
+                    Style="{StaticResource FormTextBox}"
+                    Text="{Binding City, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                    ToolTip="{Binding ErrorCollection[City]}" />
             </components:LabelLayoutForFormInputs>
 
             <components:LabelLayoutForFormInputs Label="Street">
-                <TextBox Style="{StaticResource FormTextBox}" 
-                         Text="{Binding Street, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                         ToolTip="{Binding ErrorCollection[Street]}" />
+                <TextBox
+                    Style="{StaticResource FormTextBox}"
+                    Text="{Binding Street, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                    ToolTip="{Binding ErrorCollection[Street]}" />
             </components:LabelLayoutForFormInputs>
 
-            <components:LabelLayoutForFormInputs Label="Building number" >
-                <TextBox Style="{StaticResource FormTextBox}" 
-                     Text="{Binding BuildingNumber, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, TargetNullValue=''}"
-                         ToolTip="{Binding ErrorCollection[BuildingNumber]}" />
+            <components:LabelLayoutForFormInputs Label="Building number">
+                <TextBox
+                    Style="{StaticResource FormTextBox}"
+                    Text="{Binding BuildingNumber, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, TargetNullValue=''}"
+                    ToolTip="{Binding ErrorCollection[BuildingNumber]}" />
             </components:LabelLayoutForFormInputs>
 
-            <components:LabelLayoutForFormInputs Label="Flat number" >
-                <TextBox Style="{StaticResource FormTextBox}" 
-                         Text="{Binding FlatNumber, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, TargetNullValue=''}"
-                         ToolTip="{Binding ErrorCollection[FlatNumber]}" />
+            <components:LabelLayoutForFormInputs Label="Flat number">
+                <TextBox
+                    Style="{StaticResource FormTextBox}"
+                    Text="{Binding FlatNumber, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, TargetNullValue=''}"
+                    ToolTip="{Binding ErrorCollection[FlatNumber]}" />
             </components:LabelLayoutForFormInputs>
 
         </StackPanel>
 
-        <!-- Buttons -->
-        <StackPanel Grid.Column="2" 
-                    Grid.Row="1"
-                    Orientation="Horizontal" 
-                    HorizontalAlignment="Right"
-                    Margin="0 0 20 20">
-            <Button Style="{StaticResource MenuBarButton}" 
-                    Content="Accept"
-                    Margin="0 0 10 0"
-                    Command="{Binding SubmitFormCommand}"/>
-            <Button Style="{StaticResource MenuBarButton}" 
-                    Content="Close"
-                    Command="{Binding CloseFormCommand}"/>
+        <!--  Buttons  -->
+        <StackPanel
+            Grid.Row="1"
+            Grid.Column="2"
+            Margin="0,0,20,20"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal">
+            <Button
+                Margin="0,0,10,0"
+                Command="{Binding SubmitFormCommand}"
+                Content="Accept"
+                Style="{StaticResource MenuBarButton}" />
+            <Button
+                Command="{Binding CloseFormCommand}"
+                Content="Close"
+                Style="{StaticResource MenuBarButton}" />
         </StackPanel>
     </Grid>
 </UserControl>

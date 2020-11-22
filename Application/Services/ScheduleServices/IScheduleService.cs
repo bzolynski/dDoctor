@@ -7,9 +7,6 @@ namespace Application.Services.ScheduleServices
 {
     public interface IScheduleService
     {
-        //Task<IEnumerable<Schedule>> GetSchedule(int? doctorId, int? specializationId, DateTime date);
-        Task<IEnumerable<Schedule>> GetSchedulesBySpecializationAndDoctor(int specializationId, int doctorId);
-        Task<IEnumerable<Reservation>> GetSpecifiedReservations(int doctorId, int specializationId, DateTime date);
 
         /// <summary>
         /// Returns list of schedules needed for ManageSchedulesViewModel to display doctor's schedules.
@@ -35,5 +32,7 @@ namespace Application.Services.ScheduleServices
         public Task GenerateSchedules (int doctorId, int specializationId, TimeSpan startHour, TimeSpan endHour, TimeSpan maxTimePerPatient, DateTime startDay, DateTime endDay, List<DayOfWeek> daysOfWeek);
 
 
+        Task<IEnumerable<Schedule>> GetSchedules(DateTime date, Specialization specialization = null, Doctor doctor = null);
+        Task<IEnumerable<Schedule>> GetSchedulesForDates();
     }
 }
