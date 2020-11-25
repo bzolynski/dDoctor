@@ -234,6 +234,10 @@
                                         Width="*"
                                         Binding="{Binding Path=Schedule.Specialization.Name}"
                                         Header="Specialization" />
+                                    <DataGridTextColumn
+                                        Width="*"
+                                        Binding="{Binding Path=Status}"
+                                        Header="Status" />
 
                                 </DataGrid.Columns>
                             </DataGrid>

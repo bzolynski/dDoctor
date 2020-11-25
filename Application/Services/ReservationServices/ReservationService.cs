@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Enums;
 using Persistance.Services.ReservationDataService;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,16 @@ namespace Application.Services.ReservationServices
             _reservationDataService = reservationDataService;
         }
 
+        public async Task<bool> Delete(Reservation reservation)
+        {
+            return await _reservationDataService.Delete(reservation.Id);
+        }
+
+        public async Task<Reservation> Update(int reservationId, Reservation reservation)
+        {
+            return await _reservationDataService.Update(reservationId, reservation);
+        }
+
         public async Task<IEnumerable<Reservation>> GetManyByPatient(int patientId)
         {
             return await _reservationDataService.GetManyByPatient(patientId);
@@ -28,10 +39,12 @@ namespace Application.Services.ReservationServices
         public async Task<Reservation> RegisterPatient(Reservation reservation, int patientId)
         {
             reservation.PatientId = patientId;
+            reservation.Status = ReservationStatus.Pending;
+
             return await _reservationDataService.Update(reservation.Id, reservation);
         }
 
-        public async Task<IEnumerable<Reservation>> GetAppointmentsByDate (DateTime date)
+        public async Task<IEnumerable<Reservation>> GetAppointmentsByDate(DateTime date)
         {
             return await _reservationDataService.GetManyByDateWithAllDetails(date);
         }
@@ -43,7 +56,12 @@ namespace Application.Services.ReservationServices
 
         public async Task<Reservation> CancelAppointment(Reservation reservation)
         {
-            return await _reservationDataService.Update(reservation.Id, new Reservation { Hour = reservation.Hour, ScheduleId = reservation.ScheduleId });
+            return await _reservationDataService.Update(reservation.Id, new Reservation
+            {
+                Hour = reservation.Hour,
+                ScheduleId = reservation.ScheduleId,
+                Status = ReservationStatus.Free
+            });
         }
 
     }

@@ -1,14 +1,20 @@
-﻿using System;
+﻿using Domain.Enums;
+using System;
 using System.Globalization;
 using System.Windows.Data;
 
 namespace WPFUi.Converters
 {
-    public class EnumToBoolConverter : IValueConverter
+    public class ReservationStatusBoolConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value == parameter ? true : false;
+            var result = true;
+            if (value is ReservationStatus v && parameter is ReservationStatus p)
+            {
+                result = !(v == p);
+            }
+            return result;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

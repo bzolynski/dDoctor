@@ -1,5 +1,6 @@
 ﻿using Application.Services.ReservationServices;
 using Domain.Entities;
+using Domain.Enums;
 using Persistance.Services.ScheduleDataServices;
 using System;
 using System.Collections.Generic;
@@ -33,7 +34,8 @@ namespace Application.Services.ScheduleServices
                         MaxTimePerPatient = maxTimePerPatient,
                         StartHour = startHour,
                         EndHour = endHour,
-                        Date = new DateTime(dt.Year, dt.Month, dt.Day)
+                        Date = new DateTime(dt.Year, dt.Month, dt.Day),
+                        Status = ScheduleStatus.Ok
                     });
 
                     for (var ts = startHour; ts < endHour; ts += maxTimePerPatient)
@@ -42,7 +44,8 @@ namespace Application.Services.ScheduleServices
                         await _reservationService.Create(new Reservation
                         {
                             Hour = ts,
-                            ScheduleId = schedule.Id
+                            ScheduleId = schedule.Id,
+                            Status = ReservationStatus.Free
                         });
                     }
                 }
@@ -52,6 +55,14 @@ namespace Application.Services.ScheduleServices
 
         // **************************************
         #region Used by AppointmentViewModel
+
+        /// <summary>
+        /// Gets schedules for selected date and if given, for selected specialization and doctor.
+        /// </summary>
+        /// <param name="date">Selected date</param>
+        /// <param name="specialization">Selected specialization</param>
+        /// <param name="doctor">Selected doctor</param>
+        /// <returns>Schedules including: reservations, doctor, patient</returns>
         public async Task<IEnumerable<Schedule>> GetSchedules(DateTime date, Specialization specialization = null, Doctor doctor = null)
         {
             if (doctor != null & specialization != null)
@@ -64,12 +75,15 @@ namespace Application.Services.ScheduleServices
             return await _scheduleDataService.GetManyByDate(date);
         }
 
+        /// <summary>
+        /// Returns list of schedules used to get avalieble dates for reservations
+        /// </summary>
+        /// <returns>List of schedules</returns>
         public async Task<IEnumerable<Schedule>> GetSchedulesForDates()
         {
             return await _scheduleDataService.GetSchedulesForDates();
         }
         #endregion
-
 
 
         /// <summary>
@@ -83,7 +97,26 @@ namespace Application.Services.ScheduleServices
         {
             var schedules = await _scheduleDataService.GetManyByDoctorId(doctorId);
 
-            return schedules.Where(sc => sc.Date >= dateFrom.Date && sc.Date <= dateTo);
+            return schedules.Where(sc => sc.Date >= dateFrom.Date && sc.Date <= dateTo && sc.Status != ScheduleStatus.Canceled);
+        }
+
+        /// <summary>
+        /// Changes status of schedule and each reservation in that schedule to canceled
+        /// </summary>
+        /// <param name="scheduleId">Id of schedule</param>
+        /// <returns></returns>
+        public async Task ChangeSchedulesStatusToCanceled(int scheduleId)
+        {
+            var schedule = await _scheduleDataService.Get(scheduleId);
+            schedule.Status = ScheduleStatus.Canceled;
+
+            foreach (var reservation in schedule.Reservations)
+            {
+                reservation.Status = ReservationStatus.Canceled;
+            }
+
+            await _scheduleDataService.Update(schedule.Id, schedule);
+
         }
     }
 }

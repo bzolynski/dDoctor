@@ -5,6 +5,7 @@
     xmlns:converters="clr-namespace:WPFUi.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:entities="clr-namespace:Domain.Entities;assembly=Domain"
+    xmlns:enums="clr-namespace:Domain.Enums;assembly=Domain"
     xmlns:local="clr-namespace:WPFUi.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="450"
@@ -14,6 +15,8 @@
         <converters:NullToBoolConverter x:Key="NullToBoolConverter" />
         <converters:DateTimeToBoolMultiConverter x:Key="DateTimeToBoolMultiConverter" />
         <converters:MultiBindingToBoolConverter x:Key="MultiBindingToBoolConverter" />
+        <converters:ReservationStatusBoolConverter x:Key="ReservationStatusBoolConverter" />
+
         <ToolTip x:Key="RowToolTip">
             <Grid>
                 <StackPanel Orientation="Vertical">
@@ -54,6 +57,30 @@
                                 </DataTrigger.Binding>
                                 <Setter Property="Opacity" Value="1" />
                                 <Setter Property="Background" Value="LightGreen" />
+                                <Setter Property="FontWeight" Value="SemiBold" />
+                            </DataTrigger>
+
+                            <DataTrigger Value="True">
+                                <DataTrigger.Binding>
+                                    <MultiBinding Converter="{StaticResource DateTimeToBoolMultiConverter}">
+                                        <Binding Path="DataContext.CanceledDates" RelativeSource="{RelativeSource AncestorType=Calendar}" />
+                                        <Binding Path="." />
+                                    </MultiBinding>
+                                </DataTrigger.Binding>
+                                <Setter Property="Opacity" Value="1" />
+                                <Setter Property="Background" Value="OrangeRed" />
+                                <Setter Property="FontWeight" Value="SemiBold" />
+                            </DataTrigger>
+
+                            <DataTrigger Value="True">
+                                <DataTrigger.Binding>
+                                    <MultiBinding Converter="{StaticResource DateTimeToBoolMultiConverter}">
+                                        <Binding Path="DataContext.FullDates" RelativeSource="{RelativeSource AncestorType=Calendar}" />
+                                        <Binding Path="." />
+                                    </MultiBinding>
+                                </DataTrigger.Binding>
+                                <Setter Property="Opacity" Value="1" />
+                                <Setter Property="Background" Value="Yellow" />
                                 <Setter Property="FontWeight" Value="SemiBold" />
                             </DataTrigger>
                         </Style.Triggers>
@@ -317,7 +344,8 @@
                                                     <Border
                                                         Height="60"
                                                         Margin="1"
-                                                        CornerRadius="5">
+                                                        CornerRadius="5"
+                                                        Cursor="Hand">
                                                         <Border.InputBindings>
                                                             <MouseBinding
                                                                 Command="{Binding DataContext.SelectReservationCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl, AncestorLevel=2}}"
@@ -335,10 +363,12 @@
                                                                         <Setter Property="Background" Value="#8AC6D0" />
                                                                     </DataTrigger>
 
+                                                                    <!--  Mouse over  -->
                                                                     <Trigger Property="IsMouseOver" Value="True">
                                                                         <Setter Property="Background" Value="#89b0ae" />
                                                                     </Trigger>
 
+                                                                    <!--  Selected Reservation  -->
                                                                     <DataTrigger Value="True">
                                                                         <DataTrigger.Binding>
                                                                             <MultiBinding Converter="{StaticResource MultiBindingToBoolConverter}">
@@ -353,11 +383,25 @@
                                                             </Style>
                                                         </Border.Resources>
 
-                                                        <Grid>
+
+                                                        <Grid IsEnabled="{Binding Path=Status, Converter={StaticResource ReservationStatusBoolConverter}, ConverterParameter={x:Static enums:ReservationStatus.Canceled}}">
+                                                            <Grid.Resources>
+                                                                <Style TargetType="Grid">
+                                                                    <!--  Canceled style  -->
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding Path=Status, Converter={StaticResource ReservationStatusBoolConverter}, ConverterParameter={x:Static enums:ReservationStatus.Canceled}}" Value="False">
+                                                                            <Setter Property="Background" Value="#40FF0000" />
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Grid.Resources>
                                                             <Grid.ColumnDefinitions>
                                                                 <ColumnDefinition Width="auto" />
                                                                 <ColumnDefinition Width="*" />
                                                             </Grid.ColumnDefinitions>
+                                                            <Grid.RowDefinitions>
+                                                                <RowDefinition Height="*" />
+                                                            </Grid.RowDefinitions>
                                                             <TextBlock
                                                                 Grid.Column="0"
                                                                 Margin="4,4,10,0"
@@ -492,7 +536,7 @@
                 <TextBlock
                     Grid.Row="4"
                     Grid.Column="2"
-                    Text="{Binding}" />
+                    Text="{Binding SelectedReservation.Status}" />
 
                 <!--  TODO: Patient comments  -->
                 <TextBlock
@@ -515,7 +559,7 @@
                 <TextBlock
                     Grid.Row="6"
                     Grid.Column="2"
-                    Text="{Binding}"
+                    Text="{Binding SelectedReservation.Details}"
                     TextWrapping="Wrap" />
 
             </Grid>

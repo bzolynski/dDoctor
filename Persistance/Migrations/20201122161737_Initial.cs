@@ -46,7 +46,7 @@ namespace Persistance.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Code = table.Column<int>(nullable: false),
+                    Code = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -62,7 +62,7 @@ namespace Persistance.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     LastName = table.Column<string>(nullable: true),
                     FirstName = table.Column<string>(nullable: true),
-                    NPWZ = table.Column<int>(nullable: false),
+                    NPWZ = table.Column<string>(nullable: true),
                     UserId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -132,6 +132,7 @@ namespace Persistance.Migrations
                     StartHour = table.Column<TimeSpan>(nullable: false),
                     EndHour = table.Column<TimeSpan>(nullable: false),
                     MaxTimePerPatient = table.Column<TimeSpan>(nullable: false),
+                    Status = table.Column<int>(nullable: false),
                     SpecializationId = table.Column<int>(nullable: false),
                     DoctorId = table.Column<int>(nullable: false)
                 },
@@ -159,8 +160,10 @@ namespace Persistance.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Hour = table.Column<TimeSpan>(nullable: false),
+                    Status = table.Column<int>(nullable: false),
                     PatientId = table.Column<int>(nullable: true),
-                    ScheduleId = table.Column<int>(nullable: false)
+                    ScheduleId = table.Column<int>(nullable: false),
+                    Details = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -221,7 +224,8 @@ namespace Persistance.Migrations
                 name: "IX_Specializations_Code",
                 table: "Specializations",
                 column: "Code",
-                unique: true);
+                unique: true,
+                filter: "[Code] IS NOT NULL");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

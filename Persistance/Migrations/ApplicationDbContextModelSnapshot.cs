@@ -174,7 +174,10 @@ namespace Persistance.Migrations
                     b.Property<int?>("PatientId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ScheduleId")
+                    b.Property<int?>("ScheduleId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -210,6 +213,9 @@ namespace Persistance.Migrations
 
                     b.Property<TimeSpan>("StartHour")
                         .HasColumnType("time");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -277,9 +283,7 @@ namespace Persistance.Migrations
 
                     b.HasOne("Domain.Entities.Schedule", "Schedule")
                         .WithMany("Reservations")
-                        .HasForeignKey("ScheduleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ScheduleId");
                 });
 
             modelBuilder.Entity("Domain.Entities.Schedule", b =>

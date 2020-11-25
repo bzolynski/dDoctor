@@ -6,6 +6,7 @@ using Application.Services.ScheduleServices;
 using Application.Services.SpecializationServices;
 using AutoMapper;
 using Domain.Entities;
+using Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -48,6 +49,8 @@ namespace WPFUi.ViewModels.AppointmentVMs
         public ObservableCollection<AppointmentViewScheduleModel> AppointmentViewSchedulesDisplay { get; set; }
         public ObservableCollection<Doctor> Doctors { get; set; }
         public ObservableCollection<Specialization> Specializations { get; set; }
+        public IEnumerable<DateTime> CanceledDates { get; set; }
+        public IEnumerable<DateTime> FullDates { get; set; }
         public IEnumerable<DateTime> AvaliebleDates { get; set; }
 
         public ReservationDetailsViewModel ReservationDetails
@@ -96,6 +99,7 @@ namespace WPFUi.ViewModels.AppointmentVMs
             set
             {
                 _selectedDate = value;
+                SelectedReservation = null;
                 OnPropertyChanged(nameof(SelectedDate));
                 LoadSchedules();
             }
@@ -173,11 +177,14 @@ namespace WPFUi.ViewModels.AppointmentVMs
 
         private void OpenReservationDetails(object arg)
         {
+            if (SelectedReservation != null)
+            {
+                ReservationDetails = new ReservationDetailsViewModel(SelectedReservation.Id, _reservationService, _patientService, _mapper);
 
-            ReservationDetails = new ReservationDetailsViewModel(SelectedReservation.Id, _reservationService, _patientService, _mapper);
+                ReservationDetails.DetailsClosed += ReservationDetails_DetailsClosed;
+                ReservationDetails.ReservationSubmitted += ReservationDetails_ReservationSubmitted;
 
-            ReservationDetails.DetailsClosed += ReservationDetails_DetailsClosed;
-            ReservationDetails.ReservationSubmitted += ReservationDetails_ReservationSubmitted;
+            }
 
         }
 
@@ -249,16 +256,48 @@ namespace WPFUi.ViewModels.AppointmentVMs
             {
                 if (task.Exception == null)
                 {
+                    // TODO: Find better solution
+
                     if(SelectedDoctor != null && SelectedSpecialization != null)
-                        AvaliebleDates = task.Result.Where(x => x.DoctorId == SelectedDoctor.Id && x.SpecializationId == SelectedSpecialization.Id).Select(x => x.Date).ToList();
+                    {
+                        AvaliebleDates = task.Result.Where(x => x.DoctorId == SelectedDoctor.Id && x.SpecializationId == SelectedSpecialization.Id && x.Status == ScheduleStatus.Ok).Select(x => x.Date).ToList();
+
+                        FullDates = task.Result.Where(x => x.DoctorId == SelectedDoctor.Id && x.SpecializationId == SelectedSpecialization.Id && x.Status == ScheduleStatus.Full).Select(x => x.Date).ToList();
+
+                        CanceledDates = task.Result.Where(x => x.DoctorId == SelectedDoctor.Id && x.SpecializationId == SelectedSpecialization.Id && x.Status == ScheduleStatus.Canceled).Select(x => x.Date).ToList();
+                    }
+                        
                     else if(SelectedDoctor != null)
-                        AvaliebleDates = task.Result.Where(x => x.DoctorId == SelectedDoctor.Id).Select(x => x.Date).ToList();
+                    {
+                        AvaliebleDates = task.Result.Where(x => x.DoctorId == SelectedDoctor.Id && x.Status == ScheduleStatus.Ok).Select(x => x.Date).ToList();
+
+                        FullDates = task.Result.Where(x => x.DoctorId == SelectedDoctor.Id && x.Status == ScheduleStatus.Full).Select(x => x.Date).ToList();
+
+                        CanceledDates = task.Result.Where(x => x.DoctorId == SelectedDoctor.Id && x.Status == ScheduleStatus.Canceled).Select(x => x.Date).ToList();
+
+                    }
                     else if(SelectedSpecialization != null)
-                        AvaliebleDates = task.Result.Where(x => x.SpecializationId == SelectedSpecialization.Id).Select(x => x.Date).ToList();
+                    {
+                        AvaliebleDates = task.Result.Where(x => x.SpecializationId == SelectedSpecialization.Id && x.Status == ScheduleStatus.Ok).Select(x => x.Date).ToList();
+
+                        FullDates = task.Result.Where(x => x.SpecializationId == SelectedSpecialization.Id && x.Status == ScheduleStatus.Full).Select(x => x.Date).ToList();
+
+                        CanceledDates = task.Result.Where(x => x.SpecializationId == SelectedSpecialization.Id && x.Status == ScheduleStatus.Canceled).Select(x => x.Date).ToList();
+
+                    }
                     else
-                        AvaliebleDates = task.Result.Select(x => x.Date).ToList();
+                    {
+                        AvaliebleDates = task.Result.Where(x => x.Status == ScheduleStatus.Ok).Select(x => x.Date).ToList();
+
+                        FullDates = task.Result.Where(x => x.Status == ScheduleStatus.Full).Select(x => x.Date).ToList();
+
+                        CanceledDates = task.Result.Where(x => x.Status == ScheduleStatus.Canceled).Select(x => x.Date).ToList();
+                    }
+                        
 
                     OnPropertyChanged(nameof(AvaliebleDates));
+                    OnPropertyChanged(nameof(CanceledDates));
+                    OnPropertyChanged(nameof(FullDates));
 
                 }
             });

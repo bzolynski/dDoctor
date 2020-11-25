@@ -34,5 +34,6 @@ namespace Application.Services.ScheduleServices
 
         Task<IEnumerable<Schedule>> GetSchedules(DateTime date, Specialization specialization = null, Doctor doctor = null);
         Task<IEnumerable<Schedule>> GetSchedulesForDates();
+        Task ChangeSchedulesStatusToCanceled(int scheduleId);
     }
 }

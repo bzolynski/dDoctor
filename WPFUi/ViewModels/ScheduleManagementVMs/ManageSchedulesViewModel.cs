@@ -27,7 +27,11 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
         private string _searchText = string.Empty;
         private DateTime _dateFrom;
         private List<ManageScheduleDoctorModel> _doctors;
+        public List<Schedule> _schedules;
         private DateTime _dateTo;
+        private ManageScheduleDoctorModel _selectedDoctor;
+        private Schedule _selectedSchedule;
+
 
         private readonly IDoctorService _doctorService;
         private readonly IScheduleService _scheduleService;
@@ -40,15 +44,8 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
         #region Bindings
 
         public ICollectionView DoctorsCollectionView { get; set; }
+        public ICollectionView SchedulesCollectionView { get; set; }
 
-        public ObservableCollection<Schedule> Schedules { get; set; }
-
-        public GenerateScheduleViewModel GenerateSchedule { get; set; }
-
-
-        private ManageScheduleDoctorModel _selectedDoctor;
-
-        private Schedule _selectedSchedule;
 
         public Schedule SelectedSchedule
         {
@@ -130,7 +127,10 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
             DoctorsCollectionView.Filter = DoctorsFilter;
             DoctorsCollectionView.SortDescriptions.Add(new SortDescription(nameof(ManageScheduleDoctorModel.LastName), ListSortDirection.Ascending));
 
-            DeleteSelectedScheduleDayCommand = new AsyncRelayCommand(DeleteSelectedScheduleDay, (ex) => throw ex);
+            _schedules = new List<Schedule>();
+            SchedulesCollectionView = CollectionViewSource.GetDefaultView(_schedules);
+
+            DeleteSelectedScheduleDayCommand = new AsyncRelayCommand(DeleteSelectedScheduleDay, CanDeleteSelectedScheduleDay, (ex) => throw ex);
             GenerateNewScheduleCommand = new RelayCommand(GenerateNewSchedule);
 
             LoadDoctors();
@@ -140,6 +140,8 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
         }
 
         
+
+
 
         #endregion
 
@@ -167,17 +169,33 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
             {
                 if (task.Exception == null)
                 {
-                    Schedules = new ObservableCollection<Schedule>(task.Result);
-                    OnPropertyChanged(nameof(Schedules));
+                    _schedules.Clear();
+                    foreach (var schedule in task.Result)
+                        _schedules.Add(schedule);
+
+                    System.Windows.Application.Current.Dispatcher.Invoke(new Action(() => SchedulesCollectionView.Refresh()));
+
+
                 }
             });
+        }
+
+        private bool CanDeleteSelectedScheduleDay(object obj)
+        {
+            if (SelectedSchedule != null)
+                return true;
+
+            return false;
         }
 
         private async Task DeleteSelectedScheduleDay(object obj)
         {
             if (SelectedSchedule != null)
             {
+                await _scheduleService.ChangeSchedulesStatusToCanceled(SelectedSchedule.Id);
+                _schedules.Remove(SelectedSchedule);
 
+                SchedulesCollectionView.Refresh();
             }
         }
 

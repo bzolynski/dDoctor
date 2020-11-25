@@ -10,8 +10,8 @@ using Persistance;
 namespace Persistance.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201120165453_details")]
-    partial class details
+    [Migration("20201125192806_nullable")]
+    partial class nullable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -176,7 +176,10 @@ namespace Persistance.Migrations
                     b.Property<int?>("PatientId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ScheduleId")
+                    b.Property<int?>("ScheduleId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -212,6 +215,9 @@ namespace Persistance.Migrations
 
                     b.Property<TimeSpan>("StartHour")
                         .HasColumnType("time");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -279,9 +285,7 @@ namespace Persistance.Migrations
 
                     b.HasOne("Domain.Entities.Schedule", "Schedule")
                         .WithMany("Reservations")
-                        .HasForeignKey("ScheduleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ScheduleId");
                 });
 
             modelBuilder.Entity("Domain.Entities.Schedule", b =>

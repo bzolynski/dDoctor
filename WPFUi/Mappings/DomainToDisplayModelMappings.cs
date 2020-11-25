@@ -20,7 +20,8 @@ namespace WPFUi.Mappings
             CreateMap<Schedule, AppointmentViewScheduleModel>()
                 .ForMember(model =>
                     model.DoctorFullName, x => x.MapFrom(y => $"{ y.Doctor.LastName} { y.Doctor.FirstName }"));
-          
+
+
         }
     }
 }

@@ -122,7 +122,7 @@
                     CanUserDeleteRows="False"
                     CanUserResizeRows="False"
                     IsReadOnly="True"
-                    ItemsSource="{Binding Schedules}"
+                    ItemsSource="{Binding SchedulesCollectionView}"
                     RowHeaderWidth="15"
                     SelectedItem="{Binding SelectedSchedule, Mode=OneWayToSource}"
                     SelectionMode="Single">
@@ -144,10 +144,15 @@
                             Width="*"
                             Binding="{Binding Specialization.Name}"
                             Header="Specialization" />
-                        <DataGridTextColumn
-                            Width="*"
-                            Binding="{Binding Doctor.FirstName}"
-                            Header="Doctor" />
+
+                        <DataGridTextColumn Width="*" Header="Doctor">
+                            <DataGridTextColumn.Binding>
+                                <MultiBinding StringFormat="{}{0} {1}">
+                                    <Binding Path="Doctor.LastName" />
+                                    <Binding Path="Doctor.FirstName" />
+                                </MultiBinding>
+                            </DataGridTextColumn.Binding>
+                        </DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
 
