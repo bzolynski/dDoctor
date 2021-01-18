@@ -18,8 +18,9 @@ namespace Persistance
         public static void AddPersistance(this IServiceCollection services, IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("Default");
+
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
-            services.AddScoped<ApplicationDbContextFactory>();
+            services.AddSingleton<ApplicationDbContextFactory>(new ApplicationDbContextFactory(connectionString));
 
             services.AddScoped<NonQueryDataService<Patient>>();
             services.AddScoped<NonQueryDataService<Address>>();

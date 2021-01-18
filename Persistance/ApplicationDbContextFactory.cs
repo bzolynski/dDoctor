@@ -3,14 +3,19 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace Persistance
 {
-    public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
-    {        
+    public class ApplicationDbContextFactory 
+    {
+        private readonly string _connectionString;
+
+        public ApplicationDbContextFactory(string connectionString)
+        {
+            _connectionString = connectionString;
+        }
         public ApplicationDbContext CreateDbContext(string[] args = null)
         {
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
 
-            // TODO: Change this
-            optionsBuilder.UseSqlServer("Server=.;Database=dDoctor;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer(_connectionString);
             return new ApplicationDbContext(optionsBuilder.Options);
         }
     }
