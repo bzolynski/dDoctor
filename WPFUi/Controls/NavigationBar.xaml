@@ -46,7 +46,7 @@
                         </MenuItem>
 
                         <!--  Patient  -->
-                        <MenuItem>
+                        <MenuItem Command="{Binding UpdateCurrentViewModelCommand}" CommandParameter="{x:Static navigator:ViewType.Patients}">
                             <MenuItem.Header>
                                 <StackPanel Orientation="Vertical">
                                     <Image Height="50" Source="C:\Users\barto\Desktop\dDoctor\dDoctor\WPFUi\Assets\Icons\029-nurse.png" />
@@ -57,16 +57,10 @@
                                 </StackPanel>
                             </MenuItem.Header>
 
-                            <!--  Patient list  -->
-                            <MenuItem
-                                Command="{Binding UpdateCurrentViewModelCommand}"
-                                CommandParameter="{x:Static navigator:ViewType.Patients}"
-                                Header="Patients list" />
-
                         </MenuItem>
 
                         <!--  Appointment  -->
-                        <MenuItem>
+                        <MenuItem Command="{Binding UpdateCurrentViewModelCommand}" CommandParameter="{x:Static navigator:ViewType.Appointments}">
                             <MenuItem.Header>
                                 <StackPanel Orientation="Vertical">
                                     <Image Height="50" Source="C:\Users\barto\Desktop\dDoctor\dDoctor\WPFUi\Assets\Icons\101-appointment-2.png" />
@@ -76,12 +70,6 @@
                                         Text="Appointments" />
                                 </StackPanel>
                             </MenuItem.Header>
-
-
-                            <MenuItem
-                                Command="{Binding UpdateCurrentViewModelCommand}"
-                                CommandParameter="{x:Static navigator:ViewType.Appointments}"
-                                Header="View appointments" />
                         </MenuItem>
 
                     </Menu>
@@ -90,9 +78,6 @@
                         HorizontalAlignment="Right"
                         VerticalAlignment="Top"
                         Background="Transparent">
-
-
-
                         <!--  Management  -->
                         <MenuItem>
                             <MenuItem.Header>

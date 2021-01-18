@@ -115,7 +115,7 @@
                 Grid.Row="0"
                 Grid.ColumnSpan="3"
                 Height="70"
-                Background="#042A2B">
+                Background="{StaticResource MainDarkGreenSolidColorBrush}">
                 <TextBlock
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
@@ -152,6 +152,7 @@
 
                                 <Calendar
                                     DisplayDate="{Binding SelectedDate}"
+                                    PreviewMouseUp="Calendar_PreviewMouseUp"
                                     SelectedDate="{Binding SelectedDate}"
                                     Style="{StaticResource CalendarColors}" />
                                 <Button Command="{Binding SetSelectedDateToTodayCommand}">
@@ -271,7 +272,7 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <Grid Margin="0,10,10,0" Background="#064142">
+                <Grid Margin="0,10,10,0" Background="{StaticResource SecondaryDarkGreenSolidColorBrush}">
                     <TextBlock
                         Padding="3"
                         HorizontalAlignment="Center"

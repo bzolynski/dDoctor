@@ -32,19 +32,22 @@
 
     </UserControl.Resources>
 
-    <Grid Background="{StaticResource LightPurpleSolidColorBrush}">
+    <Grid>
 
-        <Border Style="{StaticResource MainDarkBorder}">
+        <Border>
 
 
             <Grid Grid.Row="0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="50" />
+                    <RowDefinition Height="auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
                 <!--  Menu bar  -->
-                <Grid Grid.Row="0" Background="{StaticResource MainLinearGradient}">
+                <Grid
+                    Grid.Row="0"
+                    Height="70"
+                    Background="{StaticResource MainDarkGreenSolidColorBrush}">
                     <Grid Margin="10,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto" />
@@ -56,6 +59,7 @@
                             Grid.Column="0"
                             VerticalAlignment="Center"
                             Orientation="Horizontal">
+
                             <!--  LOGO XDDD  -->
                             <Button
                                 Width="40"
@@ -73,21 +77,21 @@
                                 Foreground="{StaticResource MainFontSolidColorBrush}"
                                 Text="Patients list" />
 
+                            <!--  Reload patients button  -->
                             <Button
                                 Margin="10,0,0,0"
                                 Command="{Binding ReloadPatientListCommand}"
                                 Content="Reload"
                                 Style="{StaticResource MenuBarButton}" />
 
-
-                            <TextBox Width="100" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
-
+                            <!--  Add patient button  -->
                             <Button
                                 Margin="10,0,0,0"
                                 Command="{Binding OpenAddPatientFormCommand}"
                                 Content="Add"
                                 Style="{StaticResource MenuBarButton}" />
 
+                            <!--  Edit patient button  -->
                             <Button
                                 Margin="10,0,0,0"
                                 Command="{Binding OpenEditPatientFormCommand}"
@@ -95,13 +99,33 @@
                                 Content="Edit"
                                 Style="{StaticResource MenuBarButton}" />
 
+                            <!--  Delete patient button  -->
                             <Button
                                 Margin="10,0,0,0"
                                 Command="{Binding DeletePatientCommand}"
                                 Content="Delete"
                                 Style="{StaticResource MenuBarButton}" />
+
+
+
                         </StackPanel>
 
+                        <!--  Search bar  -->
+                        <TextBox
+                            Grid.Column="1"
+                            Width="350"
+                            Margin="0,15"
+                            Padding="8,0"
+                            HorizontalAlignment="Right"
+                            FontSize="25"
+                            Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}">
+                            <TextBox.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="8" />
+                                </Style>
+
+                            </TextBox.Resources>
+                        </TextBox>
 
 
 
@@ -110,19 +134,19 @@
 
 
                 <Grid Grid.Row="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
 
                     <!--  Data Grid  -->
 
                     <DataGrid
-                        Grid.Column="0"
+                        Grid.Row="0"
                         Padding="8"
                         HorizontalAlignment="Left"
                         AutoGenerateColumns="False"
-                        Background="{StaticResource LightPurpleSolidColorBrush}"
+                        BorderThickness="0"
                         CanUserAddRows="False"
                         CanUserDeleteRows="False"
                         CanUserResizeRows="False"
@@ -134,13 +158,22 @@
                         SelectionMode="Single">
 
                         <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding Path=LastName}" Header="Last name" />
-                            <DataGridTextColumn Binding="{Binding Path=FirstName}" Header="First name" />
                             <DataGridTextColumn
-                                Width="*"
+                                MinWidth="150"
+                                Binding="{Binding Path=LastName}"
+                                Header="Last name" />
+                            <DataGridTextColumn
+                                MinWidth="150"
+                                Binding="{Binding Path=FirstName}"
+                                Header="First name" />
+                            <DataGridTextColumn
+                                Width="2*"
                                 Binding="{Binding Path=FullAddress}"
                                 Header="Address" />
-                            <DataGridTextColumn Binding="{Binding Path=BirthDateString}" Header="Birth date" />
+                            <DataGridTextColumn
+                                MinWidth="80"
+                                Binding="{Binding Path=BirthDateString}"
+                                Header="Birth date" />
                             <DataGridTextColumn Binding="{Binding Path=PhoneNumber}" Header="Phone number" />
                             <DataGridTextColumn Binding="{Binding Path=Email}" Header="Email" />
                             <DataGridTextColumn Binding="{Binding Path=Id}" Header="Patient id" />
@@ -148,13 +181,13 @@
                     </DataGrid>
 
 
-                    <Grid Grid.Column="1" VerticalAlignment="Top">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto" />
-                            <RowDefinition Height="auto" />
-                        </Grid.RowDefinitions>
+                    <Grid Grid.Row="1" VerticalAlignment="Top">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
                         <components:PatientsPageBottomBoxLayout
-                            Grid.Row="0"
+                            Grid.Column="0"
                             DataContext="{Binding SelectedPatient}"
                             Label="PATIENT DETAILS">
 
@@ -197,7 +230,7 @@
                         </components:PatientsPageBottomBoxLayout>
 
 
-                        <components:PatientsPageBottomBoxLayout Grid.Row="1" Label="PATIENT RESERVATIONS">
+                        <components:PatientsPageBottomBoxLayout Grid.Column="1" Label="PATIENT RESERVATIONS">
 
                             <DataGrid
                                 Height="200"
