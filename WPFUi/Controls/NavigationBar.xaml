@@ -36,7 +36,7 @@
                         <MenuItem Command="{Binding UpdateCurrentViewModelCommand}" CommandParameter="{x:Static navigator:ViewType.Home}">
                             <MenuItem.Header>
                                 <StackPanel Orientation="Vertical">
-                                    <Image Height="50" Source="C:\Users\barto\Desktop\dDoctor\dDoctor\WPFUi\Assets\Icons\008-house.png" />
+                                    <Image Height="50" Source="/WPFUi;component/Assets/Icons/008-house.png" />
                                     <TextBlock
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
@@ -49,7 +49,7 @@
                         <MenuItem Command="{Binding UpdateCurrentViewModelCommand}" CommandParameter="{x:Static navigator:ViewType.Patients}">
                             <MenuItem.Header>
                                 <StackPanel Orientation="Vertical">
-                                    <Image Height="50" Source="C:\Users\barto\Desktop\dDoctor\dDoctor\WPFUi\Assets\Icons\029-nurse.png" />
+                                    <Image Height="50" Source="/WPFUi;component/Assets/Icons/029-nurse.png" />
                                     <TextBlock
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
@@ -63,7 +63,7 @@
                         <MenuItem Command="{Binding UpdateCurrentViewModelCommand}" CommandParameter="{x:Static navigator:ViewType.Appointments}">
                             <MenuItem.Header>
                                 <StackPanel Orientation="Vertical">
-                                    <Image Height="50" Source="C:\Users\barto\Desktop\dDoctor\dDoctor\WPFUi\Assets\Icons\101-appointment-2.png" />
+                                    <Image Height="50" Source="/WPFUi;component/Assets/Icons/101-appointment-2.png" />
                                     <TextBlock
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
@@ -82,7 +82,7 @@
                         <MenuItem>
                             <MenuItem.Header>
                                 <StackPanel Orientation="Vertical">
-                                    <Image Height="50" Source="C:\Users\barto\Desktop\dDoctor\dDoctor\WPFUi\Assets\Icons\settings.png" />
+                                    <Image Height="50" Source="/WPFUi;component/Assets/Icons/settings.png" />
                                     <TextBlock
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
@@ -113,7 +113,7 @@
                         <MenuItem>
                             <MenuItem.Header>
                                 <StackPanel Orientation="Vertical">
-                                    <Image Height="50" Source="C:\Users\barto\Desktop\dDoctor\dDoctor\WPFUi\Assets\Icons\012-car-key.png" />
+                                    <Image Height="50" Source="/WPFUi;component/Assets/Icons/012-car-key.png" />
                                     <TextBlock
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
@@ -126,7 +126,7 @@
                         <MenuItem Command="{Binding CloseApplicationCommand}">
                             <MenuItem.Header>
                                 <StackPanel Orientation="Vertical">
-                                    <Image Height="50" Source="C:\Users\barto\Desktop\dDoctor\dDoctor\WPFUi\Assets\Icons\close.png" />
+                                    <Image Height="50" Source="/WPFUi;component/Assets/Icons/close.png" />
                                     <TextBlock
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
