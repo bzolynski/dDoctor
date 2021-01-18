@@ -12,6 +12,18 @@ namespace WPFUi.Controls.Components
 
 
 
+        public int MaximumHeight
+        {
+            get { return (int)GetValue(MaximumHeightProperty); }
+            set { SetValue(MaximumHeightProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for MaximumHeight.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty MaximumHeightProperty =
+            DependencyProperty.Register("MaximumHeight", typeof(int), typeof(PatientPicker), new PropertyMetadata(1000));
+
+
+
         public ICommand SelectedPatientChangedCommand
         {
             get { return (ICommand)GetValue(SelectedPatientChangedProperty); }

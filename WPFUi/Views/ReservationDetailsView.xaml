@@ -26,7 +26,7 @@
         <Grid
             Grid.Row="0"
             Height="70"
-            Background="#042A2B">
+            Background="{StaticResource MainDarkGreenSolidColorBrush}">
             <TextBlock
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
@@ -37,86 +37,106 @@
         </Grid>
 
         <!--  Main content  -->
-        <Grid Grid.Row="1">
+        <Grid
+            Grid.Row="1"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
+
+            <Grid.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Margin" Value="0,0,0,10" />
+                    <Setter Property="FontSize" Value="17" />
+                </Style>
+            </Grid.Resources>
+
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="auto" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
 
 
             <Grid Grid.Row="0" Grid.Column="0">
+
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <!--  Label  -->
-                <Grid Grid.Row="0">
-                    <TextBlock Text="Reservation_________________________________________________________________________________________________________" />
-                </Grid>
-
-                <Grid Grid.Row="1">
+                <!--  Doc / Spec section  -->
+                <Grid Grid.Row="1" Margin="25">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
                     </Grid.RowDefinitions>
 
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
 
+                    <!--  Spec  -->
                     <TextBlock
                         Grid.Row="0"
                         Grid.Column="0"
-                        Text="Specialization" />
+                        Margin="0,0,25,0"
+                        FontWeight="SemiBold"
+                        Text="Specialization:" />
 
                     <TextBlock
                         Grid.Row="0"
                         Grid.Column="1"
                         Text="{Binding Reservation.Schedule.Specialization.Name}" />
 
+                    <!--  Doc  -->
                     <TextBlock
                         Grid.Row="1"
                         Grid.Column="0"
-                        Text="Doctor" />
+                        FontWeight="SemiBold"
+                        Text="Doctor:" />
 
                     <TextBlock Grid.Row="1" Grid.Column="1">
                         <Run Text="{Binding Reservation.Schedule.Doctor.LastName}" />
                         <Run Text="{Binding Reservation.Schedule.Doctor.FirstName}" />
                     </TextBlock>
 
+                    <!--  Date  -->
                     <TextBlock
                         Grid.Row="2"
                         Grid.Column="0"
-                        Text="Date" />
+                        FontWeight="SemiBold"
+                        Text="Date:" />
 
                     <TextBlock
                         Grid.Row="2"
                         Grid.Column="1"
                         Text="{Binding Reservation.Schedule.Date, StringFormat=dd-MM-yyyy}" />
 
-                    <Grid Grid.Row="2" Grid.Column="2">
+                    <!--  Hour/Time  -->
+                    <Grid
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Grid.Column="0">
-                            <Run Text="Hour: " />
+                            <Run FontWeight="SemiBold" Text="Hour: " />
                             <Run Text="{Binding Reservation.Hour, StringFormat=hh\\:mm}" />
                         </TextBlock>
                         <TextBlock Grid.Column="1">
-                            <Run Text="Time: " />
+                            <Run FontWeight="SemiBold" Text="Time: " />
                             <Run Text="{Binding Reservation.Schedule.MaxTimePerPatient, StringFormat=mm}" />
                             <Run Text="min" />
                         </TextBlock>
@@ -125,71 +145,110 @@
                 </Grid>
             </Grid>
 
+
+            <!--  Patient section  -->
+            <Grid
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="25">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+
+
+                <TextBlock
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    FontWeight="SemiBold"
+                    Text="PESEL: " />
+                <TextBlock
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Text="{Binding Reservation.Patient.PESEL}" />
+
+                <TextBlock
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Margin="0,0,15,0"
+                    FontWeight="SemiBold"
+                    Text="Patient name: " />
+                <TextBlock
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Width="280"
+                    TextWrapping="WrapWithOverflow">
+                    <Run Text="{Binding Reservation.Patient.LastName}" />
+                    <Run Text="{Binding Reservation.Patient.FirstName}" />
+                </TextBlock>
+
+                <TextBlock
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Margin="0,0,15,0"
+                    FontWeight="SemiBold"
+                    Text="Phone number: " />
+                <TextBlock
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    Text="{Binding Reservation.Patient.PhoneNumber}" />
+
+
+
+            </Grid>
+
             <!--  Reservatrion details  -->
-            <Grid Grid.Row="0" Grid.Column="1">
+            <Grid
+                Grid.Row="2"
+                Grid.ColumnSpan="2"
+                Height="200"
+                Margin="25,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0" Text="Details" />
-                <TextBox Grid.Row="1" Text="{Binding Reservation.Details}" />
+                <TextBox
+                    Grid.Row="1"
+                    Padding="10"
+                    FontSize="20"
+                    Text="{Binding Reservation.Details}" />
             </Grid>
 
-            <Grid Grid.Row="1" Grid.Column="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <Grid Grid.Row="0" Grid.ColumnSpan="2">
-                    <TextBlock Padding="10" Text="Patient " />
-                    <TextBlock Padding="0,20" Text="_____________________________________________________________________________________________________________________________ " />
-
-                </Grid>
-                <TextBlock
-                    Grid.Row="1"
-                    Grid.Column="0"
-                    Text="PESEL: " />
-                <TextBlock
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    Text="{Binding Reservation.Patient.PESEL}" />
-
-                <TextBlock
-                    Grid.Row="2"
-                    Grid.Column="0"
-                    Text="Patient name: " />
-                <TextBlock Grid.Row="2" Grid.Column="1">
-                    <Run Text="{Binding Reservation.Patient.LastName}" />
-                    <Run Text="{Binding Reservation.Patient.FirstName}" />
-                </TextBlock>
-
-
-
-            </Grid>
-
-            <Grid Grid.Row="1" Grid.Column="1">
+            <!--  Patient picker  -->
+            <Grid
+                Grid.Row="0"
+                Grid.RowSpan="3"
+                Grid.Column="2">
                 <Grid.Resources>
                     <Style TargetType="Grid">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding Reservation.Status, Converter={StaticResource EqualValueToParameterConverter}, ConverterParameter={x:Static enums:ReservationStatus.Free}}" Value="false">
                                 <Setter Property="IsEnabled" Value="False" />
-                                <Setter Property="Visibility" Value="Hidden" />
+                                <Setter Property="Visibility" Value="Collapsed" />
                             </DataTrigger>
 
                         </Style.Triggers>
 
                     </Style>
                 </Grid.Resources>
-                <components:PatientPicker DataContext="{Binding PatientPicker}" SelectedPatientChangedCommand="{Binding LoadPatientCommand}" />
+                <components:PatientPicker
+                    DataContext="{Binding PatientPicker}"
+                    MaximumHeight="280"
+                    SelectedPatientChangedCommand="{Binding LoadPatientCommand}" />
             </Grid>
+
+
+
+
         </Grid>
 
 

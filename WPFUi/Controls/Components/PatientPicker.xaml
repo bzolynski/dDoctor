@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:WPFUi.Controls.Components"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Name="root"
     d:DesignHeight="450"
     d:DesignWidth="460"
     mc:Ignorable="d">
@@ -33,6 +34,7 @@
                 Style="{StaticResource MainDarkBorder}">
                 <DataGrid
                     x:Name="patientPicker"
+                    MaxHeight="{Binding MaximumHeight, ElementName=root}"
                     AutoGenerateColumns="False"
                     Background="WhiteSmoke"
                     CanUserAddRows="False"
@@ -43,7 +45,8 @@
                     RowHeaderWidth="15"
                     SelectedCellsChanged="patientPicker_SelectedPatientChanged"
                     SelectedItem="{Binding SelectedDisplayPatient, Mode=OneWayToSource}"
-                    SelectionMode="Single">
+                    SelectionMode="Single"
+                    VerticalScrollBarVisibility="Visible">
 
 
                     <DataGrid.Columns>
@@ -53,7 +56,6 @@
                         <DataGridTextColumn Binding="{Binding Path=BirthDateString}" Header="Birth date" />
                         <DataGridTextColumn Binding="{Binding Path=PhoneNumber}" Header="Phone number" />
                         <DataGridTextColumn Binding="{Binding Path=Email}" Header="Email" />
-                        <DataGridTextColumn Binding="{Binding Path=Id}" Header="Patient id" />
                     </DataGrid.Columns>
                 </DataGrid>
             </Border>
