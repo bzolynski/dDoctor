@@ -162,7 +162,7 @@ namespace Persistance.Migrations
                     Hour = table.Column<TimeSpan>(nullable: false),
                     Status = table.Column<int>(nullable: false),
                     PatientId = table.Column<int>(nullable: true),
-                    ScheduleId = table.Column<int>(nullable: false),
+                    ScheduleId = table.Column<int>(nullable: true),
                     Details = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -179,7 +179,7 @@ namespace Persistance.Migrations
                         column: x => x.ScheduleId,
                         principalTable: "Schedules",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(

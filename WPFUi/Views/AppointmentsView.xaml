@@ -47,6 +47,7 @@
                 <Setter.Value>
                     <Style TargetType="CalendarDayButton">
                         <Setter Property="Opacity" Value="0.5" />
+
                         <Style.Triggers>
                             <DataTrigger Value="True">
                                 <DataTrigger.Binding>
@@ -356,7 +357,6 @@
                                                         </Border.InputBindings>
                                                         <Border.Resources>
 
-
                                                             <Style TargetType="Border">
                                                                 <Setter Property="Background" Value="#CDEDF6" />
                                                                 <Style.Triggers>
@@ -385,7 +385,7 @@
                                                         </Border.Resources>
 
 
-                                                        <Grid IsEnabled="{Binding Path=Status, Converter={StaticResource ReservationStatusBoolConverter}, ConverterParameter={x:Static enums:ReservationStatus.Canceled}}">
+                                                        <Grid>
                                                             <Grid.Resources>
                                                                 <Style TargetType="Grid">
                                                                     <!--  Canceled style  -->

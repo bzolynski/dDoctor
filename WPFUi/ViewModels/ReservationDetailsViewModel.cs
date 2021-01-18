@@ -69,12 +69,14 @@ namespace WPFUi.ViewModels
             PatientPicker.SelectedPatientChanged += PatientPicker_SelectedPatientChanged;
 
             CloseCommand = new RelayCommand(Close);
-            SubmitReservationCommand = new AsyncRelayCommand(SubmitReservation, (ex) => throw ex);
+            SubmitReservationCommand = new AsyncRelayCommand(SubmitReservation, CanSubmitReservation, (ex) => throw ex);
 
             LoadReservation();
         }
 
         
+
+
 
 
         #endregion
@@ -85,6 +87,17 @@ namespace WPFUi.ViewModels
         private void Close(object obj)
         {
             DetailsClosed?.Invoke();
+        }
+
+        private bool CanSubmitReservation(object obj)
+        {
+            var result = false;
+            if (Reservation?.Patient == null)
+                result =  SelectedPatient != null;
+            else
+                result = true;
+
+            return result;
         }
 
         private async Task SubmitReservation(object arg)
