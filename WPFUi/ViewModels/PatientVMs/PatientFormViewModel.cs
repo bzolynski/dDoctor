@@ -57,7 +57,7 @@ namespace WPFUi.ViewModels.PatientVMs
         // Private fields
         #region Private fields
 
-        private readonly PatientDisplayModel _patient;
+        private readonly Patient _patient;
         private readonly IPatientService _patientService;
         private readonly IDateTimeService _dateTimeService;
 
@@ -144,7 +144,7 @@ namespace WPFUi.ViewModels.PatientVMs
         }
 
         //For edit
-        public PatientFormViewModel(PatientDisplayModel patient, IPatientService patientService, IDateTimeService dateTimeService, PatientFormValidator validationRules) : this(patientService, dateTimeService, validationRules)
+        public PatientFormViewModel(Patient patient, IPatientService patientService, IDateTimeService dateTimeService, PatientFormValidator validationRules) : this(patientService, dateTimeService, validationRules)
         {
             _patient = patient;
 

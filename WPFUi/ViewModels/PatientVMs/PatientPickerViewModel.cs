@@ -21,12 +21,11 @@ namespace WPFUi.ViewModels.PatientVMs
         // Private fields
         #region Private fields
         
-        private List<PatientDisplayModel> _patientsList;
+        private List<Patient> _patientsList;
         private string _searchText = string.Empty;
-        private Patient _patient;
+        private Patient _selectedPatient;
 
         private readonly IPatientService _patientService;
-        private readonly IMapper _mapper;
 
         #endregion
 
@@ -34,14 +33,14 @@ namespace WPFUi.ViewModels.PatientVMs
         #region Bindings
         public ICollectionView PatientsCollectionView { get; }
 
-        public PatientDisplayModel SelectedDisplayPatient { get; set; }
+        public Patient SelectedDisplayPatient { get; set; }
 
-        public Patient Patient 
+        public Patient SelectedPatient 
         { 
-            get => _patient;
+            get => _selectedPatient;
             set 
             {
-                _patient = value;
+                _selectedPatient = value;
                 SelectedPatientChanged?.Invoke();
             }
         }
@@ -68,18 +67,16 @@ namespace WPFUi.ViewModels.PatientVMs
         // Constructors
         #region Constructors
 
-        public PatientPickerViewModel(IPatientService patientService, IMapper mapper)
+        public PatientPickerViewModel(IPatientService patientService)
         {
             _patientService = patientService;
-            _mapper = mapper;
 
-            _patientsList = new List<PatientDisplayModel>();
+            _patientsList = new List<Patient>();
 
             PatientsCollectionView = CollectionViewSource.GetDefaultView(_patientsList);
             PatientsCollectionView.Filter = FilterPatients;
-            PatientsCollectionView.SortDescriptions.Add(new SortDescription(nameof(PatientDisplayModel.LastName), ListSortDirection.Ascending));
+            PatientsCollectionView.SortDescriptions.Add(new SortDescription(nameof(SelectedPatient.LastName), ListSortDirection.Ascending));
 
-            LoadPatientCommand = new AsyncRelayCommand(LoadPatient, (ex) => throw ex);
             LoadPatients();
         }
 
@@ -87,11 +84,7 @@ namespace WPFUi.ViewModels.PatientVMs
 
         // Methods
         #region Methods
-
-        private async Task LoadPatient(object arg)
-        {
-            Patient = await _patientService.GetById(SelectedDisplayPatient.Id);
-        }
+        
 
         private void LoadPatients()
         {
@@ -100,7 +93,7 @@ namespace WPFUi.ViewModels.PatientVMs
                 if (task.Exception == null)
                 {
                     foreach (var patient in task.Result)
-                        _patientsList.Add(_mapper.Map<PatientDisplayModel>(patient));
+                        _patientsList.Add(patient);
 
                     System.Windows.Application.Current.Dispatcher.Invoke(new Action(() => PatientsCollectionView.Refresh()));
                 }
@@ -109,9 +102,12 @@ namespace WPFUi.ViewModels.PatientVMs
 
         private bool FilterPatients(object obj)
         {
-            if (obj is PatientDisplayModel patient)
-                return patient.FullName.Contains(_searchText, StringComparison.InvariantCultureIgnoreCase);
-
+            if (obj is Patient patient)
+                return
+                    patient.FirstName.Contains(_searchText, StringComparison.InvariantCultureIgnoreCase) ||
+                    patient.LastName.Contains(_searchText, StringComparison.InvariantCultureIgnoreCase) ||
+                    patient.Address.Street.Contains(_searchText, StringComparison.InvariantCultureIgnoreCase) ||
+                    patient.Address.City.Contains(_searchText, StringComparison.InvariantCultureIgnoreCase);
             return false;
         }
         #endregion

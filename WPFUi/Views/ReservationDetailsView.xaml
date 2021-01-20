@@ -13,6 +13,9 @@
     mc:Ignorable="d">
     <UserControl.Resources>
         <converters:EqualValueToParameterConverter x:Key="EqualValueToParameterConverter" />
+
+
+
     </UserControl.Resources>
 
     <Grid Background="White">
@@ -240,10 +243,7 @@
 
                     </Style>
                 </Grid.Resources>
-                <components:PatientPicker
-                    DataContext="{Binding PatientPicker}"
-                    MaximumHeight="280"
-                    SelectedPatientChangedCommand="{Binding LoadPatientCommand}" />
+                <components:PatientPicker DataContext="{Binding PatientPicker}" MaximumHeight="280" />
             </Grid>
 
 
@@ -254,9 +254,11 @@
 
         <StackPanel
             Grid.Row="2"
+            Margin="20"
             HorizontalAlignment="Right"
             Orientation="Horizontal">
             <Button
+                Margin="0,0,10,0"
                 Command="{Binding CloseCommand}"
                 Content="Close"
                 Style="{StaticResource MenuBarButton}" />

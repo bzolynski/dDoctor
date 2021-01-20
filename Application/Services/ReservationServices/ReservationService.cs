@@ -39,7 +39,8 @@ namespace Application.Services.ReservationServices
         public async Task<Reservation> RegisterPatient(Reservation reservation, int patientId)
         {
             reservation.PatientId = patientId;
-            reservation.Status = ReservationStatus.Pending;
+            if(reservation.Status != ReservationStatus.Canceled)
+                reservation.Status = ReservationStatus.Pending;
 
             return await _reservationDataService.Update(reservation.Id, reservation);
         }

@@ -14,11 +14,13 @@
 
     <SolidColorBrush x:Key="MainDarkGreenSolidColorBrush" Color="{StaticResource MainDarkGreen}" />
     <SolidColorBrush x:Key="SecondaryDarkGreenSolidColorBrush" Color="{StaticResource SecondaryDarkGreen}" />
+    <SolidColorBrush x:Key="MediumBlueSolidColorBlush" Color="#356d94" />
+
+
     <SolidColorBrush x:Key="DarkBlueSolidColorBrush" Color="{StaticResource DarkBlue}" />
     <SolidColorBrush x:Key="LightPurpleSolidColorBrush" Color="{StaticResource LightPurple}" />
     <SolidColorBrush x:Key="MainFontSolidColorBrush" Color="{StaticResource MainFontColor}" />
     <SolidColorBrush x:Key="SecondaryFontSolidColorBrush" Color="{StaticResource SecondaryFontColor}" />
-    <SolidColorBrush x:Key="MediumBlueSolidColorBlush" Color="#356d94" />
     <SolidColorBrush x:Key="LightBlueSolidColorBlush" Color="{StaticResource LightBlue}" />
 
     <LinearGradientBrush x:Key="MainLinearGradient" StartPoint="0,0" EndPoint="1,1">

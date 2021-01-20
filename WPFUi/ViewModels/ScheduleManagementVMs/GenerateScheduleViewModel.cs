@@ -68,7 +68,7 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
         // Bindings
         #region Bindings
 
-        public DoctorPickerModel SelectedDoctor => DoctorPicker.SelectedDoctor;
+        public Doctor SelectedDoctor => DoctorPicker.SelectedDoctor;
         public DoctorPickerViewModel DoctorPicker { get; set; }
         public ObservableCollection<Specialization> Specializations { get; set; }
 
@@ -118,32 +118,31 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
             IScheduleService scheduleService, 
             IDoctorService doctorService, 
             ISpecializationService specializationService, 
-            IMapper mapper,
             IRenavigator manageSchedulesRenavigator,
             SpecializationFormValidator specializationFormValidator, 
             GenerateScheduleValidator generateScheduleValidator)
         {
-
             _scheduleService = scheduleService;
             _specializationService = specializationService;
             _manageSchedulesRenavigator = manageSchedulesRenavigator;
             _generateScheduleValidator = generateScheduleValidator;
-            SpecializationFormViewModel = new SpecializationFormViewModel(specializationService, specializationFormValidator);
 
             if (SelectedDaysOfWeek == null)
                 SelectedDaysOfWeek = new List<DayOfWeek>();
 
-            DoctorPicker = new DoctorPickerViewModel(doctorService, mapper);
 
-            DoctorPicker.SelectedDoctorChanged += DoctorPicker_SelectedDoctorChanged;
+            DoctorPicker = new DoctorPickerViewModel(doctorService);
+            SpecializationFormViewModel = new SpecializationFormViewModel(specializationService, specializationFormValidator);
 
             SelectDaysOfWeekCommand = new RelayCommand(SelectDaysOfWeek);
-            CancelCommand = new RelayCommand(Cancel);
+            CancelCommand = new RelayCommand((obj) => _manageSchedulesRenavigator.Renavigate());
             GenerateScheduleCommand = new AsyncRelayCommand(GenerateSchedule, CanGenerateSchedule, (ex) => throw ex);
-            ShowSpecializationFormCommand = new RelayCommand(ShowSpecializationForm, CanShowSpecializationFormCommand);
+            ShowSpecializationFormCommand = new RelayCommand((obj) => IsSpecializationFormVisible = true, (obj) => !IsSpecializationFormVisible);
 
+
+            DoctorPicker.SelectedDoctorChanged += () => OnPropertyChanged(nameof(SelectedDoctor)); 
             SpecializationFormViewModel.SpecializationAdded += SpecializationFormViewModel_SpecializationAdded;
-            SpecializationFormViewModel.SpecializationFormClosed += SpecializationFormViewModel_SpecializationFormClosed;
+            SpecializationFormViewModel.SpecializationFormClosed += () => IsSpecializationFormVisible = false;
 
             TimeIntervalsList = new List<TimeSpan>
             {
@@ -198,37 +197,13 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
                 OnPropertyChanged(nameof(SelectedDaysOfWeek));
             }
         }        
-
-        private void Cancel(object obj)
-        {
-            _manageSchedulesRenavigator.Renavigate();
-        }
-
-        private void DoctorPicker_SelectedDoctorChanged()
-        {
-            OnPropertyChanged(nameof(SelectedDoctor));
-        }
-
-        private void SpecializationFormViewModel_SpecializationFormClosed()
-        {
-            IsSpecializationFormVisible = false;
-        }
-
+       
         private void SpecializationFormViewModel_SpecializationAdded()
         {
             LoadSpecializations();
             IsSpecializationFormVisible = false;
         }
-
-        private bool CanShowSpecializationFormCommand(object obj)
-        {
-            return !IsSpecializationFormVisible;
-        }
-
-        private void ShowSpecializationForm(object obj)
-        {
-            IsSpecializationFormVisible = true;
-        }
+              
 
         #endregion
 

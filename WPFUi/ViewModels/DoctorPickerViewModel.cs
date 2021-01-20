@@ -1,5 +1,6 @@
 ﻿using Application.Services.DoctorServices;
 using AutoMapper;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -18,12 +19,11 @@ namespace WPFUi.ViewModels
         // Private fields
         #region Private fields
 
-        private List<DoctorPickerModel> _doctorList;
-        private DoctorPickerModel _selectedDoctor;
+        private List<Doctor> _doctorList;
+        private Doctor _selectedDoctor;
         private string _searchText = string.Empty;
         
         private readonly IDoctorService _doctorService;
-        private readonly IMapper _mapper;
 
         #endregion
 
@@ -32,7 +32,7 @@ namespace WPFUi.ViewModels
 
         public ICollectionView DoctorCollectionView{ get; }
 
-        public DoctorPickerModel SelectedDoctor
+        public Doctor SelectedDoctor
         {
             get { return _selectedDoctor; }
             set
@@ -59,15 +59,14 @@ namespace WPFUi.ViewModels
         // Constructors
         #region Constructors
 
-        public DoctorPickerViewModel(IDoctorService doctorService, IMapper mapper)
+        public DoctorPickerViewModel(IDoctorService doctorService)
         {
             _doctorService = doctorService;
-            _mapper = mapper;
 
-            _doctorList = new List<DoctorPickerModel>();
+            _doctorList = new List<Doctor>();
             DoctorCollectionView = CollectionViewSource.GetDefaultView(_doctorList);
             DoctorCollectionView.Filter = FilterDoctors;
-            DoctorCollectionView.SortDescriptions.Add(new SortDescription(nameof(DoctorPickerModel.LastName), ListSortDirection.Ascending));
+            DoctorCollectionView.SortDescriptions.Add(new SortDescription(nameof(Doctor.LastName), ListSortDirection.Ascending));
 
             LoadDoctors();
         }
@@ -87,7 +86,7 @@ namespace WPFUi.ViewModels
                 {
                     foreach (var doctor in task.Result)
                     {
-                        _doctorList.Add(_mapper.Map<DoctorPickerModel>(doctor));
+                        _doctorList.Add(doctor);
                     }
 
                     System.Windows.Application.Current.Dispatcher.Invoke(new Action(() => DoctorCollectionView.Refresh()));
@@ -98,9 +97,10 @@ namespace WPFUi.ViewModels
 
         private bool FilterDoctors(object obj)
         {
-            if (obj is DoctorPickerModel doctor)
+            if (obj is Doctor doctor)
             {
-                return doctor.FullName.Contains(_searchText, StringComparison.InvariantCultureIgnoreCase);
+                return doctor.LastName.Contains(_searchText, StringComparison.InvariantCultureIgnoreCase) ||
+                       doctor.FirstName.Contains(_searchText, StringComparison.InvariantCultureIgnoreCase);
             }
 
             return false;

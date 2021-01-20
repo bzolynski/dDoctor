@@ -93,7 +93,6 @@ namespace WPFUi
                         services.GetRequiredService<IScheduleService>(),
                         services.GetRequiredService<IDoctorService>(),
                         services.GetRequiredService<ISpecializationService>(),
-                        services.GetRequiredService<IMapper>(),
                         services.GetRequiredService<RenavigatorViewModelFactory<HomeViewModel>>(),
                         services.GetRequiredService<SpecializationFormValidator>(),
                         services.GetRequiredService<GenerateScheduleValidator>()));

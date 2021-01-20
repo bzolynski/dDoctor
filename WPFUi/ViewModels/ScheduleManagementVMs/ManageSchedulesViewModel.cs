@@ -24,11 +24,11 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
         // Private fields
         #region Private fields
 
+        private List<Schedule> _schedules;
         private string _searchText = string.Empty;
         private DateTime _dateFrom;
-        private List<ManageScheduleDoctorModel> _doctors;
-        public List<Schedule> _schedules;
         private DateTime _dateTo;
+        private List<ManageScheduleDoctorModel> _doctors;
         private ManageScheduleDoctorModel _selectedDoctor;
         private Schedule _selectedSchedule;
 
@@ -121,7 +121,6 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
             _scheduleService = scheduleService;
             _mapper = mapper;
             _generateScheduleRenavigator = generateScheduleRenavigator;
-
             _doctors = new List<ManageScheduleDoctorModel>();
             DoctorsCollectionView = CollectionViewSource.GetDefaultView(_doctors);
             DoctorsCollectionView.Filter = DoctorsFilter;

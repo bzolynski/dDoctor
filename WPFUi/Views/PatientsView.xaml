@@ -13,7 +13,6 @@
 
     <UserControl.Resources>
         <!--  Context menu for rows  -->
-
         <ContextMenu x:Key="RowContextMenu">
             <MenuItem
                 Command="{Binding DataContext.OpenEditPatientFormCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
@@ -29,6 +28,8 @@
         <Style x:Key="DefaultRowStyle" TargetType="{x:Type DataGridRow}">
             <Setter Property="ContextMenu" Value="{StaticResource RowContextMenu}" />
         </Style>
+
+
 
     </UserControl.Resources>
 
@@ -166,14 +167,24 @@
                                 MinWidth="150"
                                 Binding="{Binding Path=FirstName}"
                                 Header="First name" />
-                            <DataGridTextColumn
-                                Width="2*"
-                                Binding="{Binding Path=FullAddress}"
-                                Header="Address" />
+
+                            <DataGridTextColumn Width="2*" Header="Address">
+                                <DataGridTextColumn.Binding>
+                                    <MultiBinding StringFormat="{}{0} {1}, {2} {3} {4}">
+                                        <Binding Path="Address.PostCode" />
+                                        <Binding Path="Address.City" />
+                                        <Binding Path="Address.Street" />
+                                        <Binding Path="Address.BuildingNumber" />
+                                        <Binding Path="Address.FlatNumber" />
+                                    </MultiBinding>
+                                </DataGridTextColumn.Binding>
+                            </DataGridTextColumn>
+
                             <DataGridTextColumn
                                 MinWidth="80"
-                                Binding="{Binding Path=BirthDateString}"
+                                Binding="{Binding Path=BirthDate, StringFormat=dd-MM-yyyy}"
                                 Header="Birth date" />
+                            
                             <DataGridTextColumn Binding="{Binding Path=PhoneNumber}" Header="Phone number" />
                             <DataGridTextColumn Binding="{Binding Path=Email}" Header="Email" />
                             <DataGridTextColumn Binding="{Binding Path=Id}" Header="Patient id" />
@@ -196,12 +207,19 @@
 
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Style="{StaticResource BottomSectionOfPatientView}" Text="Date of birth: " />
-                                    <TextBlock Text="{Binding Path=BirthDateString}" />
+                                    <TextBlock Text="{Binding Path=BirthDate, StringFormat=dd-MM-yyyy}" />
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Style="{StaticResource BottomSectionOfPatientView}" Text="Address: " />
-                                    <TextBlock Text="{Binding Path=FullAddressWithPostCode}" />
+                                    <TextBlock>
+                                        <Run Text="{Binding Address.PostCode}" />
+                                        <Run Text="{Binding Address.City}" />
+                                        <LineBreak />
+                                        <Run Text="{Binding Address.Street}" />
+                                        <Run Text="{Binding Address.BuildingNumber}" />
+                                        <Run Text="{Binding Address.FlatNumber}" />
+                                    </TextBlock>
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal">

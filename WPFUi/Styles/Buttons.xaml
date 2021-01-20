@@ -3,12 +3,18 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:WPFUi.Styles">
 
+    <Style TargetType="Button">
+        <Setter Property="Cursor" Value="Hand" />
+
+    </Style>
 
     <Style x:Key="MenuBarButton" TargetType="{x:Type Button}">
         <Setter Property="Width" Value="auto" />
         <Setter Property="Padding" Value="10,0" />
         <Setter Property="Height" Value="35" />
         <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Cursor" Value="Hand" />
+
         <Setter Property="Background">
             <Setter.Value>
                 <LinearGradientBrush StartPoint="1,0" EndPoint="1,1">

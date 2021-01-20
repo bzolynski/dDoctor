@@ -121,7 +121,7 @@ namespace Application.Services.UserService
             return await _accountDataService.GetByUsername(username.ToUpper()) == null ? true : false;
         }
 
-        public async Task<IEnumerable<Account>> GetAllUsers(string username)
+        public async Task<IEnumerable<Account>> GetAllUsers()
         {
             return await _accountDataService.GetAll();
         }

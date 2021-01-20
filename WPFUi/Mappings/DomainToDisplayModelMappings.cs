@@ -8,14 +8,16 @@ namespace WPFUi.Mappings
     {
         public DomainToDisplayModelMappings()
         {
-            CreateMap<Patient, PatientDisplayModel>();
 
             CreateMap<Doctor, ManageScheduleDoctorModel>();
-            CreateMap<Doctor, DoctorPickerModel>();
 
             CreateMap<Reservation, AppointmentViewReservationModel>()
                 .ForMember(model =>
                     model.Time, x => x.MapFrom(y => $"{ y.Hour } - { y.Hour + y.Schedule.MaxTimePerPatient }"));
+
+            CreateMap<AppointmentViewReservationModel, Reservation>();
+
+
 
             CreateMap<Schedule, AppointmentViewScheduleModel>()
                 .ForMember(model =>

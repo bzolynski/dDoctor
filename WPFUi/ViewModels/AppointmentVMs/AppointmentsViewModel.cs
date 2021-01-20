@@ -1,4 +1,4 @@
-﻿using Application.Services;
+﻿ using Application.Services;
 using Application.Services.DoctorServices;
 using Application.Services.PatientServices;
 using Application.Services.ReservationServices;
@@ -11,8 +11,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using WPFUi.Commands;
 using WPFUi.Commands.Common;
 using WPFUi.Models;
 using WPFUi.States.Navigation;
@@ -45,7 +47,6 @@ namespace WPFUi.ViewModels.AppointmentVMs
         // Bindings
         #region Bindings
 
-        public ObservableCollection<AppointmentViewScheduleModel> AppointmentViewSchedules { get; set; }
         public ObservableCollection<AppointmentViewScheduleModel> AppointmentViewSchedulesDisplay { get; set; }
         public ObservableCollection<Doctor> Doctors { get; set; }
         public ObservableCollection<Specialization> Specializations { get; set; }
@@ -62,9 +63,6 @@ namespace WPFUi.ViewModels.AppointmentVMs
                 OnPropertyChanged(nameof(ReservationDetails));
             }
         }
-
-        public Doctor EmptyDoctor => null;
-        public Specialization EmptySpecialization => null;
 
         private Doctor _selectedDoctor;
 
@@ -122,9 +120,12 @@ namespace WPFUi.ViewModels.AppointmentVMs
         // Commands
         #region Commands
 
+        /// <summary>
+        /// Used to change selected reservation in items control in AppointmentsView.xaml
+        /// </summary>
         public ICommand SelectReservationCommand { get; set; }
+        public ICommand UnregisterPatientCommand { get; set; }
         public ICommand OpenReservationDetailsCommand { get; set; }
-        public ICommand CancelAppointmentCommand { get; set; }
         public ICommand CloseCommand { get; set; }
         public ICommand SetSelectedDateToTodayCommand { get; set; }
         public ICommand SetSelectedDoctorToNullCommand { get; set; }
@@ -155,17 +156,30 @@ namespace WPFUi.ViewModels.AppointmentVMs
 
             SelectedDate = dateTimeService.Now;
 
-            CancelAppointmentCommand = new AsyncRelayCommand(CancelAppointment, CanCancelAppointment, (ex) => throw ex);
+            UnregisterPatientCommand = new AsyncRelayCommand(UnregisterPatient, (obj) => SelectedReservation != null, (ex) => throw ex);
+
             SelectReservationCommand = new RelayCommand(SelectReservation);
             OpenReservationDetailsCommand = new RelayCommand(OpenReservationDetails);
-            CloseCommand = new RelayCommand(Close);
+
+            CloseCommand = new RelayCommand((obj) => _homeRenavigator.Renavigate());
+
             SetSelectedDateToTodayCommand = new RelayCommand((obj) => SelectedDate = dateTimeService.Now);
             SetSelectedDoctorToNullCommand = new RelayCommand((obj) => SelectedDoctor = null);
             SetSelectedSpecializationToNullCommand = new RelayCommand((obj) => SelectedSpecialization = null);
+            
             LoadSchedules();
             LoadDoctors();
             LoadSpecializations();
 
+        }
+
+        private async Task UnregisterPatient(object arg)
+        {
+            // TODO: Do this without mapping
+            if(SelectedReservation != null)
+                await _reservationService.CancelAppointment(_mapper.Map<Reservation>(_selectedReservation));
+
+            LoadSchedules();
         }
 
 
@@ -179,7 +193,7 @@ namespace WPFUi.ViewModels.AppointmentVMs
         {
             if (SelectedReservation != null)
             {
-                ReservationDetails = new ReservationDetailsViewModel(SelectedReservation.Id, _reservationService, _patientService, _mapper);
+                ReservationDetails = new ReservationDetailsViewModel(SelectedReservation.Id, _reservationService, _patientService);
 
                 ReservationDetails.DetailsClosed += ReservationDetails_DetailsClosed;
                 ReservationDetails.ReservationSubmitted += ReservationDetails_ReservationSubmitted;
@@ -237,12 +251,8 @@ namespace WPFUi.ViewModels.AppointmentVMs
             {
                 if (task.Exception == null)
                 {
-
-                    AppointmentViewSchedules = new ObservableCollection<AppointmentViewScheduleModel>(
+                    AppointmentViewSchedulesDisplay = new ObservableCollection<AppointmentViewScheduleModel>(
                         _mapper.Map<ObservableCollection<AppointmentViewScheduleModel>>(task.Result));
-
-
-                    AppointmentViewSchedulesDisplay = new ObservableCollection<AppointmentViewScheduleModel>(AppointmentViewSchedules);
 
                     OnPropertyChanged(nameof(AppointmentViewSchedulesDisplay));
                     LoadAvaliebleDates();
@@ -289,12 +299,13 @@ namespace WPFUi.ViewModels.AppointmentVMs
                     {
                         AvaliebleDates = task.Result.Where(x => x.Status == ScheduleStatus.Ok).Select(x => x.Date).ToList();
 
+
                         FullDates = task.Result.Where(x => x.Status == ScheduleStatus.Full).Select(x => x.Date).ToList();
 
                         CanceledDates = task.Result.Where(x => x.Status == ScheduleStatus.Canceled).Select(x => x.Date).ToList();
                     }
-                        
 
+                    
                     OnPropertyChanged(nameof(AvaliebleDates));
                     OnPropertyChanged(nameof(CanceledDates));
                     OnPropertyChanged(nameof(FullDates));
@@ -303,23 +314,6 @@ namespace WPFUi.ViewModels.AppointmentVMs
             });
         }
 
-        private bool CanCancelAppointment(object obj)
-        {
-            if (_selectedReservation == null)
-                return false;
-            return true;
-        }
-
-        private async Task CancelAppointment(object arg)
-        {
-            //await _reservationService.CancelAppointment(_selectedReservation);
-
-        }
-
-        private void Close(object obj)
-        {
-            _homeRenavigator.Renavigate();
-        }
         #endregion
 
     }

@@ -43,8 +43,7 @@
                     IsReadOnly="True"
                     ItemsSource="{Binding PatientsCollectionView}"
                     RowHeaderWidth="15"
-                    SelectedCellsChanged="patientPicker_SelectedPatientChanged"
-                    SelectedItem="{Binding SelectedDisplayPatient, Mode=OneWayToSource}"
+                    SelectedItem="{Binding SelectedPatient, Mode=OneWayToSource}"
                     SelectionMode="Single"
                     VerticalScrollBarVisibility="Visible">
 
@@ -52,8 +51,22 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Binding="{Binding Path=LastName}" Header="Last name" />
                         <DataGridTextColumn Binding="{Binding Path=FirstName}" Header="First name" />
-                        <DataGridTextColumn Binding="{Binding Path=FullAddress}" Header="Address" />
-                        <DataGridTextColumn Binding="{Binding Path=BirthDateString}" Header="Birth date" />
+                        <DataGridTextColumn MaxWidth="250" Header="Address">
+                            <DataGridTextColumn.Binding>
+                                <MultiBinding StringFormat="{}{0} {1}, {2} {3} {4}">
+                                    <Binding Path="Address.PostCode" />
+                                    <Binding Path="Address.City" />
+                                    <Binding Path="Address.Street" />
+                                    <Binding Path="Address.BuildingNumber" />
+                                    <Binding Path="Address.FlatNumber" />
+                                </MultiBinding>
+                            </DataGridTextColumn.Binding>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn
+                            MinWidth="80"
+                            Binding="{Binding Path=BirthDate, StringFormat=dd-MM-yyyy}"
+                            Header="Birth date" />
                         <DataGridTextColumn Binding="{Binding Path=PhoneNumber}" Header="Phone number" />
                         <DataGridTextColumn Binding="{Binding Path=Email}" Header="Email" />
                     </DataGrid.Columns>

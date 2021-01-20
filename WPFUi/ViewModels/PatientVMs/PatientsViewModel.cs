@@ -26,8 +26,9 @@ namespace WPFUi.ViewModels.PatientVMs
         #region Private fields
 
         private PatientFormViewModel _patientFormViewModel;
-        private PatientDisplayModel _selectedPatient;
-        private List<PatientDisplayModel> _patients;
+
+        private Patient _selectedPatient;
+        private List<Patient> _patients;
         private string _searchText = string.Empty;
 
         private readonly IPatientService _patientService;
@@ -55,7 +56,7 @@ namespace WPFUi.ViewModels.PatientVMs
             }
         }
 
-        public PatientDisplayModel SelectedPatient
+        public Patient SelectedPatient
         {
             get { return _selectedPatient; }
             set
@@ -106,10 +107,10 @@ namespace WPFUi.ViewModels.PatientVMs
             _reservationService = reservationService;
             _validationRules = validationRules;
 
-            _patients = new List<PatientDisplayModel>();
+            _patients = new List<Patient>();
             PatientsCollectionView = CollectionViewSource.GetDefaultView(_patients);
             PatientsCollectionView.Filter = FilterPatients;
-            PatientsCollectionView.SortDescriptions.Add(new SortDescription(nameof(PatientDisplayModel.LastName), ListSortDirection.Ascending));
+            PatientsCollectionView.SortDescriptions.Add(new SortDescription(nameof(Patient.LastName), ListSortDirection.Ascending));
 
             OpenEditPatientFormCommand = new RelayCommand(OpenEditPatientForm, CanOpenEditPatientForm);
             OpenAddPatientFormCommand = new RelayCommand(OpenAddPatientForm);
@@ -136,7 +137,7 @@ namespace WPFUi.ViewModels.PatientVMs
                 {
                     foreach (var patient in task.Result)
                     {
-                        _patients.Add(_mapper.Map<PatientDisplayModel>(patient));
+                        _patients.Add(patient);
                     }
 
                     System.Windows.Application.Current.Dispatcher.Invoke(new Action(() => PatientsCollectionView.Refresh()));
@@ -161,7 +162,7 @@ namespace WPFUi.ViewModels.PatientVMs
         private bool CanDeletePatient(object obj)
         {
             // TODO: Check if patient has reservations or past visits
-            if (SelectedPatient == null || Reservations.Count > 0)
+            if (SelectedPatient == null || Reservations?.Count > 0)
                 return false;
             return true;
         }
@@ -200,8 +201,12 @@ namespace WPFUi.ViewModels.PatientVMs
 
         private bool FilterPatients(object obj)
         {
-            if (obj is PatientDisplayModel patient)
-                return patient.FullName.Contains(_searchText, StringComparison.InvariantCultureIgnoreCase) || patient.FullAddressWithPostCode.Contains(_searchText, StringComparison.InvariantCultureIgnoreCase);
+            if (obj is Patient patient)
+                return 
+                    patient.FirstName.Contains(_searchText, StringComparison.InvariantCultureIgnoreCase) ||
+                    patient.LastName.Contains(_searchText, StringComparison.InvariantCultureIgnoreCase) ||
+                    patient.Address.Street.Contains(_searchText, StringComparison.InvariantCultureIgnoreCase) ||
+                    patient.Address.City.Contains(_searchText, StringComparison.InvariantCultureIgnoreCase);
             return false;
         }
 

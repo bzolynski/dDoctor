@@ -44,10 +44,14 @@
 
 
                     <DataGrid.Columns>
-                        <DataGridTextColumn
-                            Width="*"
-                            Binding="{Binding Path=FullName}"
-                            Header="Name" />
+                        <DataGridTextColumn Width="*" Header="Name">
+                            <DataGridTextColumn.Binding>
+                                <MultiBinding StringFormat="{} {0} {1}">
+                                    <Binding Path="LastName" />
+                                    <Binding Path="LastName" />
+                                </MultiBinding>
+                            </DataGridTextColumn.Binding>
+                        </DataGridTextColumn>
                         <DataGridTextColumn
                             Width="120"
                             Binding="{Binding Path=NPWZ}"

@@ -16,6 +16,15 @@
         <converters:DateTimeToBoolMultiConverter x:Key="DateTimeToBoolMultiConverter" />
         <converters:MultiBindingToBoolConverter x:Key="MultiBindingToBoolConverter" />
         <converters:ReservationStatusBoolConverter x:Key="ReservationStatusBoolConverter" />
+        <converters:EqualValueToParameterConverter x:Key="EqualValueToParameterConverter" />
+
+        <Style x:Key="ReservationDetailsSidePanel" TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="{DynamicResource MediumBlueSolidColorBlush}" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Margin" Value="0,5" />
+            <Setter Property="FontSize" Value="14" />
+
+        </Style>
 
         <ToolTip x:Key="RowToolTip">
             <Grid>
@@ -43,8 +52,10 @@
         </ToolTip>
 
         <Style x:Key="CalendarColors" TargetType="Calendar">
+
             <Setter Property="CalendarDayButtonStyle">
                 <Setter.Value>
+
                     <Style TargetType="CalendarDayButton">
                         <Setter Property="Opacity" Value="0.5" />
 
@@ -117,6 +128,7 @@
                 Grid.ColumnSpan="3"
                 Height="70"
                 Background="{StaticResource MainDarkGreenSolidColorBrush}">
+
                 <TextBlock
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
@@ -254,7 +266,7 @@
                 </Grid>
 
                 <!--  Buttons  -->
-                <Grid Grid.Row="4">
+                <Grid Grid.Row="4" Margin="10">
                     <Button
                         Grid.Column="2"
                         Command="{Binding CloseCommand}"
@@ -342,7 +354,6 @@
                                                 <DataTemplate>
 
                                                     <!--  Each reservation  -->
-
                                                     <Border
                                                         Height="60"
                                                         Margin="1"
@@ -459,7 +470,18 @@
                 Grid.Row="1"
                 Grid.RowSpan="2"
                 Grid.Column="2"
-                Background="#FFFCF9">
+                Margin="10">
+
+                <Grid.Resources>
+
+                    <Style TargetType="TextBlock">
+                        <Setter Property="FontSize" Value="14" />
+                        <Setter Property="Margin" Value="0,5" />
+                    </Style>
+
+
+                </Grid.Resources>
+
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto" />
                     <ColumnDefinition Width="10" />
@@ -473,7 +495,7 @@
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
                     <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
@@ -481,18 +503,19 @@
                 <TextBlock
                     Grid.Row="0"
                     Grid.Column="0"
-                    Style="{StaticResource BottomSectionOfPatientView}"
+                    Style="{StaticResource ReservationDetailsSidePanel}"
                     Text="Patient name" />
                 <TextBlock
                     Grid.Row="0"
                     Grid.Column="2"
-                    Text="{Binding SelectedReservation.PatientFullName}" />
+                    Text="{Binding SelectedReservation.PatientFullName}"
+                    TextWrapping="WrapWithOverflow" />
 
                 <!--  PESEL  -->
                 <TextBlock
                     Grid.Row="1"
                     Grid.Column="0"
-                    Style="{StaticResource BottomSectionOfPatientView}"
+                    Style="{StaticResource ReservationDetailsSidePanel}"
                     Text="PESEL" />
                 <TextBlock
                     Grid.Row="1"
@@ -503,7 +526,7 @@
                 <TextBlock
                     Grid.Row="2"
                     Grid.Column="0"
-                    Style="{StaticResource BottomSectionOfPatientView}"
+                    Style="{StaticResource ReservationDetailsSidePanel}"
                     Text="Address" />
                 <TextBlock
                     Grid.Row="2"
@@ -521,7 +544,7 @@
                 <TextBlock
                     Grid.Row="3"
                     Grid.Column="0"
-                    Style="{StaticResource BottomSectionOfPatientView}"
+                    Style="{StaticResource ReservationDetailsSidePanel}"
                     Text="Phone number" />
                 <TextBlock
                     Grid.Row="3"
@@ -532,18 +555,18 @@
                 <TextBlock
                     Grid.Row="4"
                     Grid.Column="0"
-                    Style="{StaticResource BottomSectionOfPatientView}"
+                    Style="{StaticResource ReservationDetailsSidePanel}"
                     Text="Status" />
                 <TextBlock
                     Grid.Row="4"
                     Grid.Column="2"
                     Text="{Binding SelectedReservation.Status}" />
 
-                <!--  TODO: Patient comments  -->
+                <!--  Patient comments  -->
                 <TextBlock
                     Grid.Row="5"
                     Grid.Column="0"
-                    Style="{StaticResource BottomSectionOfPatientView}"
+                    Style="{StaticResource ReservationDetailsSidePanel}"
                     Text="Patient comments" />
                 <TextBlock
                     Grid.Row="5"
@@ -551,17 +574,79 @@
                     Text="{Binding SelectedReservation.Patient.Comments}"
                     TextWrapping="Wrap" />
 
-                <!--  TODO: Details  -->
+                <!--  Details  -->
                 <TextBlock
                     Grid.Row="6"
                     Grid.Column="0"
-                    Style="{StaticResource BottomSectionOfPatientView}"
+                    Style="{StaticResource ReservationDetailsSidePanel}"
                     Text="Reservation details" />
                 <TextBlock
                     Grid.Row="6"
                     Grid.Column="2"
                     Text="{Binding SelectedReservation.Details}"
                     TextWrapping="Wrap" />
+
+                <!--  Buttons  -->
+                <Grid Grid.Row="8" Grid.ColumnSpan="3">
+
+                    <!--  Unregister button  -->
+                    <Grid>
+                        <Grid.Resources>
+                            <Style TargetType="Grid">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedReservation.Status, Converter={StaticResource EqualValueToParameterConverter}, ConverterParameter={x:Static enums:ReservationStatus.Pending}}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Resources>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Button
+                            Grid.Column="0"
+                            Command="{Binding OpenReservationDetailsCommand}"
+                            Content="Edit"
+                            Style="{StaticResource MenuBarButton}" />
+
+                        <Button
+                            Grid.Column="2"
+                            Command="{Binding UnregisterPatientCommand}"
+                            Content="Unregister"
+                            Style="{StaticResource MenuBarButton}" />
+
+
+                    </Grid>
+
+                    <!--  Register button  -->
+                    <Grid>
+                        <Grid.Resources>
+                            <Style TargetType="Grid">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedReservation.Status, Converter={StaticResource EqualValueToParameterConverter}, ConverterParameter={x:Static enums:ReservationStatus.Free}}" Value="true">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Resources>
+                        <Button
+                            Grid.Row="8"
+                            Grid.ColumnSpan="3"
+                            Command="{Binding OpenReservationDetailsCommand}"
+                            Content="Register"
+                            Style="{StaticResource MenuBarButton}" />
+                    </Grid>
+
+
+                </Grid>
+
+
 
             </Grid>
 

@@ -1,10 +1,13 @@
 ﻿using Application.Services.UserService;
+using Domain.Entities;
 using Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Security.Principal;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using System.Windows.Input;
 using WPFUi.Commands.Common;
 using WPFUi.Validators;
@@ -49,7 +52,6 @@ namespace WPFUi.ViewModels
 
         #endregion
 
-
         // Private fields
         #region Private fields
 
@@ -61,6 +63,9 @@ namespace WPFUi.ViewModels
         private bool _isNPWZEnabled;
         private string _nPWZ;
         private string _password;
+        private List<Account> _users;
+
+
         private readonly IAccountService _accountService;
 
 
@@ -68,6 +73,20 @@ namespace WPFUi.ViewModels
 
         // Properties
         #region Properties
+
+        public ICollectionView UsersCollectionView { get; set; }
+        private Account _selectedUser;
+
+        public Account SelectedUser
+        {
+            get { return _selectedUser; }
+            set
+            {
+                _selectedUser = value;
+                OnPropertyChanged(nameof(SelectedUser));
+            }
+        }
+
 
         public string RegistrationResult
         {
@@ -189,6 +208,11 @@ namespace WPFUi.ViewModels
             CreateUserCommand = new AsyncRelayCommand(CreateUser, CanCreateUser, (ex) => throw ex);
             _accountService = userService;
             _userFormValidator = userFormValidator;
+
+            _users = new List<Account>();
+            UsersCollectionView = CollectionViewSource.GetDefaultView(_users);
+
+            LoadUsers();
         }
 
         private bool CanCreateUser(object obj)
@@ -203,6 +227,18 @@ namespace WPFUi.ViewModels
 
         private void LoadUsers()
         {
+            _accountService.GetAllUsers().ContinueWith(task =>
+            {
+                if (task.Exception == null)
+                {
+                    foreach (var user in task.Result)
+                    {
+                        _users.Add(user);
+                    }
+
+                    System.Windows.Application.Current.Dispatcher.Invoke(new Action(() => UsersCollectionView.Refresh()));
+                }
+            });
         }
 
         private async Task CreateUser(object obj)

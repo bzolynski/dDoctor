@@ -38,7 +38,7 @@ namespace WPFUi.ViewModels
             }
         }
 
-        public Patient SelectedPatient => PatientPicker.Patient;
+        public Patient SelectedPatient => PatientPicker.SelectedPatient;
         public PatientPickerViewModel PatientPicker { get; set; }
 
         #endregion
@@ -59,35 +59,25 @@ namespace WPFUi.ViewModels
         public ReservationDetailsViewModel(
             int reservationId, 
             IReservationService reservationService, 
-            IPatientService patientService,
-            IMapper mapper)
+            IPatientService patientService)
         {
             _reservationId = reservationId;
             _reservationService = reservationService;
-            PatientPicker = new PatientPickerViewModel(patientService, mapper);
+            PatientPicker = new PatientPickerViewModel(patientService);
 
             PatientPicker.SelectedPatientChanged += PatientPicker_SelectedPatientChanged;
 
-            CloseCommand = new RelayCommand(Close);
+            CloseCommand = new RelayCommand((obj) => DetailsClosed?.Invoke());
             SubmitReservationCommand = new AsyncRelayCommand(SubmitReservation, CanSubmitReservation, (ex) => throw ex);
 
             LoadReservation();
         }
-
-        
-
-
 
 
         #endregion
 
         // Methods
         #region Methods
-
-        private void Close(object obj)
-        {
-            DetailsClosed?.Invoke();
-        }
 
         private bool CanSubmitReservation(object obj)
         {

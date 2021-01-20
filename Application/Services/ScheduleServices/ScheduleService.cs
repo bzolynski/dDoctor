@@ -22,6 +22,8 @@ namespace Application.Services.ScheduleServices
 
         public async Task GenerateSchedules(int doctorId, int specializationId, TimeSpan startHour, TimeSpan endHour, TimeSpan maxTimePerPatient, DateTime startDay, DateTime endDay, List<DayOfWeek> daysOfWeek)
         {
+            startHour = new TimeSpan(startHour.Hours, startHour.Minutes, 0);
+            endHour = new TimeSpan(endHour.Hours, endHour.Minutes, 0);
 
             for (var dt = startDay; dt <= endDay; dt = dt.AddDays(1))
             {
