@@ -1,6 +1,6 @@
 ﻿using Application.Services.UserService;
 using WPFUi.Validators;
-using WPFUi.ViewModels;
+using WPFUi.ViewModels.UserVMs;
 
 namespace WPFUi.Factories.ViewModelFactories
 {

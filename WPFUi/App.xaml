@@ -7,6 +7,7 @@
     xmlns:local="clr-namespace:WPFUi"
     xmlns:patientVMs="clr-namespace:WPFUi.ViewModels.PatientVMs"
     xmlns:scheduleVMs="clr-namespace:WPFUi.ViewModels.ScheduleManagementVMs"
+    xmlns:userVMs="clr-namespace:WPFUi.ViewModels.UserVMs"
     xmlns:viewModels="clr-namespace:WPFUi.ViewModels"
     xmlns:views="clr-namespace:WPFUi.Views">
     <Application.Resources>
@@ -37,7 +38,7 @@
                 <views:ManageSchedulesView />
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type viewModels:ManageUsersViewModel}">
+            <DataTemplate DataType="{x:Type userVMs:ManageUsersViewModel}">
                 <views:ManageUsersView />
             </DataTemplate>
 
@@ -51,6 +52,10 @@
 
             <DataTemplate DataType="{x:Type patientVMs:PatientFormViewModel}">
                 <controls:PatientForm />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type userVMs:UserFormViewModel}">
+                <controls:UserForm />
             </DataTemplate>
 
 

@@ -21,6 +21,7 @@ using WPFUi.ViewModels;
 using WPFUi.ViewModels.AppointmentVMs;
 using WPFUi.ViewModels.PatientVMs;
 using WPFUi.ViewModels.ScheduleManagementVMs;
+using WPFUi.ViewModels.UserVMs;
 using WPFUi.Views;
 
 namespace WPFUi

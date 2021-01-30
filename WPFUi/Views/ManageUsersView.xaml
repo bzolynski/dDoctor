@@ -14,161 +14,117 @@
 
     <UserControl.Resources>
         <converters:NullToBoolConverter x:Key="NullToBoolConverter" />
-        <ObjectDataProvider
-            x:Key="accountTypeEnum"
-            MethodName="GetValues"
-            ObjectType="{x:Type system:Enum}">
-            <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="enums:AccountType" />
-            </ObjectDataProvider.MethodParameters>
-        </ObjectDataProvider>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </UserControl.Resources>
 
     <Grid Background="#f0f0f0">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-        <!--  Side bar  -->
-        <Grid Grid.Column="0" Width="230" />
+        <Grid
+            Grid.Row="0"
+            Grid.ColumnSpan="2"
+            Height="70"
+            Background="{StaticResource MainDarkGreenSolidColorBrush}">
+            <TextBlock
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="35"
+                FontWeight="Bold"
+                Foreground="#f0f0f0"
+                Text="Manage users" />
+        </Grid>
 
-        <!--  Main content  -->
-        <Grid Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="auto" />
-            </Grid.RowDefinitions>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-            <!--  List  -->
-            <Grid Grid.Row="0">
-                <DataGrid
-                    Padding="8"
-                    HorizontalAlignment="Center"
-                    AutoGenerateColumns="False"
-                    CanUserAddRows="False"
-                    CanUserDeleteRows="False"
-                    CanUserResizeRows="False"
-                    IsReadOnly="True"
-                    ItemsSource="{Binding UsersCollectionView}"
-                    RowHeaderWidth="15"
-                    SelectedItem="{Binding SelectedUser, Mode=OneWayToSource}"
-                    SelectionMode="Single">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn
-                            Width="*"
-                            Binding="{Binding Username}"
-                            Header="Username" />
-                        <DataGridTextColumn
-                            Width="*"
-                            Binding="{Binding AccountType}"
-                            Header="Account type" />
-                    </DataGrid.Columns>
-                </DataGrid>
-            </Grid>
+            <!--  Side bar  -->
+            <Grid Grid.Column="0" Width="230" />
 
-            <!--  Separator  -->
-            <Grid
-                Grid.Row="1"
-                Height="20"
-                Background="Navy" />
+            <!--  Main content  -->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
 
-            <!--  Form  -->
-            <Grid Grid.Row="2">
+                <!--  List  -->
+                <Grid Grid.Row="0">
+                    <DataGrid
+                        Padding="8"
+                        HorizontalAlignment="Center"
+                        AutoGenerateColumns="False"
+                        CanUserAddRows="False"
+                        CanUserDeleteRows="False"
+                        CanUserResizeRows="False"
+                        IsEnabled="{Binding IsUserFormClosed}"
+                        IsReadOnly="True"
+                        ItemsSource="{Binding UsersCollectionView}"
+                        RowHeaderWidth="15"
+                        SelectedItem="{Binding SelectedUser, Mode=OneWayToSource}"
+                        SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Width="*" Header="Name">
+                                <DataGridTextColumn.Binding>
+                                    <MultiBinding StringFormat="{}{0} {1}">
+                                        <Binding Path="LastName" />
+                                        <Binding Path="FirstName" />
+                                    </MultiBinding>
+                                </DataGridTextColumn.Binding>
+                            </DataGridTextColumn>
 
-                <StackPanel Orientation="Vertical">
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Username}"
+                                Header="Username" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding AccountType}"
+                                Header="Account type" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
 
-                    <!--  Account type  -->
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Account type: " />
-                        <ComboBox
-                            Width="100"
-                            ItemsSource="{Binding Source={StaticResource accountTypeEnum}}"
-                            SelectedItem="{Binding SelectedAccountType, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                            ToolTip="{Binding ErrorCollection[SelectedAccountType]}" />
+                <!--  Separator  -->
+                <Grid Grid.Row="1" Background="{StaticResource MainLinearGradient}">
+                    <StackPanel Margin="5" Orientation="Horizontal">
+                        <Button
+                            Width="80"
+                            Margin="0,0,5,0"
+                            Command="{Binding OpenNewUserFormCommand}"
+                            Content="New"
+                            Style="{StaticResource MenuBarButton}" />
+                        <Button
+                            Width="80"
+                            Command="{Binding OpenEditUserFormCommand}"
+                            Content="Edit"
+                            Style="{StaticResource MenuBarButton}" />
                     </StackPanel>
+                </Grid>
 
-                    <!--  Last name  -->
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Last name: " />
-                        <TextBox
-                            Width="100"
-                            Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                            ToolTip="{Binding ErrorCollection[LastName]}" />
-                    </StackPanel>
 
-                    <!--  First name  -->
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="First name: " />
-                        <TextBox
-                            Width="100"
-                            Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                            ToolTip="{Binding ErrorCollection[FirstName]}" />
-                    </StackPanel>
 
-                    <!--  Username  -->
-                    <!--  first letter of first and full last name  -->
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Username: " />
-                        <TextBox
-                            Width="100"
-                            IsEnabled="false"
-                            Text="{Binding UserName}" />
-                    </StackPanel>
+                <!--  Create Form  -->
+                <Grid Grid.Row="2" Margin="15">
+                    <Grid.Resources>
+                        <Style TargetType="Grid">
+                            <Setter Property="Visibility" Value="Visible" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsUserFormClosed}" Value="True">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Resources>
+                    <ContentControl Content="{Binding UserFormViewModel}" />
+                </Grid>
 
-                    <!--  Email  -->
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Email: " />
-                        <TextBox
-                            Width="100"
-                            Text="{Binding Email, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                            ToolTip="{Binding ErrorCollection[Email]}" />
-                    </StackPanel>
-
-                    <!--  Password  -->
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Password: " />
-                        <TextBox
-                            Width="100"
-                            Text="{Binding Password, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                            ToolTip="{Binding ErrorCollection[Password]}" />
-                    </StackPanel>
-
-                    <!--  Confirm password  -->
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Confirm password: " />
-                        <TextBox
-                            Width="100"
-                            Text="{Binding ConfirmPassword, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                            ToolTip="{Binding ErrorCollection[ConfirmPassword]}" />
-                    </StackPanel>
-
-                    <!--  NPWZ - visible only if doctor type is selected  -->
-                    <StackPanel Orientation="Horizontal" Visibility="{Binding IsNPWZEnabled, Converter={StaticResource BoolToVis}}">
-                        <TextBlock Text="NPWZ: " />
-                        <TextBox
-                            Width="100"
-                            Text="{Binding NPWZ, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                            ToolTip="{Binding ErrorCollection[NPWZ]}" />
-                    </StackPanel>
-
-                </StackPanel>
-            </Grid>
-
-            <!--  Buttons  -->
-            <Grid Grid.Row="3">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <Button
-                    Command="{Binding CreateUserCommand}"
-                    Content="Create"
-                    Style="{StaticResource MenuBarButton}" />
 
             </Grid>
         </Grid>

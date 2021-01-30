@@ -5,20 +5,24 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Security.Principal;
+using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Data;
 using System.Windows.Input;
 using WPFUi.Commands.Common;
+using WPFUi.Models;
 using WPFUi.Validators;
 
-namespace WPFUi.ViewModels
+namespace WPFUi.ViewModels.UserVMs
 {
-    public class ManageUsersViewModel : ViewModelBase, IDataErrorInfo
+    public class UserFormViewModel : ViewModelBase, IDataErrorInfo
     {
+        public event Action UserFormSubmited;
+
         // Validation
         #region Validation
         private readonly UserFormValidator _userFormValidator;
+        
+
         public string Error => null;
 
         public Dictionary<string, string> ErrorCollection { get; set; } = new Dictionary<string, string>();
@@ -54,41 +58,25 @@ namespace WPFUi.ViewModels
 
         // Private fields
         #region Private fields
-
-        private string _registrationResult;
         private string _userName;
         private string _firstName;
         private string _lastName;
         private AccountType _accountType;
         private bool _isNPWZEnabled;
         private string _nPWZ;
-        private string _password;
-        private List<Account> _users;
-
-
+        private string _password; 
+        private string _email;
+        private string _confirmPassword;
+        private RegistrationResult _registrationResult;
+        private readonly List<AccountViewModel> _users;
         private readonly IAccountService _accountService;
-
-
+        private readonly AccountViewModel _selectedUser;
         #endregion
 
         // Properties
         #region Properties
 
-        public ICollectionView UsersCollectionView { get; set; }
-        private Account _selectedUser;
-
-        public Account SelectedUser
-        {
-            get { return _selectedUser; }
-            set
-            {
-                _selectedUser = value;
-                OnPropertyChanged(nameof(SelectedUser));
-            }
-        }
-
-
-        public string RegistrationResult
+        public RegistrationResult RegistrationResult
         {
             get { return _registrationResult; }
             set
@@ -97,13 +85,16 @@ namespace WPFUi.ViewModels
                 OnPropertyChanged(nameof(RegistrationResult));
             }
         }
+
         public string LastName
         {
             get { return _lastName; }
             set
             {
                 _lastName = value;
-                GenerateUsername();
+                OnPropertyChanged(nameof(LastName));
+                if(_lastName != _selectedUser?.LastName)
+                    GenerateUsername();
             }
         }
         public string FirstName
@@ -112,7 +103,9 @@ namespace WPFUi.ViewModels
             set
             {
                 _firstName = value;
-                GenerateUsername();
+                OnPropertyChanged(nameof(FirstName));
+                if(_firstName != _selectedUser?.FirstName)
+                    GenerateUsername();
             }
         }
         public string UserName
@@ -125,16 +118,35 @@ namespace WPFUi.ViewModels
             }
         }
 
-        public string Email { get; set; }
-        public string Password { 
-            get => _password; 
-            set 
+        public string Email
+        {
+            get => _email;
+            set
+            {
+                _email = value;
+                OnPropertyChanged(nameof(Email));
+            }
+        }
+        public string Password
+        {
+            get => _password;
+            set
             {
                 _password = value;
+                OnPropertyChanged(nameof(Password));
                 OnPropertyChanged(nameof(ConfirmPassword));
-            } 
+            }
         }
-        public string ConfirmPassword { get; set; }
+        public string ConfirmPassword
+        {
+            get => _confirmPassword;
+            set
+            {
+                _confirmPassword = value;
+                OnPropertyChanged(nameof(ConfirmPassword));
+
+            }
+        }
 
         public string NPWZ
         {
@@ -187,69 +199,80 @@ namespace WPFUi.ViewModels
                 OnPropertyChanged(nameof(IsNPWZEnabled));
             }
         }
-
-
-
-
         #endregion
 
         // Commands
         #region Commands
-        public ICommand CreateUserCommand { get; set; }
-
+        public ICommand SubmitUserFormCommand { get; set; }
+        public ICommand CloseUserFormCommand { get; set; }
 
         #endregion
 
         // Constructors
         #region Constructors
 
-        public ManageUsersViewModel(IAccountService userService, UserFormValidator userFormValidator)
+        // For new
+        public UserFormViewModel(IAccountService accountService, UserFormValidator userFormValidator, List<AccountViewModel> users) 
         {
-            CreateUserCommand = new AsyncRelayCommand(CreateUser, CanCreateUser, (ex) => throw ex);
-            _accountService = userService;
             _userFormValidator = userFormValidator;
+            _users = users;
+            _accountService = accountService;
 
-            _users = new List<Account>();
-            UsersCollectionView = CollectionViewSource.GetDefaultView(_users);
-
-            LoadUsers();
+            SubmitUserFormCommand = new AsyncRelayCommand(CreateUser, (obj) => _canSubmit, (ex) => throw ex);
+            CloseUserFormCommand = new RelayCommand(CloseUserForm);
         }
 
-        private bool CanCreateUser(object obj)
+        // For edit
+        public UserFormViewModel(IAccountService accountService, UserFormValidator userFormValidator, List<AccountViewModel> users, AccountViewModel selectedUser) : this(accountService, userFormValidator, users)
         {
-            return _canSubmit;
+            _selectedUser = selectedUser;
+
+            SelectedAccountType = selectedUser.AccountType;
+            LastName = selectedUser.LastName;
+            FirstName = selectedUser.FirstName;
+            UserName = selectedUser.Username;
+            Email = selectedUser.Email;
+
+            SubmitUserFormCommand = new AsyncRelayCommand(EditUser, (obj) => _canSubmit, (ex) => throw ex);
         }
+
+
 
         #endregion
 
         // Methods
         #region Methods
 
-        private void LoadUsers()
+        private async Task EditUser(object arg)
         {
-            _accountService.GetAllUsers().ContinueWith(task =>
-            {
-                if (task.Exception == null)
-                {
-                    foreach (var user in task.Result)
-                    {
-                        _users.Add(user);
-                    }
+            Account user;
+            (RegistrationResult, user) = await _accountService.EditUser(_selectedUser.Id, UserName, Email, Password, ConfirmPassword, SelectedAccountType, FirstName, LastName, NPWZ);
 
-                    System.Windows.Application.Current.Dispatcher.Invoke(new Action(() => UsersCollectionView.Refresh()));
-                }
-            });
+            if (user != null && RegistrationResult == RegistrationResult.Success)
+            {
+                _users.Remove(_selectedUser);
+                _users.Add(new AccountViewModel(user));
+                CloseUserForm();
+            }
         }
+
 
         private async Task CreateUser(object obj)
         {
-            RegistrationResult = (await _accountService.CreateUser(UserName, Email, Password, ConfirmPassword, SelectedAccountType, FirstName, LastName, NPWZ)).ToString();
+            Account user;
+            (RegistrationResult, user) = await _accountService.CreateUser(UserName, Email, Password, ConfirmPassword, SelectedAccountType, FirstName, LastName, NPWZ);
+
+            if (user != null && RegistrationResult == RegistrationResult.Success)
+            {
+                _users.Add(new AccountViewModel(user));
+                CloseUserForm();
+            }
 
         }
 
         private void GenerateUsername()
         {
-            if (!String.IsNullOrWhiteSpace(FirstName) && !String.IsNullOrWhiteSpace(LastName))
+            if (!string.IsNullOrWhiteSpace(FirstName) && !string.IsNullOrWhiteSpace(LastName))
             {
                 _accountService.GenerateValidUserName(FirstName, LastName).ContinueWith(task =>
                 {
@@ -262,12 +285,24 @@ namespace WPFUi.ViewModels
                         OnPropertyChanged(nameof(UserName));
                     }
                 });
-
             }
         }
 
+        private void CloseUserForm(object obj = null)
+        {
+            ClearUserForm();
+            UserFormSubmited?.Invoke();
+        }
 
-
+        private void ClearUserForm()
+        {
+            LastName = "";
+            FirstName = "";
+            UserName = "";
+            Email = "";
+            Password = "";
+            ConfirmPassword = "";
+        }
         #endregion
 
     }

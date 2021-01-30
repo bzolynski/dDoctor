@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
 using System;
 using System.Linq;
-using WPFUi.ViewModels;
+using WPFUi.ViewModels.UserVMs;
 
 namespace WPFUi.Validators
 {
-    public class UserFormValidator : AbstractValidator<ManageUsersViewModel>
+    public class UserFormValidator : AbstractValidator<UserFormViewModel>
     {
         public UserFormValidator()
         {
