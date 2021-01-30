@@ -32,7 +32,24 @@
 
     <Grid Background="#f0f0f0">
 
-        <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid
+            Grid.Row="0"
+            Grid.ColumnSpan="2"
+            Height="70"
+            Background="{StaticResource MainDarkGreenSolidColorBrush}">
+            <TextBlock
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="35"
+                FontWeight="Bold"
+                Foreground="#f0f0f0"
+                Text="Generate schedule" />
+        </Grid>
+        <Grid Grid.Row="1" Margin="5">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
@@ -46,19 +63,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Grid
-                Grid.Row="0"
-                Grid.ColumnSpan="2"
-                Height="50"
-                Margin="0,0,0,10"
-                Background="Navy">
-                <TextBlock
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    FontSize="30"
-                    Foreground="WhiteSmoke"
-                    Text="Generate schedule" />
-            </Grid>
+
 
             <Grid
                 Grid.Row="1"
@@ -126,23 +131,21 @@
                         HorizontalAlignment="Center"
                         Orientation="Horizontal">
 
-                        <!--  TODO: Create own TimePicker  -->
-
                         <TextBlock
                             VerticalAlignment="Center"
                             Style="{StaticResource TextBlockStyle}"
                             Text="Time per patient: " />
-                        <ComboBox
-                            Width="100"
-                            ItemsSource="{Binding TimeIntervalsList}"
-                            SelectedItem="{Binding MaxTimePerPatient, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                            ToolTip="{Binding ErrorCollection[MaxTimePerPatient]}">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding StringFormat={}mm}" />
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
+                        <TextBox
+                            Width="50"
+                            Text="{Binding MaxTimePerPatient, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, TargetNullValue=''}"
+                            TextAlignment="Right"
+                            ToolTip="{Binding ErrorCollection[MaxTimePerPatient]}" />
+                        <TextBlock
+                            Margin="5,0,0,0"
+                            Style="{StaticResource TextBlockStyle}"
+                            Text="min."
+                            TextAlignment="Left" />
+
 
                     </StackPanel>
 
@@ -160,7 +163,8 @@
                         <Border
                             HorizontalAlignment="Center"
                             Style="{StaticResource MainDarkBorder}"
-                            Validation.ValidationAdornerSiteFor="{Binding SelectedDaysOfWeek, UpdateSourceTrigger=PropertyChanged}">
+                            ToolTip="{Binding ErrorCollection[SelectedDaysOfWeek]}"
+                            Validation.ValidationAdornerSiteFor="{Binding SelectedDaysOfWeek, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}">
 
                             <ItemsControl ItemsSource="{Binding Source={StaticResource DayOfWeek}}">
                                 <ItemsControl.ItemTemplate>
@@ -203,10 +207,12 @@
                 Grid.Row="1"
                 Grid.Column="1"
                 Margin="10,0,0,0">
-                <StackPanel Orientation="Vertical">
-
+                <StackPanel
+                    Orientation="Vertical"
+                    ToolTip="{Binding ErrorCollection[SelectedDoctor]}"
+                    Validation.ValidationAdornerSiteFor="{Binding SelectedDoctor, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}">
                     <!--  Doctor picker  -->
-                    <components:DoctorPicker DataContext="{Binding DoctorPicker}" Validation.ValidationAdornerSiteFor="{Binding SelectedDoctor}" />
+                    <components:DoctorPicker DataContext="{Binding DoctorPicker}" />
 
                     <StackPanel
                         Margin="0,15,0,30"
@@ -235,7 +241,8 @@
                         <ComboBox
                             Width="250"
                             ItemsSource="{Binding Specializations}"
-                            SelectedItem="{Binding SelectedSpecialization}">
+                            SelectedItem="{Binding SelectedSpecialization, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                            ToolTip="{Binding ErrorCollection[SelectedSpecialization]}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Name}" />

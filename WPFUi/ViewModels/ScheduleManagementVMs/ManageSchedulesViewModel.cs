@@ -181,10 +181,7 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
 
         private bool CanDeleteSelectedScheduleDay(object obj)
         {
-            if (SelectedSchedule != null)
-                return true;
-
-            return false;
+            return SelectedSchedule != null ? true : false;
         }
 
         private async Task DeleteSelectedScheduleDay(object obj)

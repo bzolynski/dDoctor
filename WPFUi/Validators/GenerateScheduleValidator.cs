@@ -1,4 +1,6 @@
 ﻿using FluentValidation;
+using System;
+using System.Linq;
 using WPFUi.ViewModels.ScheduleManagementVMs;
 
 namespace WPFUi.Validators
@@ -23,9 +25,11 @@ namespace WPFUi.Validators
                 .Cascade(CascadeMode.Stop)
                 .NotNull();
 
+            // TODO: Maximum value validation for time per patient
             RuleFor(x => x.MaxTimePerPatient)
                 .Cascade(CascadeMode.Stop)
-                .Must((vm, time) => vm.TimeIntervalsList.Contains(time)).WithMessage("Select time for patient.");
+                .NotEmpty().WithMessage("Can not be empty")
+                .Must(time => time.All(Char.IsNumber)).WithMessage("Must be valid number.");
 
             RuleFor(x => x.SelectedDaysOfWeek)
                 .Cascade(CascadeMode.Stop)
