@@ -13,13 +13,12 @@
 
         <Grid Margin="10">
             <Grid.Resources>
-                <Style TargetType="{x:Type TextBlock}">
+
+                <Style BasedOn="{StaticResource FormTextBlock}" TargetType="TextBlock">
                     <Setter Property="FontSize" Value="18" />
+                    <Setter Property="FontWeight" Value="Normal" />
                 </Style>
-                <Style TargetType="{x:Type TextBox}">
-                    <Setter Property="FontSize" Value="18" />
-                    <Setter Property="Padding" Value="1" />
-                </Style>
+                <Style BasedOn="{StaticResource FormTextBoxWithValidation}" TargetType="TextBox" />
             </Grid.Resources>
 
             <Grid.RowDefinitions>
@@ -38,10 +37,7 @@
 
                 <TextBlock Grid.Column="0" Text="Specialization code:" />
 
-                <TextBox
-                    Grid.Column="1"
-                    Text="{Binding SpecializationCode, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                    ToolTip="{Binding ErrorCollection[SpecializationCode]}" />
+                <TextBox Grid.Column="1" Text="{Binding SpecializationCode, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
             </Grid>
 
             <Grid Grid.Row="1" Margin="0,0,0,5">
@@ -52,10 +48,7 @@
 
                 <TextBlock Grid.Column="0" Text="Specialization name:" />
 
-                <TextBox
-                    Grid.Column="1"
-                    Text="{Binding SpecializationName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                    ToolTip="{Binding ErrorCollection[SpecializationName]}" />
+                <TextBox Grid.Column="1" Text="{Binding SpecializationName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
             </Grid>
 
             <Grid Grid.Row="2">

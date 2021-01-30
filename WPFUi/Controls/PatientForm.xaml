@@ -20,64 +20,101 @@
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
+        <Grid.Resources>
+            <Style BasedOn="{StaticResource FormTextBoxWithValidation}" TargetType="TextBox" />
+            <Style BasedOn="{StaticResource FormTextBlock}" TargetType="TextBlock" />
+        </Grid.Resources>
 
 
-        <StackPanel
+        <Grid
             Grid.Row="0"
             Grid.Column="0"
-            Margin="50,50,50,0"
-            Orientation="Vertical">
+            Margin="50,50,50,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
 
-            <StackPanel.Resources>
-                <Style TargetType="{x:Type components:LabelLayoutForFormInputs}">
-                    <Setter Property="Margin" Value="0,0,0,15" />
-                </Style>
-            </StackPanel.Resources>
+            <!--  Last name  -->
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-            <components:LabelLayoutForFormInputs Label="Last name">
+                <TextBlock Grid.Column="0" Text="Last name" />
+                <TextBox Grid.Column="1" Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
 
+            </Grid>
+
+            <!--  First name  -->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" Text="First name" />
+                <TextBox Grid.Column="1" Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
+            </Grid>
+
+            <!--  Phone number  -->
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Phone number" />
+                <TextBox Grid.Column="1" Text="{Binding PhoneNumber, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, TargetNullValue=''}" />
+            </Grid>
+
+            <!--  Email  -->
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Email" />
+                <TextBox Grid.Column="1" Text="{Binding Email, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
+            </Grid>
+
+            <!--  Birth date  -->
+            <Grid Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Birth date" />
+                <DatePicker
+                    Grid.Column="1"
+                    Margin="0,0,0,20"
+                    SelectedDate="{Binding BirthDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
+                <!--  TODO: CUSTOM VALIDATION DISPL  -->
+            </Grid>
+
+            <!--  Comment  -->
+            <Grid Grid.Row="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <TextBlock
+                    Grid.Row="0"
+                    Margin="0,0,0,10"
+                    Text="Comment (optional)" />
                 <TextBox
-                    Style="{StaticResource FormTextBox}"
-                    Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                    ToolTip="{Binding ErrorCollection[LastName]}" />
+                    Grid.Row="1"
+                    Height="100"
+                    Text="{Binding Comments, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                    TextWrapping="Wrap" />
+            </Grid>
+        </Grid>
 
-            </components:LabelLayoutForFormInputs>
-
-
-            <components:LabelLayoutForFormInputs Label="First name">
-                <TextBox
-                    Style="{StaticResource FormTextBox}"
-                    Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                    ToolTip="{Binding ErrorCollection[FirstName]}" />
-            </components:LabelLayoutForFormInputs>
-
-            <components:LabelLayoutForFormInputs Label="Phone number">
-                <TextBox
-                    Style="{StaticResource FormTextBox}"
-                    Text="{Binding PhoneNumber, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, TargetNullValue=''}"
-                    ToolTip="{Binding ErrorCollection[PhoneNumber]}" />
-            </components:LabelLayoutForFormInputs>
-
-            <components:LabelLayoutForFormInputs Label="Email">
-                <TextBox
-                    Style="{StaticResource FormTextBox}"
-                    Text="{Binding Email, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                    ToolTip="{Binding ErrorCollection[Email]}" />
-            </components:LabelLayoutForFormInputs>
-
-            <components:LabelLayoutForFormInputs Label="Birth date">
-                <DatePicker SelectedDate="{Binding BirthDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" ToolTip="{Binding ErrorCollection[BirthDate]}" />
-            </components:LabelLayoutForFormInputs>
-
-            <components:LabelLayoutForFormInputs Label="Comments (optional)" />
-            <TextBox
-                Height="100"
-                Text="{Binding Comments, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                TextWrapping="Wrap"
-                ToolTip="{Binding ErrorCollection[Comments]}" />
-
-
-        </StackPanel>
 
         <!--  Separator  -->
         <Border Grid.Column="1" Width="0.8">
@@ -91,52 +128,80 @@
             </Border.Background>
         </Border>
 
-        <StackPanel
+        <!--  Column "2"  -->
+        <Grid
             Grid.Row="0"
             Grid.Column="2"
-            Margin="50"
-            Orientation="Vertical">
-            <StackPanel.Resources>
-                <Style TargetType="{x:Type components:LabelLayoutForFormInputs}">
-                    <Setter Property="Margin" Value="0,0,0,15" />
-                </Style>
-            </StackPanel.Resources>
-            <components:LabelLayoutForFormInputs Label="Post code">
-                <TextBox
-                    Style="{StaticResource FormTextBox}"
-                    Text="{Binding PostCode, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                    ToolTip="{Binding ErrorCollection[PostCode]}" />
-            </components:LabelLayoutForFormInputs>
+            Margin="50">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
 
-            <components:LabelLayoutForFormInputs Label="City">
-                <TextBox
-                    Style="{StaticResource FormTextBox}"
-                    Text="{Binding City, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                    ToolTip="{Binding ErrorCollection[City]}" />
-            </components:LabelLayoutForFormInputs>
+            <!--  Post code  -->
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-            <components:LabelLayoutForFormInputs Label="Street">
-                <TextBox
-                    Style="{StaticResource FormTextBox}"
-                    Text="{Binding Street, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                    ToolTip="{Binding ErrorCollection[Street]}" />
-            </components:LabelLayoutForFormInputs>
+                <TextBlock Grid.Column="0" Text="Post code" />
+                <TextBox Grid.Column="1" Text="{Binding PostCode, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
 
-            <components:LabelLayoutForFormInputs Label="Building number">
-                <TextBox
-                    Style="{StaticResource FormTextBox}"
-                    Text="{Binding BuildingNumber, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, TargetNullValue=''}"
-                    ToolTip="{Binding ErrorCollection[BuildingNumber]}" />
-            </components:LabelLayoutForFormInputs>
 
-            <components:LabelLayoutForFormInputs Label="Flat number">
-                <TextBox
-                    Style="{StaticResource FormTextBox}"
-                    Text="{Binding FlatNumber, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, TargetNullValue=''}"
-                    ToolTip="{Binding ErrorCollection[FlatNumber]}" />
-            </components:LabelLayoutForFormInputs>
+            </Grid>
 
-        </StackPanel>
+            <!--  City  -->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" Text="City" />
+                <TextBox Grid.Column="1" Text="{Binding City, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
+            </Grid>
+
+            <!--  Street  -->
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Street" />
+                <TextBox Grid.Column="1" Text="{Binding Street, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
+
+            </Grid>
+
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Building number" />
+                <TextBox Grid.Column="1" Text="{Binding BuildingNumber, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, TargetNullValue=''}" />
+
+            </Grid>
+
+            <!--  Flat number  -->
+            <Grid Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Flat number" />
+                <TextBox Grid.Column="1" Text="{Binding FlatNumber, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, TargetNullValue=''}" />
+
+            </Grid>
+
+
+        </Grid>
+
+
+
 
         <!--  Buttons  -->
         <StackPanel

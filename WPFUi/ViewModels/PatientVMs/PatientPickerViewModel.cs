@@ -40,8 +40,12 @@ namespace WPFUi.ViewModels.PatientVMs
             get => _selectedPatient;
             set 
             {
-                _selectedPatient = value;
-                SelectedPatientChanged?.Invoke();
+                if(value != _selectedPatient)
+                {
+                    _selectedPatient = value;
+                    SelectedPatientChanged?.Invoke();
+                }
+                
             }
         }
 

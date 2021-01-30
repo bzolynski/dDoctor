@@ -37,9 +37,11 @@ namespace WPFUi.ViewModels
             get { return _selectedDoctor; }
             set
             {
-                _selectedDoctor = value;
-                OnPropertyChanged(nameof(SelectedDoctor));
-                SelectedDoctorChanged?.Invoke();
+                if(value != _selectedDoctor)
+                {
+                    _selectedDoctor = value;
+                    SelectedDoctorChanged?.Invoke();
+                }
             }
         }
 

@@ -12,14 +12,14 @@ namespace WPFUi.Validators
             RuleFor(x => x.LastName)
                 .Cascade(CascadeMode.Stop)
                 .NotEmpty().WithMessage("Last name can not be empty")
-                .Length(2, 50).WithMessage("Invalid lenght of last name")
-                .Must(BeValidName).WithMessage("Last name contains invalid characters");
+                .Must(BeValidName).WithMessage("Last name contains invalid characters")
+                .Length(2, 50).WithMessage("Invalid lenght of last name");
 
             RuleFor(x => x.FirstName)
                 .Cascade(CascadeMode.Stop)
                 .NotEmpty().WithMessage("First name can not be empty")
-                .Length(2, 50).WithMessage("Invalid lenght of first name")
-                .Must(BeValidName).WithMessage("First name contains invalid characters");
+                .Must(BeValidName).WithMessage("First name contains invalid characters")
+                .Length(2, 50).WithMessage("Invalid lenght of first name");
 
             RuleFor(x => x.PhoneNumber)
                 .Cascade(CascadeMode.Stop);

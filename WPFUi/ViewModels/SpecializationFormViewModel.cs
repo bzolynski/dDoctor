@@ -102,12 +102,22 @@ namespace WPFUi.ViewModels
         private async Task SubmitSpecializationForm(object arg)
         {
             await _specializationService.Create(SpecializationCode, SpecializationName);
+            ResetForm();
             SpecializationAdded?.Invoke();
         }
 
         private void CancelSpecializationForm(object obj)
         {
+            ResetForm();
             SpecializationFormClosed?.Invoke();
+        }
+
+        private void ResetForm()
+        {
+            SpecializationCode = string.Empty;
+            SpecializationName = string.Empty;
+            OnPropertyChanged(nameof(SpecializationCode));
+            OnPropertyChanged(nameof(SpecializationName));
         }
 
        

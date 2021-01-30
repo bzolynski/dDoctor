@@ -30,9 +30,8 @@ namespace WPFUi.ViewModels.PatientVMs
         private Patient _selectedPatient;
         private List<Patient> _patients;
         private string _searchText = string.Empty;
-
+        private bool _canDeletePatientBinding;
         private readonly IPatientService _patientService;
-        private readonly IMapper _mapper;
         private readonly IDateTimeService _dateTimeService;
         private readonly IReservationService _reservationService;
         private readonly PatientFormValidator _validationRules;
@@ -42,7 +41,6 @@ namespace WPFUi.ViewModels.PatientVMs
         // Bindings
         #region Bindings
 
-        // TODO: PatientDisplayList sort after edit or add
         public ICollectionView PatientsCollectionView { get; set; }
         public ObservableCollection<Reservation> Reservations { get; set; }
 
@@ -81,7 +79,15 @@ namespace WPFUi.ViewModels.PatientVMs
             }
         }
 
-
+        // TODO: Find better name
+        public bool CanDeletePatientBinding
+        {
+            get => _canDeletePatientBinding;
+            set
+            {
+                _canDeletePatientBinding = value;
+            }
+        }
 
 
         #endregion
@@ -98,11 +104,10 @@ namespace WPFUi.ViewModels.PatientVMs
 
         // Constructors
         #region Constructors
-        public PatientsViewModel(IPatientService patientService, IMapper mapper, IDateTimeService dateTimeService, IReservationService reservationService, PatientFormValidator validationRules)
+        public PatientsViewModel(IPatientService patientService, IDateTimeService dateTimeService, IReservationService reservationService, PatientFormValidator validationRules)
         {
 
             _patientService = patientService;
-            _mapper = mapper;
             _dateTimeService = dateTimeService;
             _reservationService = reservationService;
             _validationRules = validationRules;
@@ -116,8 +121,6 @@ namespace WPFUi.ViewModels.PatientVMs
             OpenAddPatientFormCommand = new RelayCommand(OpenAddPatientForm);
             DeletePatientCommand = new AsyncRelayCommand(DeletePatient, CanDeletePatient, (ex) => throw ex);
             ReloadPatientListCommand = new RelayCommand(ReloadPatientList);
-
-
 
             LoadPatients();
         }
@@ -142,8 +145,6 @@ namespace WPFUi.ViewModels.PatientVMs
 
                     System.Windows.Application.Current.Dispatcher.Invoke(new Action(() => PatientsCollectionView.Refresh()));
                 }
-
-                    
             });
         }
 
@@ -159,12 +160,17 @@ namespace WPFUi.ViewModels.PatientVMs
             });
         }
 
-        private bool CanDeletePatient(object obj)
+        private bool CanDeletePatient(object obj = null)
         {
             // TODO: Check if patient has reservations or past visits
             if (SelectedPatient == null || Reservations?.Count > 0)
-                return false;
-            return true;
+                CanDeletePatientBinding = false;
+            else
+                CanDeletePatientBinding = true;
+
+
+            OnPropertyChanged(nameof(CanDeletePatientBinding));
+            return _canDeletePatientBinding;
         }
 
         private async Task DeletePatient(object obj)
@@ -183,12 +189,8 @@ namespace WPFUi.ViewModels.PatientVMs
 
 
 
-        private bool CanOpenEditPatientForm(object obj)
-        {
-            if (SelectedPatient == null)
-                return false;
-            return true;
-        }
+        private bool CanOpenEditPatientForm(object obj) => SelectedPatient == null ? false : true;
+      
 
         private void OpenEditPatientForm(object obj)
         {
@@ -217,11 +219,7 @@ namespace WPFUi.ViewModels.PatientVMs
             LoadPatients();
         }
 
-        private void PatientFormViewModel_FormSubmited()
-        {
-            ReloadPatientList();
-            PatientFormViewModel = null;
-        }
+        private void PatientFormViewModel_FormSubmited() => PatientFormViewModel = null;
         #endregion
     }
 }

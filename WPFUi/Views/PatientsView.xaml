@@ -14,15 +14,25 @@
     <UserControl.Resources>
         <!--  Context menu for rows  -->
         <ContextMenu x:Key="RowContextMenu">
-            <MenuItem
-                Command="{Binding DataContext.OpenEditPatientFormCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                CommandParameter="{Binding}"
-                Header="Edit" />
+            <MenuItem Command="{Binding DataContext.OpenEditPatientFormCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" Header="Edit" />
             <Separator />
             <MenuItem
                 Command="{Binding DataContext.DeletePatientCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                CommandParameter="{Binding}"
-                Header="Delete" />
+                Header="Delete"
+                ToolTipService.ShowOnDisabled="True">
+                <MenuItem.Resources>
+                    <Style TargetType="MenuItem">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding DataContext.CanDeletePatientBinding, RelativeSource={RelativeSource AncestorType=DataGrid}}" Value="False">
+                                <Setter Property="ToolTip" Value="Can't delete patient who has reservation or past visits" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding DataContext.CanDeletePatientBinding, RelativeSource={RelativeSource AncestorType=DataGrid}}" Value="True">
+                                <Setter Property="ToolTip" Value="Delete patient" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </MenuItem.Resources>
+            </MenuItem>
         </ContextMenu>
 
         <Style x:Key="DefaultRowStyle" TargetType="{x:Type DataGridRow}">
@@ -104,7 +114,20 @@
                                 Margin="10,0,0,0"
                                 Command="{Binding DeletePatientCommand}"
                                 Content="Delete"
-                                Style="{StaticResource MenuBarButton}" />
+                                ToolTipService.ShowOnDisabled="True">
+                                <Button.Resources>
+                                    <Style BasedOn="{StaticResource MenuBarButton}" TargetType="Button">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding CanDeletePatientBinding}" Value="False">
+                                                <Setter Property="ToolTip" Value="Can't delete patient who has reservation or past visits" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding CanDeletePatientBinding}" Value="True">
+                                                <Setter Property="ToolTip" Value="Delete patient" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Resources>
+                            </Button>
 
 
 
@@ -184,7 +207,7 @@
                                 MinWidth="80"
                                 Binding="{Binding Path=BirthDate, StringFormat=dd-MM-yyyy}"
                                 Header="Birth date" />
-                            
+
                             <DataGridTextColumn Binding="{Binding Path=PhoneNumber}" Header="Phone number" />
                             <DataGridTextColumn Binding="{Binding Path=Email}" Header="Email" />
                             <DataGridTextColumn Binding="{Binding Path=Id}" Header="Patient id" />
@@ -197,6 +220,7 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
+
                         <components:PatientsPageBottomBoxLayout
                             Grid.Column="0"
                             DataContext="{Binding SelectedPatient}"

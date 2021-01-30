@@ -48,7 +48,7 @@
                             <DataGridTextColumn.Binding>
                                 <MultiBinding StringFormat="{} {0} {1}">
                                     <Binding Path="LastName" />
-                                    <Binding Path="LastName" />
+                                    <Binding Path="FirstName" />
                                 </MultiBinding>
                             </DataGridTextColumn.Binding>
                         </DataGridTextColumn>

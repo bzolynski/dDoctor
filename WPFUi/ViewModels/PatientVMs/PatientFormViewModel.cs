@@ -18,7 +18,7 @@ namespace WPFUi.ViewModels.PatientVMs
         // Validation
         #region Validation       
 
-        public Dictionary<string, string> ErrorCollection { get; set; } = new Dictionary<string, string>();
+        //public Dictionary<string, string> ErrorCollection { get; set; } = new Dictionary<string, string>();
 
         private readonly PatientFormValidator _patientFormValidator;
 
@@ -36,14 +36,14 @@ namespace WPFUi.ViewModels.PatientVMs
 
                 var error = errorList.FirstOrDefault(e => e.PropertyName == propertyName);
 
-                if (ErrorCollection.ContainsKey(propertyName) && error != null)
-                    ErrorCollection[propertyName] = error.ErrorMessage;
-                else if (error != null)
-                    ErrorCollection.Add(propertyName, error.ErrorMessage);
-                else
-                    ErrorCollection.Remove(propertyName);
+                //if (ErrorCollection.ContainsKey(propertyName) && error != null)
+                //    ErrorCollection[propertyName] = error.ErrorMessage;
+                //else if (error != null)
+                //    ErrorCollection.Add(propertyName, error.ErrorMessage);
+                //else
+                //    ErrorCollection.Remove(propertyName);
                 
-                OnPropertyChanged(nameof(ErrorCollection));
+                //OnPropertyChanged(nameof(ErrorCollection));
 
                 return error != null ? error.ErrorMessage : null;
             }
