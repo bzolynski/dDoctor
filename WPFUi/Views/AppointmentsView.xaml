@@ -164,8 +164,11 @@
                             <StackPanel Orientation="Vertical">
 
                                 <Calendar
+                                    x:Name="calendar"
                                     DisplayDate="{Binding SelectedDate}"
-                                    PreviewMouseUp="Calendar_PreviewMouseUp"
+                                    MouseLeave="calendar_MouseLeave"
+                                    PreviewMouseLeftButtonDown="calendar_PreviewMouseLeftButtonDown"
+                                    PreviewMouseLeftButtonUp="calendar_MouseLeftButtonUp"
                                     SelectedDate="{Binding SelectedDate}"
                                     Style="{StaticResource CalendarColors}" />
                                 <Button Command="{Binding SetSelectedDateToTodayCommand}">

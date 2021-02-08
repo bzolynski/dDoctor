@@ -15,16 +15,20 @@ namespace WPFUi.Views
             InitializeComponent();
         }
 
-
-
-        private void Calendar_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        private void calendar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            if (Mouse.Captured is CalendarItem)
-            {
-                Mouse.Capture(null);
-
-            }
+            calendar.IsHitTestVisible = true;
         }
 
+        private void calendar_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            calendar.IsHitTestVisible = false;
+        }
+
+        private void calendar_MouseLeave(object sender, MouseEventArgs e)
+        {
+            calendar.IsHitTestVisible = true;
+
+        }
     }
 }
