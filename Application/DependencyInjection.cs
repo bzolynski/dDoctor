@@ -19,7 +19,6 @@ namespace Application
             services.AddTransient<IDoctorService, DoctorService>();
             services.AddTransient<IReservationService, ReservationService>();
             services.AddTransient<IScheduleService, ScheduleService>();
-            services.AddTransient<IDateTimeService, DateTimeService>();
             services.AddTransient<ISpecializationService, SpecializationService>();
             services.AddTransient<IAgeService, AgeServices>();
             services.AddTransient<IAccountService, AccountService>();

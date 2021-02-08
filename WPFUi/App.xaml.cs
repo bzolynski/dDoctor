@@ -75,7 +75,6 @@ namespace WPFUi
 
                     services.AddScoped<IViewModelFactory<AppointmentsViewModel>>(services => new AppointmentsViewModelFactory(
                             services.GetRequiredService<IReservationService>(),
-                            services.GetRequiredService<IDateTimeService>(),
                             services.GetRequiredService<RenavigatorViewModelFactory<HomeViewModel>>(),
                             services.GetRequiredService<IScheduleService>(),
                             services.GetRequiredService<IMapper>(),
@@ -86,7 +85,6 @@ namespace WPFUi
                     services.AddScoped<IViewModelFactory<ManageSchedulesViewModel>>(services => new ManageSchedulesViewModelFactory(
                         services.GetRequiredService<IDoctorService>(),
                         services.GetRequiredService<IScheduleService>(),
-                        services.GetRequiredService<IDateTimeService>(),
                         services.GetRequiredService<IMapper>(),
                         services.GetRequiredService<RenavigatorViewModelFactory<GenerateScheduleViewModel>>()));
 

@@ -109,13 +109,14 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
         // Commands
         #region Commands
 
+        public ICommand EditSelectedScheduleDayCommand { get; set; }
         public ICommand DeleteSelectedScheduleDayCommand { get; set; }
         public ICommand GenerateNewScheduleCommand { get; set; }
         #endregion
 
         // Constructors
         #region Constructors
-        public ManageSchedulesViewModel(IDoctorService doctorService, IScheduleService scheduleService, IDateTimeService dateTimeService, IMapper mapper, IRenavigator generateScheduleRenavigator)
+        public ManageSchedulesViewModel(IDoctorService doctorService, IScheduleService scheduleService, IMapper mapper, IRenavigator generateScheduleRenavigator)
         {
             _doctorService = doctorService;
             _scheduleService = scheduleService;
@@ -128,17 +129,19 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
 
             _schedules = new List<Schedule>();
             SchedulesCollectionView = CollectionViewSource.GetDefaultView(_schedules);
-
+            EditSelectedScheduleDayCommand = new AsyncRelayCommand(EditSelectedScheduleDay, CanEditSelectedScheduleDay, (ex) => throw ex);
             DeleteSelectedScheduleDayCommand = new AsyncRelayCommand(DeleteSelectedScheduleDay, CanDeleteSelectedScheduleDay, (ex) => throw ex);
             GenerateNewScheduleCommand = new RelayCommand(GenerateNewSchedule);
 
             LoadDoctors();
 
-            DateFrom = new DateTime(dateTimeService.Now.Year, dateTimeService.Now.Month, 1);
-            DateTo = new DateTime(dateTimeService.Now.Year, dateTimeService.Now.Month, DateTime.DaysInMonth(dateTimeService.Now.Year, dateTimeService.Now.Month));
+            DateFrom = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            DateTo = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month));
         }
 
         
+
+
 
 
 
@@ -177,6 +180,16 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
 
                 }
             });
+        }
+
+        private bool CanEditSelectedScheduleDay(object obj)
+        {
+            return SelectedSchedule != null ? true : false;
+        }
+
+        private async Task EditSelectedScheduleDay(object arg)
+        {
+
         }
 
         private bool CanDeleteSelectedScheduleDay(object obj)

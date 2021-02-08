@@ -33,7 +33,6 @@ namespace WPFUi.ViewModels.AppointmentVMs
         private ReservationDetailsViewModel _reservationDetails;
 
         private readonly IReservationService _reservationService;
-        private readonly IDateTimeService _dateTimeService;
         private readonly IRenavigator _homeRenavigator;
         private readonly IScheduleService _scheduleService;
         private readonly IMapper _mapper;
@@ -102,7 +101,7 @@ namespace WPFUi.ViewModels.AppointmentVMs
                 LoadSchedules();
             }
         }
-        public DateTime Today => _dateTimeService.Now;
+        public DateTime Today => DateTime.Today;
 
         public AppointmentViewReservationModel SelectedReservation
         {
@@ -137,7 +136,6 @@ namespace WPFUi.ViewModels.AppointmentVMs
         #region Constructors
         public AppointmentsViewModel(
             IReservationService reservationService,
-            IDateTimeService dateTimeService,
             IRenavigator homeRenavigator,
             IScheduleService scheduleService,
             IMapper mapper,
@@ -146,7 +144,6 @@ namespace WPFUi.ViewModels.AppointmentVMs
             IDoctorService doctorService)
         {
             _reservationService = reservationService;
-            _dateTimeService = dateTimeService;
             _homeRenavigator = homeRenavigator;
             _scheduleService = scheduleService;
             _mapper = mapper;
@@ -154,7 +151,7 @@ namespace WPFUi.ViewModels.AppointmentVMs
             _specializationService = specializationService;
             _doctorService = doctorService;
 
-            SelectedDate = dateTimeService.Now;
+            SelectedDate = DateTime.Today;
 
             UnregisterPatientCommand = new AsyncRelayCommand(UnregisterPatient, (obj) => SelectedReservation != null, (ex) => throw ex);
 
@@ -163,7 +160,7 @@ namespace WPFUi.ViewModels.AppointmentVMs
 
             CloseCommand = new RelayCommand((obj) => _homeRenavigator.Renavigate());
 
-            SetSelectedDateToTodayCommand = new RelayCommand((obj) => SelectedDate = dateTimeService.Now);
+            SetSelectedDateToTodayCommand = new RelayCommand((obj) => SelectedDate = DateTime.Now);
             SetSelectedDoctorToNullCommand = new RelayCommand((obj) => SelectedDoctor = null);
             SetSelectedSpecializationToNullCommand = new RelayCommand((obj) => SelectedSpecialization = null);
             
