@@ -36,6 +36,8 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+
+        <!--  Title bar  -->
         <Grid
             Grid.Row="0"
             Grid.ColumnSpan="2"
@@ -49,13 +51,26 @@
                 Foreground="#f0f0f0"
                 Text="Generate schedule" />
         </Grid>
-        <Grid Grid.Row="1" Margin="5">
 
+
+        <!--  Main Content  -->
+        <Grid Grid.Row="1" Margin="5">
+            <Grid.Resources>
+                <Style TargetType="Grid">
+                    <Setter Property="IsEnabled" Value="True" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsSpecializationFormVisible}" Value="True">
+                            <Setter Property="IsEnabled" Value="False" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Resources>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
+
 
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -64,7 +79,7 @@
             </Grid.ColumnDefinitions>
 
 
-
+            <!--  Column 1  -->
             <Grid
                 Grid.Row="1"
                 Grid.RowSpan="2"
@@ -73,25 +88,46 @@
 
                 <StackPanel Orientation="Vertical">
 
+                    <!--  Date picker  -->
                     <StackPanel
                         Margin="0,0,0,30"
                         HorizontalAlignment="Center"
                         Orientation="Horizontal">
-                        <StackPanel Margin="10,0" Orientation="Horizontal">
-                            <TextBlock
-                                VerticalAlignment="Center"
-                                Style="{StaticResource TextBlockStyle}"
-                                Text="Start date: " />
-                            <DatePicker SelectedDate="{Binding StartDate, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" ToolTip="{Binding ErrorCollection[StartDate]}" />
-                        </StackPanel>
-                        <StackPanel Margin="10,0" Orientation="Horizontal">
-                            <TextBlock
-                                VerticalAlignment="Center"
-                                Style="{StaticResource TextBlockStyle}"
-                                Text="End date: " />
-                            <DatePicker SelectedDate="{Binding EndDate, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" ToolTip="{Binding ErrorCollection[EndDate]}" />
-                        </StackPanel>
 
+                        <Border
+                            Margin="0,0,3,0"
+                            Padding="5"
+                            Validation.ValidationAdornerSiteFor="{Binding StartDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}">
+                            <Border.Resources>
+                                <Style BasedOn="{StaticResource BorderValidationTemplate}" TargetType="Border" />
+                            </Border.Resources>
+                            <StackPanel Margin="10,0" Orientation="Horizontal">
+
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    Style="{StaticResource TextBlockStyle}"
+                                    Text="Start date: " />
+                                <DatePicker SelectedDate="{Binding StartDate, UpdateSourceTrigger=PropertyChanged}" />
+
+
+                            </StackPanel>
+                        </Border>
+
+                        <Border
+                            Margin="3,0,0,0"
+                            Padding="5"
+                            Validation.ValidationAdornerSiteFor="{Binding EndDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}">
+                            <Border.Resources>
+                                <Style BasedOn="{StaticResource BorderValidationTemplate}" TargetType="Border" />
+                            </Border.Resources>
+                            <StackPanel Margin="10,0" Orientation="Horizontal">
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    Style="{StaticResource TextBlockStyle}"
+                                    Text="End date: " />
+                                <DatePicker SelectedDate="{Binding EndDate, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+                        </Border>
                     </StackPanel>
 
                     <!--  Time picker  -->
@@ -99,33 +135,45 @@
                         Margin="0,0,0,30"
                         HorizontalAlignment="Center"
                         Orientation="Horizontal">
+                        <Border Padding="5" Validation.ValidationAdornerSiteFor="{Binding EndTime, ValidatesOnDataErrors=True}">
+                            <Border.Resources>
+                                <Style BasedOn="{StaticResource BorderValidationTemplate}" TargetType="Border" />
+                            </Border.Resources>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel
+                                    Grid.Column="0"
+                                    Margin="10,0"
+                                    Orientation="Horizontal">
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        Style="{StaticResource TextBlockStyle}"
+                                        Text="Start time: " />
+                                    <components:TimePicker Time="{Binding StartTime, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" />
 
-                        <!--  TODO: Create own TimePicker  -->
+                                </StackPanel>
+                                <StackPanel
+                                    Grid.Column="1"
+                                    Margin="10,0"
+                                    Orientation="Horizontal">
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        Style="{StaticResource TextBlockStyle}"
+                                        Text="End time: " />
 
-                        <StackPanel Margin="10,0" Orientation="Horizontal">
-                            <TextBlock
-                                VerticalAlignment="Center"
-                                Style="{StaticResource TextBlockStyle}"
-                                Text="Start hour: " />
-                            <xceed:TimePicker
-                                Width="100"
-                                ToolTip="{Binding ErrorCollection[StartHour]}"
-                                Value="{Binding Path=StartHour, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
-                        </StackPanel>
-                        <StackPanel Margin="10,0" Orientation="Horizontal">
-                            <TextBlock
-                                VerticalAlignment="Center"
-                                Style="{StaticResource TextBlockStyle}"
-                                Text="End hour: " />
-                            <xceed:TimePicker
-                                Width="100"
-                                ToolTip="{Binding ErrorCollection[EndHour]}"
-                                Value="{Binding Path=EndHour, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
-                        </StackPanel>
+                                    <components:TimePicker Time="{Binding EndTime, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" />
+                                </StackPanel>
 
+                            </Grid>
+
+                        </Border>
 
                     </StackPanel>
 
+                    <!--  Max time per patient  -->
                     <StackPanel
                         Margin="0,0,0,30"
                         HorizontalAlignment="Center"
@@ -137,9 +185,12 @@
                             Text="Time per patient: " />
                         <TextBox
                             Width="50"
+                            Padding="2"
+                            FontSize="18"
                             Text="{Binding MaxTimePerPatient, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, TargetNullValue=''}"
-                            TextAlignment="Right"
+                            TextAlignment="Center"
                             ToolTip="{Binding ErrorCollection[MaxTimePerPatient]}" />
+
                         <TextBlock
                             Margin="5,0,0,0"
                             Style="{StaticResource TextBlockStyle}"
@@ -149,6 +200,7 @@
 
                     </StackPanel>
 
+                    <!--  Days of week picker  -->
                     <StackPanel
                         Margin="0,0,0,30"
                         HorizontalAlignment="Center"
@@ -160,11 +212,10 @@
                             Style="{StaticResource TextBlockStyle}"
                             Text="Select days of week: " />
 
-                        <Border
-                            HorizontalAlignment="Center"
-                            Style="{StaticResource MainDarkBorder}"
-                            ToolTip="{Binding ErrorCollection[SelectedDaysOfWeek]}"
-                            Validation.ValidationAdornerSiteFor="{Binding SelectedDaysOfWeek, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}">
+                        <Border HorizontalAlignment="Center" Validation.ValidationAdornerSite="{Binding SelectedDaysOfWeek, ValidatesOnDataErrors=True}">
+                            <Border.Resources>
+                                <Style BasedOn="{StaticResource BorderValidationTemplate}" TargetType="Border" />
+                            </Border.Resources>
 
                             <ItemsControl ItemsSource="{Binding Source={StaticResource DayOfWeek}}">
                                 <ItemsControl.ItemTemplate>
@@ -193,32 +244,38 @@
 
                     </StackPanel>
 
-
-
-
-
                 </StackPanel>
 
 
 
             </Grid>
 
+            <!--  Column 2  -->
             <Grid
                 Grid.Row="1"
                 Grid.Column="1"
                 Margin="10,0,0,0">
-                <StackPanel
-                    Orientation="Vertical"
-                    ToolTip="{Binding ErrorCollection[SelectedDoctor]}"
-                    Validation.ValidationAdornerSiteFor="{Binding SelectedDoctor, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}">
-                    <!--  Doctor picker  -->
-                    <components:DoctorPicker DataContext="{Binding DoctorPicker}" />
+                <StackPanel Orientation="Vertical">
 
+                    <!--  Doctor picker  -->
+                    <Border Validation.ValidationAdornerSiteFor="{Binding SelectedDoctor, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}">
+                        <Border.Resources>
+                            <Style BasedOn="{StaticResource BorderValidationTemplate}" TargetType="Border">
+                                <Setter Property="BorderThickness" Value="0" />
+                                <Setter Property="Padding" Value="10" />
+                            </Style>
+                        </Border.Resources>
+
+                        <components:DoctorPicker DataContext="{Binding DoctorPicker}" />
+                    </Border>
+
+                    <!--  Specialization section  -->
                     <StackPanel
                         Margin="0,15,0,30"
                         HorizontalAlignment="Center"
                         Orientation="Vertical">
 
+                        <!--  New specialization  -->
                         <StackPanel
                             Margin="0,0,0,5"
                             HorizontalAlignment="Center"
@@ -238,29 +295,34 @@
 
 
                         <!--  Specialization picker  -->
-                        <ComboBox
-                            Width="250"
-                            ItemsSource="{Binding Specializations}"
-                            SelectedItem="{Binding SelectedSpecialization, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                            ToolTip="{Binding ErrorCollection[SelectedSpecialization]}">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Name}" />
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
+                        <Border Validation.ValidationAdornerSiteFor="{Binding SelectedSpecialization, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}">
+                            <Border.Resources>
+                                <Style BasedOn="{StaticResource BorderValidationTemplate}" TargetType="Border">
+                                    <Setter Property="BorderThickness" Value="0" />
+                                    <Setter Property="Padding" Value="10" />
+                                </Style>
+                            </Border.Resources>
+
+                            <ComboBox
+                                Width="250"
+                                ItemsSource="{Binding Specializations}"
+                                SelectedItem="{Binding SelectedSpecialization, UpdateSourceTrigger=PropertyChanged}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </Border>
                     </StackPanel>
 
-                    <!--  Specialization form  -->
-                    <Grid Visibility="{Binding IsSpecializationFormVisible, Converter={StaticResource BoolToVisConverter}}">
-                        <controls:SpecializationForm DataContext="{Binding SpecializationFormViewModel}" />
 
-                    </Grid>
 
 
                 </StackPanel>
             </Grid>
 
+            <!--  Buttons  -->
             <Grid
                 Grid.Row="3"
                 Grid.Column="0"
@@ -279,6 +341,16 @@
                     Content="Generate"
                     Style="{StaticResource MenuBarButton}" />
             </Grid>
+        </Grid>
+
+        <!--  Specialization form  -->
+        <Grid
+            Grid.Row="1"
+            Margin="400,350,400,150"
+            Background="#f0f0f0"
+            Visibility="{Binding IsSpecializationFormVisible, Converter={StaticResource BoolToVisConverter}}">
+            <controls:SpecializationForm DataContext="{Binding SpecializationFormViewModel}" />
+
         </Grid>
     </Grid>
 </UserControl>
