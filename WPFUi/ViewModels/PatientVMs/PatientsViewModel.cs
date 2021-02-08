@@ -32,7 +32,6 @@ namespace WPFUi.ViewModels.PatientVMs
         private string _searchText = string.Empty;
         private bool _canDeletePatientBinding;
         private readonly IPatientService _patientService;
-        private readonly IDateTimeService _dateTimeService;
         private readonly IReservationService _reservationService;
         private readonly PatientFormValidator _validationRules;
 
@@ -104,11 +103,12 @@ namespace WPFUi.ViewModels.PatientVMs
 
         // Constructors
         #region Constructors
-        public PatientsViewModel(IPatientService patientService, IDateTimeService dateTimeService, IReservationService reservationService, PatientFormValidator validationRules)
+        public PatientsViewModel(IPatientService patientService, 
+            IReservationService reservationService, 
+            PatientFormValidator validationRules)
         {
 
             _patientService = patientService;
-            _dateTimeService = dateTimeService;
             _reservationService = reservationService;
             _validationRules = validationRules;
 
@@ -182,7 +182,7 @@ namespace WPFUi.ViewModels.PatientVMs
 
         private void OpenAddPatientForm(object obj)
         {
-            PatientFormViewModel = new PatientFormViewModel(_patientService, _dateTimeService, _validationRules);
+            PatientFormViewModel = new PatientFormViewModel(_patientService, _validationRules);
 
             PatientFormViewModel.FormSubmited += PatientFormViewModel_FormSubmited;
         }
@@ -195,7 +195,7 @@ namespace WPFUi.ViewModels.PatientVMs
         private void OpenEditPatientForm(object obj)
         {
 
-            PatientFormViewModel = new PatientFormViewModel(_selectedPatient, _patientService, _dateTimeService, _validationRules);
+            PatientFormViewModel = new PatientFormViewModel(_selectedPatient, _patientService, _validationRules);
 
             PatientFormViewModel.FormSubmited += PatientFormViewModel_FormSubmited;
 

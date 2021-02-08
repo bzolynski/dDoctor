@@ -14,7 +14,6 @@ namespace WPFUi.Factories.ViewModelFactories
     public class AppointmentsViewModelFactory : IViewModelFactory<AppointmentsViewModel>
     {
         private readonly IReservationService _reservationService;
-        private readonly IDateTimeService _dateTimeService;
         private readonly IRenavigator _homeRenavigator;
         private readonly IScheduleService _scheduleService;
         private readonly IMapper _mapper;
@@ -24,7 +23,6 @@ namespace WPFUi.Factories.ViewModelFactories
 
         public AppointmentsViewModelFactory(
             IReservationService reservationService,
-            IDateTimeService dateTimeService,
             IRenavigator homeRenavigator,
             IScheduleService scheduleService,
             IMapper mapper,
@@ -33,7 +31,6 @@ namespace WPFUi.Factories.ViewModelFactories
             IDoctorService doctorService)
         {
             _reservationService = reservationService;
-            _dateTimeService = dateTimeService;
             _homeRenavigator = homeRenavigator;
             _scheduleService = scheduleService;
             _mapper = mapper;
@@ -45,7 +42,6 @@ namespace WPFUi.Factories.ViewModelFactories
         {
             return new AppointmentsViewModel(
                 _reservationService,
-                _dateTimeService,
                 _homeRenavigator,
                 _scheduleService,
                 _mapper,

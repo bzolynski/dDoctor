@@ -59,22 +59,15 @@ namespace WPFUi.ViewModels.PatientVMs
 
         private readonly Patient _patient;
         private readonly IPatientService _patientService;
-        private readonly IDateTimeService _dateTimeService;
+        private int? _phoneNumber;
 
         #endregion
 
         // Properties
         #region Properties
 
-        
-
         public string LastName { get; set; }
         public string FirstName { get; set; }
-
-        //public int? PhoneNumber { get; set; }
-
-        private int? _phoneNumber;
-
         public string PhoneNumber
         {
             get { return _phoneNumber.ToString(); }
@@ -91,8 +84,6 @@ namespace WPFUi.ViewModels.PatientVMs
                 {}
             }
         }
-
-
         public string Email { get; set; }
         public DateTime BirthDate { get; set; }
         public string Comments { get; set; }
@@ -101,14 +92,6 @@ namespace WPFUi.ViewModels.PatientVMs
         public string Street { get; set; }
         public string BuildingNumber { get; set; }
         public string FlatNumber { get; set; }
-        
-
-
-
-
-
-
-
 
 
         #endregion
@@ -130,21 +113,23 @@ namespace WPFUi.ViewModels.PatientVMs
 
 
         // For new
-        public PatientFormViewModel(IPatientService patientService, IDateTimeService dateTimeService, PatientFormValidator patientFormValidator)
+        public PatientFormViewModel(IPatientService patientService, 
+            PatientFormValidator patientFormValidator)
         {
 
             CloseFormCommand = new RelayCommand(CancelForm);
             _patientService = patientService;
-            _dateTimeService = dateTimeService;
             _patientFormValidator = patientFormValidator;
 
-            BirthDate = _dateTimeService.Now;
+            BirthDate = DateTime.Today;
 
             SubmitFormCommand = new AsyncRelayCommand(SubmitNewPatientForm, CanSubmitForm, (ex) => { throw ex; });
         }
 
         //For edit
-        public PatientFormViewModel(Patient patient, IPatientService patientService, IDateTimeService dateTimeService, PatientFormValidator validationRules) : this(patientService, dateTimeService, validationRules)
+        public PatientFormViewModel(Patient patient, 
+            IPatientService patientService, 
+            PatientFormValidator validationRules) : this(patientService, validationRules)
         {
             _patient = patient;
 

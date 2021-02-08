@@ -13,18 +13,15 @@ namespace WPFUi.Factories.ViewModelFactories
         private readonly IScheduleService _scheduleService;
         private readonly IMapper _mapper;
         private readonly IRenavigator _generateScheduleRenavigator;
-        private readonly IDateTimeService _dateTimeService;
 
         public ManageSchedulesViewModelFactory(
             IDoctorService doctorService, 
             IScheduleService scheduleService, 
-            IDateTimeService dateTimeService,
             IMapper mapper,
             IRenavigator generateScheduleRenavigator)
         {
             _doctorService = doctorService;
             _scheduleService = scheduleService;
-            _dateTimeService = dateTimeService;
             _mapper = mapper;
             _generateScheduleRenavigator = generateScheduleRenavigator;
         }
@@ -33,7 +30,6 @@ namespace WPFUi.Factories.ViewModelFactories
             return new ManageSchedulesViewModel(
                 _doctorService, 
                 _scheduleService, 
-                _dateTimeService, 
                 _mapper,
                 _generateScheduleRenavigator);
         }
