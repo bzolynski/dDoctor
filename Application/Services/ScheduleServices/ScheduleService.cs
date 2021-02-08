@@ -1,4 +1,5 @@
 ﻿using Application.Services.ReservationServices;
+
 using Domain.Entities;
 using Domain.Enums;
 using Persistance.Services.ScheduleDataServices;
@@ -20,11 +21,9 @@ namespace Application.Services.ScheduleServices
             _reservationService = reservationService;
         }
 
-        public async Task GenerateSchedules(int doctorId, int specializationId, TimeSpan startHour, TimeSpan endHour, TimeSpan maxTimePerPatient, DateTime startDay, DateTime endDay, List<DayOfWeek> daysOfWeek)
+        public async Task GenerateSchedules(int doctorId, int specializationId, TimeSpan startTime, TimeSpan endTime, TimeSpan maxTimePerPatient, DateTime startDay, DateTime endDay, List<DayOfWeek> daysOfWeek)
         {
-            startHour = new TimeSpan(startHour.Hours, startHour.Minutes, 0);
-            endHour = new TimeSpan(endHour.Hours, endHour.Minutes, 0);
-
+            
             for (var dt = startDay; dt <= endDay; dt = dt.AddDays(1))
             {
                 if (daysOfWeek.Contains(dt.DayOfWeek))
@@ -34,13 +33,13 @@ namespace Application.Services.ScheduleServices
                         DoctorId = doctorId,
                         SpecializationId = specializationId,
                         MaxTimePerPatient = maxTimePerPatient,
-                        StartHour = startHour,
-                        EndHour = endHour,
+                        StartHour = startTime,
+                        EndHour = endTime,
                         Date = new DateTime(dt.Year, dt.Month, dt.Day),
                         Status = ScheduleStatus.Ok
                     });
 
-                    for (var ts = startHour; ts < endHour; ts += maxTimePerPatient)
+                    for (var ts = startTime; ts < endTime; ts += maxTimePerPatient)
                     {
 
                         await _reservationService.Create(new Reservation
@@ -112,6 +111,7 @@ namespace Application.Services.ScheduleServices
             var schedule = await _scheduleDataService.Get(scheduleId);
             schedule.Status = ScheduleStatus.Canceled;
 
+            // TODO: Remove reservation from database if patient is null
             foreach (var reservation in schedule.Reservations)
             {
                 reservation.Status = ReservationStatus.Canceled;

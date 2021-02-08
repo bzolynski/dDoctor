@@ -1,7 +1,6 @@
 ﻿using Application.Services.DoctorServices;
 using Application.Services.ScheduleServices;
 using Application.Services.SpecializationServices;
-using AutoMapper;
 using Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -11,7 +10,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using WPFUi.Commands.Common;
-using WPFUi.Models;
 using WPFUi.States.Navigation;
 using WPFUi.Validators;
 
@@ -19,6 +17,7 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
 {
     public class GenerateScheduleViewModel : ViewModelBase, IDataErrorInfo
     {
+
         // Validators
         #region Validators
 
@@ -62,7 +61,13 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
         private readonly IRenavigator _manageSchedulesRenavigator;
         private readonly GenerateScheduleValidator _generateScheduleValidator;
         private bool _isSpecializationFormVisible = false;
-        private int? _maxTimePerPatient = 15;
+
+        private Specialization _selectedSpecialization;
+        private TimeSpan _maxTimePerPatient = new TimeSpan(0, 15, 0);
+        private TimeSpan _startTime;
+        private TimeSpan _endTime;
+        private DateTime _startDate = DateTime.Today;
+        private DateTime _endDate = DateTime.Today.AddDays(1);
 
         #endregion
 
@@ -73,37 +78,80 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
         public DoctorPickerViewModel DoctorPicker { get; set; }
         public ObservableCollection<Specialization> Specializations { get; set; }
 
-        public Specialization SelectedSpecialization { get; set; }
+
+        public Specialization SelectedSpecialization
+        {
+            get { return _selectedSpecialization; }
+            set
+            {
+                _selectedSpecialization = value;
+                OnPropertyChanged(nameof(SelectedSpecialization));
+            }
+        }
+
         public SpecializationFormViewModel SpecializationFormViewModel { get; set; }
 
         public List<DayOfWeek> SelectedDaysOfWeek { get; set; }
 
-        public string MaxTimePerPatient 
-        { 
-            get => _maxTimePerPatient.ToString();
+        
 
-            set 
+        public string MaxTimePerPatient
+        {
+            get => _maxTimePerPatient.ToString("%m");
+
+            set
             {
-                if (value == null)
-                    _maxTimePerPatient = null;
-
                 try
                 {
-                    _maxTimePerPatient = int.Parse(value);
+                    _maxTimePerPatient = new TimeSpan(0, int.Parse(value), 0);
 
                 }
                 catch (Exception)
-                {}
-            } 
+                { }
+            }
         }
 
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime StartDate
+        {
+            get { return _startDate; }
+            set
+            {
+                _startDate = value;
+                OnPropertyChanged(nameof(StartDate));
+                OnPropertyChanged(nameof(EndDate));
+            }
+        }
 
+        public DateTime EndDate
+        {
+            get { return _endDate; }
+            set
+            {
+                _endDate = value;
+                OnPropertyChanged(nameof(EndDate));
+            }
+        }
 
-        // TODO: Made custom datepicker and change those ugly things
-        public DateTime StartHour { get; set; }
-        public DateTime EndHour { get; set; }
+        public TimeSpan StartTime
+        {
+            get { return _startTime; }
+            set
+            {
+                _startTime = value;
+                OnPropertyChanged(nameof(StartTime));
+            }
+        }
+        
+
+        public TimeSpan EndTime
+        {
+            get { return _endTime; }
+            set
+            {
+                _endTime = value;
+                OnPropertyChanged(nameof(EndTime));
+            }
+        }
 
 
         public bool IsSpecializationFormVisible
@@ -186,8 +234,8 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
 
         private async Task GenerateSchedule(object arg)
         {
-            if(_maxTimePerPatient != null)
-                await _scheduleService.GenerateSchedules(SelectedDoctor.Id, SelectedSpecialization.Id, StartHour.TimeOfDay, EndHour.TimeOfDay, new TimeSpan(0, (int)_maxTimePerPatient, 0), StartDate, EndDate, SelectedDaysOfWeek.ToList());
+            if (_maxTimePerPatient != null)
+                await _scheduleService.GenerateSchedules(SelectedDoctor.Id, _selectedSpecialization.Id, _startTime, _endTime, _maxTimePerPatient, _startDate, _endDate, SelectedDaysOfWeek.ToList());
         }
 
         /// <summary>

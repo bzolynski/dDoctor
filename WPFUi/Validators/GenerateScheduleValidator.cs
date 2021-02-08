@@ -9,20 +9,18 @@ namespace WPFUi.Validators
     {
         public GenerateScheduleValidator()
         {
+            //TODO: Better messages
             RuleFor(x => x.StartDate)
                 .Cascade(CascadeMode.Stop)
-                .NotNull();
+                .Must(x => x >= DateTime.Today).WithMessage("Start date can't be earlier than today.");
 
             RuleFor(x => x.EndDate)
                 .Cascade(CascadeMode.Stop)
-                .NotNull();
+                .Must((vm, x) => x >=vm.StartDate).WithMessage("End date must be later than start date.");
 
-            RuleFor(x => x.StartHour)
+            RuleFor(x => x.EndTime)
                 .Cascade(CascadeMode.Stop)
-                .NotNull();
-
-            RuleFor(x => x.EndHour)
-                .Cascade(CascadeMode.Stop)
+                .Must((vm, x) => x > vm.StartTime).WithMessage("End time must be later than start time")
                 .NotNull();
 
             // TODO: Maximum value validation for time per patient
@@ -33,7 +31,7 @@ namespace WPFUi.Validators
 
             RuleFor(x => x.SelectedDaysOfWeek)
                 .Cascade(CascadeMode.Stop)
-                .Must(days => days.Count > 0).WithMessage("At least one day must be selected");
+                .Must(days => days?.Count > 0).WithMessage("At least one day must be selected");
 
             RuleFor(x => x.SelectedDoctor)
                 .Cascade(CascadeMode.Stop)
@@ -41,7 +39,7 @@ namespace WPFUi.Validators
 
             RuleFor(x => x.SelectedSpecialization)
                 .Cascade(CascadeMode.Stop)
-                .NotNull();
+                .NotNull().WithMessage("Please select specialization");
         }
     }
 }
