@@ -26,6 +26,7 @@ namespace WPFUi.ViewModels.UserVMs
         private readonly UserFormValidator _userFormValidator;
         private readonly IAccountService _accountService;
         private UserFormViewModel _userFormViewModel;
+        private string _searchText = string.Empty;
 
 
         #endregion
@@ -42,6 +43,18 @@ namespace WPFUi.ViewModels.UserVMs
             {
                 _isUserFormClosed = value;
                 OnPropertyChanged(nameof(IsUserFormClosed));
+            }
+        }
+
+
+        public string SearchText
+        {
+            get { return _searchText; }
+            set
+            {
+                _searchText = value;
+                OnPropertyChanged(nameof(SearchText));
+                UsersCollectionView.Refresh();
             }
         }
 
@@ -92,10 +105,17 @@ namespace WPFUi.ViewModels.UserVMs
             _users = new List<AccountViewModel>();
             UsersCollectionView = CollectionViewSource.GetDefaultView(_users);
             UsersCollectionView.SortDescriptions.Add(new SortDescription(nameof(AccountViewModel.LastName), ListSortDirection.Ascending));
+            UsersCollectionView.Filter = FilterUsers;
             LoadUsers();
         }
 
-       
+        private bool FilterUsers(object obj)
+        {
+            if(obj is AccountViewModel model)
+                return model.FullName.Contains(_searchText, StringComparison.InvariantCultureIgnoreCase);
+
+            return false;
+        }
 
         private void OpenEditUserForm(object obj)
         {

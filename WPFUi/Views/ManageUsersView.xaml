@@ -20,6 +20,7 @@
     <Grid Background="#f0f0f0">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
@@ -38,16 +39,66 @@
         </Grid>
 
         <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+            <!--  Search bar  -->
+
+            <!--  Separator  -->
+            <Grid
+                Grid.Row="1"
+                Margin="10,10,10,0"
+                Background="{StaticResource MainLinearGradient}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+                <!--  Search bar  -->
+                <TextBox
+                    Grid.Column="0"
+                    Width="350"
+                    Margin="15"
+                    Padding="8,0"
+                    HorizontalAlignment="Right"
+                    FontSize="25"
+                    IsEnabled="{Binding IsUserFormClosed}"
+                    Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}">
+                    <TextBox.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="8" />
+                        </Style>
+
+                    </TextBox.Resources>
+                </TextBox>
+                <Button
+                    Grid.Column="1"
+                    Width="80"
+                    Margin="5,5,15,5"
+                    Command="{Binding OpenNewUserFormCommand}"
+                    Content="New"
+                    Style="{StaticResource MenuBarButton}" />
+                <Button
+                    Grid.Column="2"
+                    Width="80"
+                    Command="{Binding OpenEditUserFormCommand}"
+                    Content="Edit"
+                    Style="{StaticResource MenuBarButton}" />
+            </Grid>
+        </Grid>
+
+
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <!--  Side bar  -->
-            <Grid Grid.Column="0" Width="230" />
+
 
             <!--  Main content  -->
-            <Grid Grid.Column="1">
+            <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="auto" />
@@ -60,6 +111,7 @@
                         Padding="8"
                         HorizontalAlignment="Center"
                         AutoGenerateColumns="False"
+                        BorderThickness="0,0,0,1"
                         CanUserAddRows="False"
                         CanUserDeleteRows="False"
                         CanUserResizeRows="False"
@@ -91,22 +143,7 @@
                     </DataGrid>
                 </Grid>
 
-                <!--  Separator  -->
-                <Grid Grid.Row="1" Background="{StaticResource MainLinearGradient}">
-                    <StackPanel Margin="5" Orientation="Horizontal">
-                        <Button
-                            Width="80"
-                            Margin="0,0,5,0"
-                            Command="{Binding OpenNewUserFormCommand}"
-                            Content="New"
-                            Style="{StaticResource MenuBarButton}" />
-                        <Button
-                            Width="80"
-                            Command="{Binding OpenEditUserFormCommand}"
-                            Content="Edit"
-                            Style="{StaticResource MenuBarButton}" />
-                    </StackPanel>
-                </Grid>
+
 
 
 

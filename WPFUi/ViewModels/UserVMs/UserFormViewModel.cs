@@ -18,6 +18,7 @@ namespace WPFUi.ViewModels.UserVMs
     {
         public event Action UserFormSubmited;
 
+
         // Validation
         #region Validation
         private readonly UserFormValidator _userFormValidator;
@@ -144,7 +145,6 @@ namespace WPFUi.ViewModels.UserVMs
             {
                 _confirmPassword = value;
                 OnPropertyChanged(nameof(ConfirmPassword));
-
             }
         }
 
