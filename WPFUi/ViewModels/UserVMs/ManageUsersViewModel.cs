@@ -21,8 +21,8 @@ namespace WPFUi.ViewModels.UserVMs
         // Private fields
         #region Private fields
         
-        private List<AccountViewModel> _users;
-        private AccountViewModel _selectedUser;
+        private List<AccountModel> _users;
+        private AccountModel _selectedUser;
         private readonly UserFormValidator _userFormValidator;
         private readonly IAccountService _accountService;
         private UserFormViewModel _userFormViewModel;
@@ -72,7 +72,7 @@ namespace WPFUi.ViewModels.UserVMs
 
         public ICollectionView UsersCollectionView { get; set; }
 
-        public AccountViewModel SelectedUser
+        public AccountModel SelectedUser
         {
             get { return _selectedUser; }
             set
@@ -102,16 +102,16 @@ namespace WPFUi.ViewModels.UserVMs
 
             OpenNewUserFormCommand = new RelayCommand(OpenNewUserForm, (obj) => _isUserFormClosed);
             OpenEditUserFormCommand = new RelayCommand(OpenEditUserForm, (obj) => _selectedUser != null && _isUserFormClosed);
-            _users = new List<AccountViewModel>();
+            _users = new List<AccountModel>();
             UsersCollectionView = CollectionViewSource.GetDefaultView(_users);
-            UsersCollectionView.SortDescriptions.Add(new SortDescription(nameof(AccountViewModel.LastName), ListSortDirection.Ascending));
+            UsersCollectionView.SortDescriptions.Add(new SortDescription(nameof(AccountModel.LastName), ListSortDirection.Ascending));
             UsersCollectionView.Filter = FilterUsers;
             LoadUsers();
         }
 
         private bool FilterUsers(object obj)
         {
-            if(obj is AccountViewModel model)
+            if(obj is AccountModel model)
                 return model.FullName.Contains(_searchText, StringComparison.InvariantCultureIgnoreCase);
 
             return false;
@@ -154,7 +154,7 @@ namespace WPFUi.ViewModels.UserVMs
                 {
                     foreach (var user in task.Result)
                     {
-                        _users.Add(new AccountViewModel(user));
+                        _users.Add(new AccountModel(user));
                     }
 
                     System.Windows.Application.Current.Dispatcher.Invoke(new Action(() => UsersCollectionView.Refresh()));

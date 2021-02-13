@@ -7,7 +7,7 @@ using WPFUi.ViewModels;
 
 namespace WPFUi.Models
 {
-    public class AccountViewModel : ObservableObject
+    public class AccountModel : ObservableObject
     {
         public readonly Account account;
         public int Id => account.Id;
@@ -39,7 +39,9 @@ namespace WPFUi.Models
             }
         }
 
-        public AccountViewModel(Account account)
+        public string FullName => $"{ LastName } { FirstName }";
+
+        public AccountModel(Account account)
         {
             this.account = account;
         }

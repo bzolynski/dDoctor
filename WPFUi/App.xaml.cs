@@ -77,7 +77,6 @@ namespace WPFUi
                             services.GetRequiredService<IReservationService>(),
                             services.GetRequiredService<RenavigatorViewModelFactory<HomeViewModel>>(),
                             services.GetRequiredService<IScheduleService>(),
-                            services.GetRequiredService<IMapper>(),
                             services.GetRequiredService<IPatientService>(),
                             services.GetRequiredService<ISpecializationService>(),
                             services.GetRequiredService<IDoctorService>()));
@@ -85,7 +84,6 @@ namespace WPFUi
                     services.AddScoped<IViewModelFactory<ManageSchedulesViewModel>>(services => new ManageSchedulesViewModelFactory(
                         services.GetRequiredService<IDoctorService>(),
                         services.GetRequiredService<IScheduleService>(),
-                        services.GetRequiredService<IMapper>(),
                         services.GetRequiredService<RenavigatorViewModelFactory<GenerateScheduleViewModel>>()));
 
                     services.AddScoped<IViewModelFactory<GenerateScheduleViewModel>>(services => new GenerateScheduleViewModelFactory(
@@ -98,7 +96,6 @@ namespace WPFUi
 
                     services.AddScoped<IViewModelFactory<ManageUsersViewModel>, ManageUsersViewModelFactory>();
 
-                    services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
                     // States
                     services.AddSingleton<INavigator, Navigator>();

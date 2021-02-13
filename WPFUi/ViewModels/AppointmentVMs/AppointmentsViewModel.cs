@@ -29,13 +29,13 @@ namespace WPFUi.ViewModels.AppointmentVMs
         #region Private fields
 
         private DateTime _selectedDate;
-        private AppointmentViewReservationModel _selectedReservation;
+        private ReservationModel _selectedReservation;
         private ReservationDetailsViewModel _reservationDetails;
+        private Doctor _selectedDoctor;
 
         private readonly IReservationService _reservationService;
         private readonly IRenavigator _homeRenavigator;
         private readonly IScheduleService _scheduleService;
-        private readonly IMapper _mapper;
         private readonly IPatientService _patientService;
         private readonly ISpecializationService _specializationService;
         private readonly IDoctorService _doctorService;
@@ -46,7 +46,7 @@ namespace WPFUi.ViewModels.AppointmentVMs
         // Bindings
         #region Bindings
 
-        public ObservableCollection<AppointmentViewScheduleModel> AppointmentViewSchedulesDisplay { get; set; }
+        public ObservableCollection<ScheduleModel> ScheduleViewModels { get; set; }
         public ObservableCollection<Doctor> Doctors { get; set; }
         public ObservableCollection<Specialization> Specializations { get; set; }
         public IEnumerable<DateTime> CanceledDates { get; set; }
@@ -63,7 +63,6 @@ namespace WPFUi.ViewModels.AppointmentVMs
             }
         }
 
-        private Doctor _selectedDoctor;
 
         public Doctor SelectedDoctor
         {
@@ -103,7 +102,7 @@ namespace WPFUi.ViewModels.AppointmentVMs
         }
         public DateTime Today => DateTime.Today;
 
-        public AppointmentViewReservationModel SelectedReservation
+        public ReservationModel SelectedReservation
         {
             get { return _selectedReservation; }
             set
@@ -112,7 +111,6 @@ namespace WPFUi.ViewModels.AppointmentVMs
                 OnPropertyChanged(nameof(SelectedReservation));
             }
         }
-
 
         #endregion
 
@@ -138,7 +136,6 @@ namespace WPFUi.ViewModels.AppointmentVMs
             IReservationService reservationService,
             IRenavigator homeRenavigator,
             IScheduleService scheduleService,
-            IMapper mapper,
             IPatientService patientService,
             ISpecializationService specializationService,
             IDoctorService doctorService)
@@ -146,7 +143,6 @@ namespace WPFUi.ViewModels.AppointmentVMs
             _reservationService = reservationService;
             _homeRenavigator = homeRenavigator;
             _scheduleService = scheduleService;
-            _mapper = mapper;
             _patientService = patientService;
             _specializationService = specializationService;
             _doctorService = doctorService;
@@ -172,9 +168,8 @@ namespace WPFUi.ViewModels.AppointmentVMs
 
         private async Task UnregisterPatient(object arg)
         {
-            // TODO: Do this without mapping
-            if(SelectedReservation != null)
-                await _reservationService.CancelAppointment(_mapper.Map<Reservation>(_selectedReservation));
+            if (SelectedReservation != null)
+                await _reservationService.CancelAppointment(_selectedReservation.reservation);
 
             LoadSchedules();
         }
@@ -194,9 +189,7 @@ namespace WPFUi.ViewModels.AppointmentVMs
 
                 ReservationDetails.DetailsClosed += ReservationDetails_DetailsClosed;
                 ReservationDetails.ReservationSubmitted += ReservationDetails_ReservationSubmitted;
-
             }
-
         }
 
         private void ReservationDetails_ReservationSubmitted()
@@ -212,7 +205,7 @@ namespace WPFUi.ViewModels.AppointmentVMs
 
         private void SelectReservation(object obj)
         {
-            if (obj is AppointmentViewReservationModel reservation)
+            if (obj is ReservationModel reservation)
             {
                 SelectedReservation = reservation;
             }
@@ -248,10 +241,13 @@ namespace WPFUi.ViewModels.AppointmentVMs
             {
                 if (task.Exception == null)
                 {
-                    AppointmentViewSchedulesDisplay = new ObservableCollection<AppointmentViewScheduleModel>(
-                        _mapper.Map<ObservableCollection<AppointmentViewScheduleModel>>(task.Result));
 
-                    OnPropertyChanged(nameof(AppointmentViewSchedulesDisplay));
+                    ScheduleViewModels = new ObservableCollection<ScheduleModel>();
+
+                    foreach (var schedule in task.Result)
+                        ScheduleViewModels.Add(new ScheduleModel(schedule));
+                    
+                    OnPropertyChanged(nameof(ScheduleViewModels));
                     LoadAvaliebleDates();
                 }
             });
@@ -263,7 +259,7 @@ namespace WPFUi.ViewModels.AppointmentVMs
             {
                 if (task.Exception == null)
                 {
-                    // TODO: Find better solution
+                    // TODO: Find better solution !!!!!!!!!!!!!!
 
                     if(SelectedDoctor != null && SelectedSpecialization != null)
                     {

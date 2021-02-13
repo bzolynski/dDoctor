@@ -1,7 +1,6 @@
 ﻿using Application.Services;
 using Application.Services.DoctorServices;
 using Application.Services.ScheduleServices;
-using AutoMapper;
 using Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -19,8 +18,6 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
 {
     public class ManageSchedulesViewModel : ViewModelBase
     {
-
-
         // Private fields
         #region Private fields
 
@@ -28,14 +25,12 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
         private string _searchText = string.Empty;
         private DateTime _dateFrom;
         private DateTime _dateTo;
-        private List<ManageScheduleDoctorModel> _doctors;
-        private ManageScheduleDoctorModel _selectedDoctor;
+        private List<DoctorModel> _doctors;
+        private DoctorModel _selectedDoctor;
         private Schedule _selectedSchedule;
-
 
         private readonly IDoctorService _doctorService;
         private readonly IScheduleService _scheduleService;
-        private readonly IMapper _mapper;
         private readonly IRenavigator _generateScheduleRenavigator;
 
         #endregion
@@ -45,7 +40,6 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
 
         public ICollectionView DoctorsCollectionView { get; set; }
         public ICollectionView SchedulesCollectionView { get; set; }
-
 
         public Schedule SelectedSchedule
         {
@@ -57,8 +51,7 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
             }
         }
 
-
-        public ManageScheduleDoctorModel SelectedDoctor
+        public DoctorModel SelectedDoctor
         {
             get { return _selectedDoctor; }
             set
@@ -102,8 +95,6 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
                     LoadSchedule();
             }
         }
-
-
         #endregion
 
         // Commands
@@ -116,16 +107,17 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
 
         // Constructors
         #region Constructors
-        public ManageSchedulesViewModel(IDoctorService doctorService, IScheduleService scheduleService, IMapper mapper, IRenavigator generateScheduleRenavigator)
+        public ManageSchedulesViewModel(IDoctorService doctorService,
+            IScheduleService scheduleService, 
+            IRenavigator generateScheduleRenavigator)
         {
             _doctorService = doctorService;
             _scheduleService = scheduleService;
-            _mapper = mapper;
             _generateScheduleRenavigator = generateScheduleRenavigator;
-            _doctors = new List<ManageScheduleDoctorModel>();
+            _doctors = new List<DoctorModel>();
             DoctorsCollectionView = CollectionViewSource.GetDefaultView(_doctors);
             DoctorsCollectionView.Filter = DoctorsFilter;
-            DoctorsCollectionView.SortDescriptions.Add(new SortDescription(nameof(ManageScheduleDoctorModel.LastName), ListSortDirection.Ascending));
+            DoctorsCollectionView.SortDescriptions.Add(new SortDescription(nameof(DoctorModel.LastName), ListSortDirection.Ascending));
 
             _schedules = new List<Schedule>();
             SchedulesCollectionView = CollectionViewSource.GetDefaultView(_schedules);
@@ -157,7 +149,7 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
                 if (task.Exception == null)
                 {
                     foreach (var doctor in task.Result)
-                        _doctors.Add(_mapper.Map<ManageScheduleDoctorModel>(doctor));
+                        _doctors.Add(new DoctorModel(doctor));
 
                     System.Windows.Application.Current.Dispatcher.Invoke(new Action(() => DoctorsCollectionView.Refresh()));
                     
@@ -210,7 +202,7 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
 
         private bool DoctorsFilter(object obj)
         {
-            if (obj is ManageScheduleDoctorModel doctor)
+            if (obj is DoctorModel doctor)
                 return doctor.FullName.Contains(_searchText, StringComparison.InvariantCultureIgnoreCase) || doctor.NPWZ.Contains(_searchText, StringComparison.InvariantCultureIgnoreCase);
 
             return false;

@@ -26,7 +26,6 @@ namespace WPFUi.ViewModels.UserVMs
 
         public string Error => null;
 
-        public Dictionary<string, string> ErrorCollection { get; set; } = new Dictionary<string, string>();
 
         private bool _canSubmit;
 
@@ -34,21 +33,11 @@ namespace WPFUi.ViewModels.UserVMs
         {
             get
             {
-
                 var errorList = _userFormValidator.Validate(this).Errors;
 
                 _canSubmit = errorList.Count > 0 ? false : true;
 
                 var error = errorList.FirstOrDefault(e => e.PropertyName == propertyName);
-
-                if (ErrorCollection.ContainsKey(propertyName) && error != null)
-                    ErrorCollection[propertyName] = error.ErrorMessage;
-                else if (error != null)
-                    ErrorCollection.Add(propertyName, error.ErrorMessage);
-                else
-                    ErrorCollection.Remove(propertyName);
-
-                OnPropertyChanged(nameof(ErrorCollection));
 
                 return error != null ? error.ErrorMessage : null;
             }
@@ -69,9 +58,9 @@ namespace WPFUi.ViewModels.UserVMs
         private string _email;
         private string _confirmPassword;
         private RegistrationResult _registrationResult;
-        private readonly List<AccountViewModel> _users;
+        private readonly List<AccountModel> _users;
         private readonly IAccountService _accountService;
-        private readonly AccountViewModel _selectedUser;
+        private readonly AccountModel _selectedUser;
         #endregion
 
         // Properties
@@ -212,7 +201,7 @@ namespace WPFUi.ViewModels.UserVMs
         #region Constructors
 
         // For new
-        public UserFormViewModel(IAccountService accountService, UserFormValidator userFormValidator, List<AccountViewModel> users) 
+        public UserFormViewModel(IAccountService accountService, UserFormValidator userFormValidator, List<AccountModel> users) 
         {
             _userFormValidator = userFormValidator;
             _users = users;
@@ -223,7 +212,7 @@ namespace WPFUi.ViewModels.UserVMs
         }
 
         // For edit
-        public UserFormViewModel(IAccountService accountService, UserFormValidator userFormValidator, List<AccountViewModel> users, AccountViewModel selectedUser) : this(accountService, userFormValidator, users)
+        public UserFormViewModel(IAccountService accountService, UserFormValidator userFormValidator, List<AccountModel> users, AccountModel selectedUser) : this(accountService, userFormValidator, users)
         {
             _selectedUser = selectedUser;
 
@@ -251,7 +240,7 @@ namespace WPFUi.ViewModels.UserVMs
             if (user != null && RegistrationResult == RegistrationResult.Success)
             {
                 _users.Remove(_selectedUser);
-                _users.Add(new AccountViewModel(user));
+                _users.Add(new AccountModel(user));
                 CloseUserForm();
             }
         }
@@ -264,7 +253,7 @@ namespace WPFUi.ViewModels.UserVMs
 
             if (user != null && RegistrationResult == RegistrationResult.Success)
             {
-                _users.Add(new AccountViewModel(user));
+                _users.Add(new AccountModel(user));
                 CloseUserForm();
             }
 

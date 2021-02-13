@@ -16,7 +16,6 @@ namespace WPFUi.Factories.ViewModelFactories
         private readonly IReservationService _reservationService;
         private readonly IRenavigator _homeRenavigator;
         private readonly IScheduleService _scheduleService;
-        private readonly IMapper _mapper;
         private readonly IPatientService _patientService;
         private readonly ISpecializationService _specializationService;
         private readonly IDoctorService _doctorService;
@@ -25,7 +24,6 @@ namespace WPFUi.Factories.ViewModelFactories
             IReservationService reservationService,
             IRenavigator homeRenavigator,
             IScheduleService scheduleService,
-            IMapper mapper,
             IPatientService patientService,
             ISpecializationService specializationService,
             IDoctorService doctorService)
@@ -33,7 +31,6 @@ namespace WPFUi.Factories.ViewModelFactories
             _reservationService = reservationService;
             _homeRenavigator = homeRenavigator;
             _scheduleService = scheduleService;
-            _mapper = mapper;
             _patientService = patientService;
             _specializationService = specializationService;
             _doctorService = doctorService;
@@ -44,7 +41,6 @@ namespace WPFUi.Factories.ViewModelFactories
                 _reservationService,
                 _homeRenavigator,
                 _scheduleService,
-                _mapper,
                 _patientService,
                 _specializationService,
                 _doctorService
