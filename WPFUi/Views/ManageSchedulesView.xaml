@@ -10,190 +10,214 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
     <Grid Background="#f0f0f0">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.Resources>
+                <Style TargetType="Grid">
+                    <Setter Property="Visibility" Value="Visible" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsGenerateScheduleViewVisible}" Value="True">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Resources>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
-        <Grid
-            Grid.Row="0"
-            Grid.ColumnSpan="2"
-            Height="70"
-            Background="{StaticResource MainDarkGreenSolidColorBrush}">
-            <TextBlock
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                FontSize="35"
-                FontWeight="Bold"
-                Foreground="#f0f0f0"
-                Text="Manage schedule" />
-        </Grid>
+            <Grid
+                Grid.Row="0"
+                Grid.ColumnSpan="2"
+                Height="70"
+                Background="{StaticResource MainDarkGreenSolidColorBrush}">
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontSize="35"
+                    FontWeight="Bold"
+                    Foreground="#f0f0f0"
+                    Text="Manage schedule" />
+            </Grid>
 
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="230" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <!--  Side panel  -->
-            <Grid Grid.Column="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-
-                <!--  Doctor search  -->
-                <Grid Grid.Row="0">
-                    <StackPanel Orientation="Vertical">
-
-                        <TextBlock Text="Search" />
-                        <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
-
-                    </StackPanel>
-                </Grid>
-
-                <!--  Advanced search  -->
-                <Grid Grid.Row="1">
-                    <StackPanel Orientation="Vertical">
-
-                        <!--  Date from-to  -->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="230" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <!--  Side panel  -->
+                <Grid Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <!--  Doctor search  -->
+                    <Grid Grid.Row="0">
                         <StackPanel Orientation="Vertical">
-                            <TextBlock Text="Date from-to" />
-                            <StackPanel Orientation="Horizontal">
-                                <DatePicker SelectedDate="{Binding DateFrom}" />
-                                <DatePicker SelectedDate="{Binding DateTo}" />
+
+                            <TextBlock Text="Search" />
+                            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+
+                        </StackPanel>
+                    </Grid>
+
+                    <!--  Advanced search  -->
+                    <Grid Grid.Row="1">
+                        <StackPanel Orientation="Vertical">
+
+                            <!--  Date from-to  -->
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="Date from-to" />
+                                <StackPanel Orientation="Horizontal">
+                                    <DatePicker SelectedDate="{Binding DateFrom}" />
+                                    <DatePicker SelectedDate="{Binding DateTo}" />
+                                </StackPanel>
                             </StackPanel>
+
                         </StackPanel>
 
-                    </StackPanel>
-
+                    </Grid>
                 </Grid>
-            </Grid>
 
-            <!--  Main content  -->
-            <Grid Grid.Column="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-
-                <!--  Doctor list  -->
-                <Grid Grid.Row="0">
+                <!--  Main content  -->
+                <Grid Grid.Column="1">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <StackPanel Grid.Row="0" Orientation="Horizontal">
-                        <Button
-                            Command="{Binding GenerateNewScheduleCommand}"
-                            Content="Generate"
-                            Style="{StaticResource MenuBarButton}" />
-                    </StackPanel>
+                    <!--  Doctor list  -->
+                    <Grid Grid.Row="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
 
-                    <DataGrid
-                        Grid.Row="1"
-                        Padding="8"
-                        HorizontalAlignment="Center"
-                        AutoGenerateColumns="False"
-                        CanUserAddRows="False"
-                        CanUserDeleteRows="False"
-                        CanUserResizeRows="False"
-                        IsReadOnly="True"
-                        ItemsSource="{Binding DoctorsCollectionView}"
-                        RowHeaderWidth="15"
-                        SelectedItem="{Binding SelectedDoctor, Mode=OneWayToSource}"
-                        SelectionMode="Single">
+                        <StackPanel Grid.Row="0" Orientation="Horizontal">
+                            <Button
+                                Command="{Binding GenerateNewScheduleCommand}"
+                                Content="Generate"
+                                Style="{StaticResource MenuBarButton}" />
+                        </StackPanel>
 
-                        <DataGrid.Columns>
-                            <DataGridTextColumn
-                                Width="*"
-                                Binding="{Binding Path=FullName}"
-                                Header="Name" />
-                            <DataGridTextColumn
-                                Width="100"
-                                Binding="{Binding Path=NPWZ}"
-                                Header="NPWZ" />
-                            <DataGridTextColumn
-                                Width="100"
-                                Binding="{Binding Path=DateFrom, StringFormat={}dd-MM-yyyy}"
-                                Header="Date from" />
-                            <DataGridTextColumn
-                                Width="100"
-                                Binding="{Binding Path=DateTo, StringFormat={}dd-MM-yyyy}"
-                                Header="Date to" />
-                        </DataGrid.Columns>
-                    </DataGrid>
+                        <DataGrid
+                            Grid.Row="1"
+                            Padding="8"
+                            HorizontalAlignment="Center"
+                            AutoGenerateColumns="False"
+                            CanUserAddRows="False"
+                            CanUserDeleteRows="False"
+                            CanUserResizeRows="False"
+                            IsReadOnly="True"
+                            ItemsSource="{Binding DoctorsCollectionView}"
+                            RowHeaderWidth="15"
+                            SelectedItem="{Binding SelectedDoctor, Mode=OneWayToSource}"
+                            SelectionMode="Single">
+
+                            <DataGrid.Columns>
+                                <DataGridTextColumn
+                                    Width="*"
+                                    Binding="{Binding Path=FullName}"
+                                    Header="Name" />
+                                <DataGridTextColumn
+                                    Width="100"
+                                    Binding="{Binding Path=NPWZ}"
+                                    Header="NPWZ" />
+                                <DataGridTextColumn
+                                    Width="100"
+                                    Binding="{Binding Path=DateFrom, StringFormat={}dd-MM-yyyy}"
+                                    Header="Date from" />
+                                <DataGridTextColumn
+                                    Width="100"
+                                    Binding="{Binding Path=DateTo, StringFormat={}dd-MM-yyyy}"
+                                    Header="Date to" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+
+                    <!--  Edit schedule day  -->
+                    <Grid Grid.Row="1" />
+
+
+                    <!--  Schedule details  -->
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+
+                        <DataGrid
+                            Grid.Row="0"
+                            Padding="8"
+                            HorizontalAlignment="Center"
+                            AutoGenerateColumns="False"
+                            CanUserAddRows="False"
+                            CanUserDeleteRows="False"
+                            CanUserResizeRows="False"
+                            IsReadOnly="True"
+                            ItemsSource="{Binding SchedulesCollectionView}"
+                            RowHeaderWidth="15"
+                            SelectedItem="{Binding SelectedSchedule, Mode=OneWayToSource}"
+                            SelectionMode="Single">
+
+                            <DataGrid.Columns>
+                                <DataGridTextColumn
+                                    Width="120"
+                                    Binding="{Binding Path=Date, StringFormat={}dd-MM-yyyy}"
+                                    Header="Date" />
+                                <DataGridTextColumn
+                                    Width="70"
+                                    Binding="{Binding Path=StartHour, StringFormat={}hh\\:mm}"
+                                    Header="Start hour" />
+                                <DataGridTextColumn
+                                    Width="70"
+                                    Binding="{Binding Path=EndHour, StringFormat={}hh\\:mm}"
+                                    Header="End hour" />
+                                <DataGridTextColumn
+                                    Width="*"
+                                    Binding="{Binding Specialization.Name}"
+                                    Header="Specialization" />
+
+                                <DataGridTextColumn Width="*" Header="Doctor">
+                                    <DataGridTextColumn.Binding>
+                                        <MultiBinding StringFormat="{}{0} {1}">
+                                            <Binding Path="Doctor.LastName" />
+                                            <Binding Path="Doctor.FirstName" />
+                                        </MultiBinding>
+                                    </DataGridTextColumn.Binding>
+                                </DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <StackPanel Grid.Row="1" Orientation="Horizontal">
+                            <Button
+                                Command="{Binding EditSelectedScheduleDayCommand}"
+                                Content="Edit"
+                                Style="{StaticResource MenuBarButton}" />
+                            <Button
+                                Command="{Binding DeleteSelectedScheduleDayCommand}"
+                                Content="Delete"
+                                Style="{StaticResource MenuBarButton}" />
+
+                        </StackPanel>
+                    </Grid>
                 </Grid>
 
-                <!--  Edit schedule day  -->
-                <Grid Grid.Row="1" />
-
-
-                <!--  Schedule details  -->
-                <Grid Grid.Row="1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="auto" />
-                    </Grid.RowDefinitions>
-
-                    <DataGrid
-                        Grid.Row="0"
-                        Padding="8"
-                        HorizontalAlignment="Center"
-                        AutoGenerateColumns="False"
-                        CanUserAddRows="False"
-                        CanUserDeleteRows="False"
-                        CanUserResizeRows="False"
-                        IsReadOnly="True"
-                        ItemsSource="{Binding SchedulesCollectionView}"
-                        RowHeaderWidth="15"
-                        SelectedItem="{Binding SelectedSchedule, Mode=OneWayToSource}"
-                        SelectionMode="Single">
-
-                        <DataGrid.Columns>
-                            <DataGridTextColumn
-                                Width="120"
-                                Binding="{Binding Path=Date, StringFormat={}dd-MM-yyyy}"
-                                Header="Date" />
-                            <DataGridTextColumn
-                                Width="70"
-                                Binding="{Binding Path=StartHour, StringFormat={}hh\\:mm}"
-                                Header="Start hour" />
-                            <DataGridTextColumn
-                                Width="70"
-                                Binding="{Binding Path=EndHour, StringFormat={}hh\\:mm}"
-                                Header="End hour" />
-                            <DataGridTextColumn
-                                Width="*"
-                                Binding="{Binding Specialization.Name}"
-                                Header="Specialization" />
-
-                            <DataGridTextColumn Width="*" Header="Doctor">
-                                <DataGridTextColumn.Binding>
-                                    <MultiBinding StringFormat="{}{0} {1}">
-                                        <Binding Path="Doctor.LastName" />
-                                        <Binding Path="Doctor.FirstName" />
-                                    </MultiBinding>
-                                </DataGridTextColumn.Binding>
-                            </DataGridTextColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
-
-                    <StackPanel Grid.Row="1" Orientation="Horizontal">
-                        <Button
-                            Command="{Binding EditSelectedScheduleDayCommand}"
-                            Content="Edit"
-                            Style="{StaticResource MenuBarButton}" />
-                        <Button
-                            Command="{Binding DeleteSelectedScheduleDayCommand}"
-                            Content="Delete"
-                            Style="{StaticResource MenuBarButton}" />
-
-                    </StackPanel>
-                </Grid>
             </Grid>
-
         </Grid>
+
+        <ContentControl Content="{Binding GenerateScheduleViewModel}">
+            <ContentControl.Resources>
+                <Style TargetType="ContentControl">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsGenerateScheduleViewVisible}" Value="True">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Resources>
+        </ContentControl>
 
     </Grid>
 </UserControl>

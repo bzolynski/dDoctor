@@ -56,46 +56,19 @@ namespace WPFUi
 
                     services.AddSingleton<ShellView>();
                     services.AddSingleton<ShellViewModel>();
-                    services.AddSingleton<HomeView>();
                     services.AddSingleton<HomeViewModel>();
-                    services.AddSingleton<PatientsView>();
                     services.AddSingleton<PatientsViewModel>();
                     services.AddSingleton<PatientPickerViewModel>();
-
-                    services.AddSingleton<RenavigatorViewModelFactory<GenerateScheduleViewModel>>();
-                    services.AddSingleton<RenavigatorViewModelFactory<ManageSchedulesViewModel>>();
-                    services.AddSingleton<RenavigatorViewModelFactory<PatientsViewModel>>();
-                    services.AddSingleton<RenavigatorViewModelFactory<HomeViewModel>>();
-                    services.AddSingleton<RenavigatorViewModelFactory<AppointmentsViewModel>>();
+                    services.AddSingleton<GenerateScheduleViewModel>();
+                    services.AddSingleton<SpecializationFormViewModel>();
 
                     services.AddScoped<IRootViewModelFactory, RootViewModelFactory>();
+                    services.AddScoped<IViewModelFactory<GenerateScheduleViewModel>, GenerateScheduleViewModelFactory>();
+                    services.AddScoped<IViewModelFactory<ManageSchedulesViewModel>, ManageSchedulesViewModelFactory>();
+                    services.AddScoped<IViewModelFactory<AppointmentsViewModel>, AppointmentsViewModelFactory>();
                     services.AddScoped<IViewModelFactory<HomeViewModel>, HomeViewModelFactory>();
-                    services.AddScoped<IViewModelFactory<PatientsViewModel>, PatientsViewModelFactory>();
-                    services.AddScoped<SpecializationFormViewModel>();
-
-                    services.AddScoped<IViewModelFactory<AppointmentsViewModel>>(services => new AppointmentsViewModelFactory(
-                            services.GetRequiredService<IReservationService>(),
-                            services.GetRequiredService<RenavigatorViewModelFactory<HomeViewModel>>(),
-                            services.GetRequiredService<IScheduleService>(),
-                            services.GetRequiredService<IPatientService>(),
-                            services.GetRequiredService<ISpecializationService>(),
-                            services.GetRequiredService<IDoctorService>()));
-
-                    services.AddScoped<IViewModelFactory<ManageSchedulesViewModel>>(services => new ManageSchedulesViewModelFactory(
-                        services.GetRequiredService<IDoctorService>(),
-                        services.GetRequiredService<IScheduleService>(),
-                        services.GetRequiredService<RenavigatorViewModelFactory<GenerateScheduleViewModel>>()));
-
-                    services.AddScoped<IViewModelFactory<GenerateScheduleViewModel>>(services => new GenerateScheduleViewModelFactory(
-                        services.GetRequiredService<IScheduleService>(),
-                        services.GetRequiredService<IDoctorService>(),
-                        services.GetRequiredService<ISpecializationService>(),
-                        services.GetRequiredService<RenavigatorViewModelFactory<HomeViewModel>>(),
-                        services.GetRequiredService<SpecializationFormValidator>(),
-                        services.GetRequiredService<GenerateScheduleValidator>()));
-
                     services.AddScoped<IViewModelFactory<ManageUsersViewModel>, ManageUsersViewModelFactory>();
-
+                    services.AddScoped<IViewModelFactory<PatientsViewModel>, PatientsViewModelFactory>();
 
                     // States
                     services.AddSingleton<INavigator, Navigator>();

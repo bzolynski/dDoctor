@@ -13,7 +13,6 @@ namespace WPFUi.Factories.ViewModelFactories
         private readonly IScheduleService _scheduleService;
         private readonly IDoctorService _doctorService;
         private readonly ISpecializationService _specializationService;
-        private readonly IRenavigator _manageSchedulesRenavigator;
         private readonly SpecializationFormValidator _specializationFormValidator;
         private readonly GenerateScheduleValidator _generateScheduleValidator;
 
@@ -21,14 +20,12 @@ namespace WPFUi.Factories.ViewModelFactories
             IScheduleService scheduleService, 
             IDoctorService doctorService, 
             ISpecializationService specializationService, 
-            IRenavigator manageSchedulesRenavigator,
             SpecializationFormValidator specializationFormValidator,
             GenerateScheduleValidator generateScheduleValidator)
         {
             _scheduleService = scheduleService;
             _doctorService = doctorService;
             _specializationService = specializationService;
-            _manageSchedulesRenavigator = manageSchedulesRenavigator;
             _specializationFormValidator = specializationFormValidator;
             _generateScheduleValidator = generateScheduleValidator;
         }
@@ -38,7 +35,6 @@ namespace WPFUi.Factories.ViewModelFactories
                 _scheduleService, 
                 _doctorService,
                 _specializationService, 
-                _manageSchedulesRenavigator,
                 _specializationFormValidator,
                 _generateScheduleValidator);
         }

@@ -46,7 +46,6 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
 
         private readonly IScheduleService _scheduleService;
         private readonly ISpecializationService _specializationService;
-        private readonly IRenavigator _manageSchedulesRenavigator;
         private readonly GenerateScheduleValidator _generateScheduleValidator;
 
         private bool _isSpecializationFormVisible = false;
@@ -79,8 +78,6 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
         public SpecializationFormViewModel SpecializationFormViewModel { get; set; }
 
         public List<DayOfWeek> SelectedDaysOfWeek { get; set; }
-
-        
 
         public string MaxTimePerPatient
         {
@@ -155,6 +152,7 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
         // Commands
         #region Commands
 
+        public event Action FormSubmited;
         public ICommand SelectDaysOfWeekCommand { get; set; }
         public ICommand GenerateScheduleCommand { get; set; }
         public ICommand CancelCommand { get; set; }
@@ -167,24 +165,23 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
             IScheduleService scheduleService,
             IDoctorService doctorService,
             ISpecializationService specializationService,
-            IRenavigator manageSchedulesRenavigator,
             SpecializationFormValidator specializationFormValidator,
             GenerateScheduleValidator generateScheduleValidator)
         {
             _scheduleService = scheduleService;
             _specializationService = specializationService;
-            _manageSchedulesRenavigator = manageSchedulesRenavigator;
             _generateScheduleValidator = generateScheduleValidator;
 
             if (SelectedDaysOfWeek == null)
                 SelectedDaysOfWeek = new List<DayOfWeek>();
 
+            SetDefaultPropertyValues();
 
             DoctorPicker = new DoctorPickerViewModel(doctorService);
             SpecializationFormViewModel = new SpecializationFormViewModel(specializationService, specializationFormValidator);
 
             SelectDaysOfWeekCommand = new RelayCommand(SelectDaysOfWeek);
-            CancelCommand = new RelayCommand((obj) => _manageSchedulesRenavigator.Renavigate());
+            CancelCommand = new RelayCommand(CloseForm);
             GenerateScheduleCommand = new AsyncRelayCommand(GenerateSchedule, (obj) => _canSubmit, (ex) => throw ex);
             ShowSpecializationFormCommand = new RelayCommand((obj) => IsSpecializationFormVisible = true, (obj) => !IsSpecializationFormVisible);
 
@@ -197,6 +194,8 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
 
             LoadSpecializations();
         }
+
+        
 
 
 
@@ -217,10 +216,18 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
             });
         }
 
+        private void CloseForm(object obj)
+        {
+            SetDefaultPropertyValues();
+            FormSubmited?.Invoke();
+        }
+
         private async Task GenerateSchedule(object arg)
         {
             if (_maxTimePerPatient != null)
                 await _scheduleService.GenerateSchedules(SelectedDoctor.Id, _selectedSpecialization.Id, _startTime, _endTime, _maxTimePerPatient, _startDate, _endDate, SelectedDaysOfWeek.ToList());
+            SetDefaultPropertyValues();
+            FormSubmited?.Invoke();
         }
 
         /// <summary>
@@ -247,7 +254,19 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
             IsSpecializationFormVisible = false;
         }
 
+        // TODO: Do smth with this
+        private void SetDefaultPropertyValues()
+        {
+            _maxTimePerPatient = new TimeSpan(0, 15, 0);
+            OnPropertyChanged(nameof(MaxTimePerPatient));
+            StartDate = DateTime.Today;
+            EndDate = DateTime.Today.AddDays(1);
+            SelectedSpecialization = null;
 
+            if (DoctorPicker != null)
+                DoctorPicker.SelectedDoctor = null;
+            
+    }
         #endregion
 
     }

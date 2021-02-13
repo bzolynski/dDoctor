@@ -110,7 +110,7 @@
                         <Separator />
 
                         <!--  Logout  -->
-                        <MenuItem>
+                        <MenuItem IsEnabled="False" Opacity="0.5">
                             <MenuItem.Header>
                                 <StackPanel Orientation="Vertical">
                                     <Image Height="50" Source="/WPFUi;component/Assets/Icons/012-car-key.png" />

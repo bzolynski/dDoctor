@@ -28,18 +28,30 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
         private List<DoctorModel> _doctors;
         private DoctorModel _selectedDoctor;
         private Schedule _selectedSchedule;
+        private bool _isGenerateScheduleViewVisible = false;
 
         private readonly IDoctorService _doctorService;
         private readonly IScheduleService _scheduleService;
-        private readonly IRenavigator _generateScheduleRenavigator;
-
         #endregion
 
         // Bindings
         #region Bindings
 
+        public GenerateScheduleViewModel GenerateScheduleViewModel { get; set; }
         public ICollectionView DoctorsCollectionView { get; set; }
         public ICollectionView SchedulesCollectionView { get; set; }
+
+
+        public bool IsGenerateScheduleViewVisible
+        {
+            get { return _isGenerateScheduleViewVisible; }
+            set
+            {
+                _isGenerateScheduleViewVisible = value;
+                OnPropertyChanged(nameof(IsGenerateScheduleViewVisible));
+            }
+        }
+
 
         public Schedule SelectedSchedule
         {
@@ -107,13 +119,15 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
 
         // Constructors
         #region Constructors
-        public ManageSchedulesViewModel(IDoctorService doctorService,
-            IScheduleService scheduleService, 
-            IRenavigator generateScheduleRenavigator)
+        public ManageSchedulesViewModel(
+            IDoctorService doctorService,
+            IScheduleService scheduleService,
+            GenerateScheduleViewModel generateScheduleViewModel)
         {
             _doctorService = doctorService;
             _scheduleService = scheduleService;
-            _generateScheduleRenavigator = generateScheduleRenavigator;
+            GenerateScheduleViewModel = generateScheduleViewModel;
+
             _doctors = new List<DoctorModel>();
             DoctorsCollectionView = CollectionViewSource.GetDefaultView(_doctors);
             DoctorsCollectionView.Filter = DoctorsFilter;
@@ -124,6 +138,7 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
             EditSelectedScheduleDayCommand = new AsyncRelayCommand(EditSelectedScheduleDay, CanEditSelectedScheduleDay, (ex) => throw ex);
             DeleteSelectedScheduleDayCommand = new AsyncRelayCommand(DeleteSelectedScheduleDay, CanDeleteSelectedScheduleDay, (ex) => throw ex);
             GenerateNewScheduleCommand = new RelayCommand(GenerateNewSchedule);
+            GenerateScheduleViewModel.FormSubmited += GenerateScheduleViewModel_FormSubmited;
 
             LoadDoctors();
 
@@ -131,7 +146,12 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
             DateTo = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month));
         }
 
-        
+        private void GenerateScheduleViewModel_FormSubmited()
+        {
+            IsGenerateScheduleViewVisible = false;
+        }
+
+
 
 
 
@@ -208,10 +228,9 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
             return false;
         }
                
-
         private void GenerateNewSchedule(object obj)
         {
-            _generateScheduleRenavigator.Renavigate();
+            IsGenerateScheduleViewVisible = true;
         }
         #endregion
 

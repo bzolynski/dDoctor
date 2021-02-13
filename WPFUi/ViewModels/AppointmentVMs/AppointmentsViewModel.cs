@@ -34,7 +34,6 @@ namespace WPFUi.ViewModels.AppointmentVMs
         private Doctor _selectedDoctor;
 
         private readonly IReservationService _reservationService;
-        private readonly IRenavigator _homeRenavigator;
         private readonly IScheduleService _scheduleService;
         private readonly IPatientService _patientService;
         private readonly ISpecializationService _specializationService;
@@ -123,7 +122,6 @@ namespace WPFUi.ViewModels.AppointmentVMs
         public ICommand SelectReservationCommand { get; set; }
         public ICommand UnregisterPatientCommand { get; set; }
         public ICommand OpenReservationDetailsCommand { get; set; }
-        public ICommand CloseCommand { get; set; }
         public ICommand SetSelectedDateToTodayCommand { get; set; }
         public ICommand SetSelectedDoctorToNullCommand { get; set; }
         public ICommand SetSelectedSpecializationToNullCommand { get; set; }
@@ -134,14 +132,12 @@ namespace WPFUi.ViewModels.AppointmentVMs
         #region Constructors
         public AppointmentsViewModel(
             IReservationService reservationService,
-            IRenavigator homeRenavigator,
             IScheduleService scheduleService,
             IPatientService patientService,
             ISpecializationService specializationService,
             IDoctorService doctorService)
         {
             _reservationService = reservationService;
-            _homeRenavigator = homeRenavigator;
             _scheduleService = scheduleService;
             _patientService = patientService;
             _specializationService = specializationService;
@@ -153,8 +149,6 @@ namespace WPFUi.ViewModels.AppointmentVMs
 
             SelectReservationCommand = new RelayCommand(SelectReservation);
             OpenReservationDetailsCommand = new RelayCommand(OpenReservationDetails);
-
-            CloseCommand = new RelayCommand((obj) => _homeRenavigator.Renavigate());
 
             SetSelectedDateToTodayCommand = new RelayCommand((obj) => SelectedDate = DateTime.Now);
             SetSelectedDoctorToNullCommand = new RelayCommand((obj) => SelectedDoctor = null);

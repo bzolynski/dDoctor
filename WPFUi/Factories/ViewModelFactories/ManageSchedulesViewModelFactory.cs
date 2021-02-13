@@ -11,23 +11,25 @@ namespace WPFUi.Factories.ViewModelFactories
     {
         private readonly IDoctorService _doctorService;
         private readonly IScheduleService _scheduleService;
-        private readonly IRenavigator _generateScheduleRenavigator;
+        private readonly GenerateScheduleViewModel _generateScheduleViewModel;
 
         public ManageSchedulesViewModelFactory(
             IDoctorService doctorService, 
             IScheduleService scheduleService, 
-            IRenavigator generateScheduleRenavigator)
+            GenerateScheduleViewModel generateScheduleViewModel
+            )
         {
             _doctorService = doctorService;
             _scheduleService = scheduleService;
-            _generateScheduleRenavigator = generateScheduleRenavigator;
+            _generateScheduleViewModel = generateScheduleViewModel;
         }
         public ManageSchedulesViewModel CreateViewModel()
         {
             return new ManageSchedulesViewModel(
                 _doctorService, 
-                _scheduleService, 
-                _generateScheduleRenavigator);
+                _scheduleService,
+                _generateScheduleViewModel
+                );
         }
     }
 }

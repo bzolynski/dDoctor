@@ -54,10 +54,13 @@
         <Style x:Key="CalendarColors" TargetType="Calendar">
 
             <Setter Property="CalendarDayButtonStyle">
+
                 <Setter.Value>
 
                     <Style TargetType="CalendarDayButton">
                         <Setter Property="Opacity" Value="0.5" />
+                        <Setter Property="Margin" Value="1" />
+                        <Setter Property="FontWeight" Value="Bold" />
 
                         <Style.Triggers>
                             <DataTrigger Value="True">
@@ -68,8 +71,10 @@
                                     </MultiBinding>
                                 </DataTrigger.Binding>
                                 <Setter Property="Opacity" Value="1" />
-                                <Setter Property="Background" Value="LightGreen" />
+                                <Setter Property="Background" Value="#44b33e" />
                                 <Setter Property="FontWeight" Value="SemiBold" />
+                                <Setter Property="BorderBrush" Value="Green" />
+                                <Setter Property="BorderThickness" Value="1" />
                             </DataTrigger>
 
                             <DataTrigger Value="True">
@@ -82,6 +87,8 @@
                                 <Setter Property="Opacity" Value="1" />
                                 <Setter Property="Background" Value="OrangeRed" />
                                 <Setter Property="FontWeight" Value="SemiBold" />
+                                <Setter Property="BorderBrush" Value="Red" />
+                                <Setter Property="BorderThickness" Value="1" />
                             </DataTrigger>
 
                             <DataTrigger Value="True">
@@ -92,8 +99,10 @@
                                     </MultiBinding>
                                 </DataTrigger.Binding>
                                 <Setter Property="Opacity" Value="1" />
-                                <Setter Property="Background" Value="Yellow" />
+                                <Setter Property="Background" Value="GreenYellow" />
                                 <Setter Property="FontWeight" Value="SemiBold" />
+                                <Setter Property="BorderBrush" Value="Yellow" />
+                                <Setter Property="BorderThickness" Value="1" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -267,202 +276,209 @@
 
                 </Grid>
 
-                <!--  Buttons  -->
-                <Grid Grid.Row="4" Margin="10">
-                    <Button
-                        Grid.Column="2"
-                        Command="{Binding CloseCommand}"
-                        Content="Close"
-                        Style="{StaticResource MenuBarButton}" />
-                </Grid>
-
             </Grid>
 
 
 
             <!--  Appointment list  -->
-            <Grid Grid.Row="2" Grid.Column="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
+            <Grid
+                Grid.Row="2"
+                Grid.Column="1"
+                Margin="0,10,10,10">
 
-                <Grid Margin="0,10,10,0" Background="{StaticResource SecondaryDarkGreenSolidColorBrush}">
-                    <TextBlock
-                        Padding="3"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        FontSize="20"
-                        Foreground="White"
-                        Text="{Binding SelectedDate, StringFormat=dd/MM/yyyy (dddd)}" />
-                </Grid>
+                <Border BorderBrush="LightGray" BorderThickness="2,0,2,2">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
 
+                        <Grid Grid.Row="0" Background="{StaticResource SecondaryDarkGreenSolidColorBrush}">
+                            <TextBlock
+                                Padding="3"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontSize="20"
+                                Foreground="White"
+                                Text="{Binding SelectedDate, StringFormat=dd/MM/yyyy (dddd)}" />
+                        </Grid>
 
-                <!--  Items control  -->
-                <ItemsControl Grid.Row="1" ItemsSource="{Binding ScheduleViewModels}">
+                        <!--  Items control  -->
+                        <ScrollViewer
+                            Grid.Row="1"
+                            HorizontalScrollBarVisibility="Auto"
+                            VerticalScrollBarVisibility="Disabled">
 
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
+                            <ItemsControl ItemsSource="{Binding ScheduleViewModels}">
 
-                            <Border Margin="5" Style="{StaticResource MainDarkBorder}">
-                                <Grid Width="300">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto" />
-                                        <RowDefinition Height="*" />
-                                    </Grid.RowDefinitions>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
 
-
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="*" />
-                                            <RowDefinition Height="*" />
-                                            <RowDefinition Height="*" />
-                                        </Grid.RowDefinitions>
-
-                                        <Border
-                                            Grid.Row="0"
-                                            BorderBrush="Black"
-                                            BorderThickness="1">
-                                            <TextBlock HorizontalAlignment="Center" Text="{Binding DoctorFullName, Mode=OneWay}" />
-                                        </Border>
-
-                                        <Border
-                                            Grid.Row="1"
-                                            BorderBrush="Black"
-                                            BorderThickness="1">
-                                            <TextBlock HorizontalAlignment="Center" Text="{Binding Specialization.Name, Mode=OneWay}" />
-                                        </Border>
-
-                                        <Border
-                                            Grid.Row="2"
-                                            BorderBrush="Black"
-                                            BorderThickness="1">
-                                            <TextBlock HorizontalAlignment="Center" Text="{Binding Availability, Mode=OneWay}" />
-                                        </Border>
+                                        <!--  Each column of reservations  -->
+                                        <Border Margin="3" Style="{StaticResource MainDarkBorder}">
+                                            <Grid Width="300">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="auto" />
+                                                    <RowDefinition Height="*" />
+                                                </Grid.RowDefinitions>
 
 
-                                    </Grid>
+                                                <Grid Grid.Row="0">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="*" />
+                                                        <RowDefinition Height="*" />
+                                                        <RowDefinition Height="*" />
+                                                    </Grid.RowDefinitions>
 
-
-
-                                    <ScrollViewer
-                                        Grid.Row="1"
-                                        HorizontalScrollBarVisibility="Disabled"
-                                        VerticalScrollBarVisibility="Auto">
-
-                                        <ItemsControl Background="#EEF9FC" ItemsSource="{Binding Reservations}">
-
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
-
-                                                    <!--  Each reservation  -->
+                                                    <!--  Doctor name  -->
                                                     <Border
-                                                        Height="60"
-                                                        Margin="1"
-                                                        CornerRadius="5"
-                                                        Cursor="Hand">
-                                                        <Border.InputBindings>
-                                                            <MouseBinding
-                                                                Command="{Binding DataContext.SelectReservationCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl, AncestorLevel=2}}"
-                                                                CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                                                                Gesture="LeftClick" />
-                                                            <MouseBinding Command="{Binding DataContext.OpenReservationDetailsCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl, AncestorLevel=2}}" Gesture="LeftDoubleClick" />
-                                                        </Border.InputBindings>
-                                                        <Border.Resources>
-
-                                                            <Style TargetType="Border">
-                                                                <Setter Property="Background" Value="#CDEDF6" />
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding Patient, Converter={StaticResource NullToBoolConverter}}" Value="False">
-                                                                        <Setter Property="Background" Value="#8AC6D0" />
-                                                                    </DataTrigger>
-
-                                                                    <!--  Mouse over  -->
-                                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                                        <Setter Property="Background" Value="#89b0ae" />
-                                                                    </Trigger>
-
-                                                                    <!--  Selected Reservation  -->
-                                                                    <DataTrigger Value="True">
-                                                                        <DataTrigger.Binding>
-                                                                            <MultiBinding Converter="{StaticResource ReservationAndSelectedReservationToBoolMultiConverter}">
-                                                                                <Binding Path="DataContext.SelectedReservation" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=ItemsControl, AncestorLevel=2}" />
-                                                                                <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=TemplatedParent}" />
-                                                                            </MultiBinding>
-                                                                        </DataTrigger.Binding>
-                                                                        <Setter Property="Background" Value="#9CC4B2" />
-                                                                    </DataTrigger>
-
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </Border.Resources>
-
-
-                                                        <Grid>
-                                                            <Grid.Resources>
-                                                                <Style TargetType="Grid">
-                                                                    <!--  Canceled style  -->
-                                                                    <Style.Triggers>
-                                                                        <DataTrigger Binding="{Binding Path=Status, Converter={StaticResource ReservationStatusBoolConverter}, ConverterParameter={x:Static enums:ReservationStatus.Canceled}}" Value="False">
-                                                                            <Setter Property="Background" Value="#40FF0000" />
-                                                                        </DataTrigger>
-                                                                    </Style.Triggers>
-                                                                </Style>
-                                                            </Grid.Resources>
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="auto" />
-                                                                <ColumnDefinition Width="*" />
-                                                            </Grid.ColumnDefinitions>
-                                                            <Grid.RowDefinitions>
-                                                                <RowDefinition Height="*" />
-                                                            </Grid.RowDefinitions>
-                                                            <TextBlock
-                                                                Grid.Column="0"
-                                                                Margin="4,4,10,0"
-                                                                FontWeight="SemiBold"
-                                                                Text="{Binding Time, Mode=OneWay}" />
-                                                            <TextBlock
-                                                                Grid.Column="1"
-                                                                Padding="0,0,5,0"
-                                                                VerticalAlignment="Center"
-                                                                FontSize="20"
-                                                                Text="{Binding PatientFullName, Mode=OneWay}"
-                                                                TextWrapping="Wrap" />
-                                                        </Grid>
-
+                                                        Grid.Row="0"
+                                                        BorderBrush="Black"
+                                                        BorderThickness="1">
+                                                        <TextBlock HorizontalAlignment="Center" Text="{Binding DoctorFullName, Mode=OneWay}" />
                                                     </Border>
 
+                                                    <!--  Specialization name  -->
+                                                    <Border
+                                                        Grid.Row="1"
+                                                        BorderBrush="Black"
+                                                        BorderThickness="1">
+                                                        <TextBlock HorizontalAlignment="Center" Text="{Binding Specialization.Name, Mode=OneWay}" />
+                                                    </Border>
+
+                                                    <!--  Avability name  -->
+                                                    <Border
+                                                        Grid.Row="2"
+                                                        BorderBrush="Black"
+                                                        BorderThickness="1">
+                                                        <TextBlock HorizontalAlignment="Center" Text="{Binding Availability, Mode=OneWay}" />
+                                                    </Border>
+                                                </Grid>
 
 
 
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
+                                                <ScrollViewer
+                                                    Grid.Row="1"
+                                                    HorizontalScrollBarVisibility="Disabled"
+                                                    VerticalScrollBarVisibility="Auto">
 
-                                            <ItemsControl.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                    <StackPanel Orientation="Vertical" />
-                                                </ItemsPanelTemplate>
-                                            </ItemsControl.ItemsPanel>
+                                                    <ItemsControl Background="#EEF9FC" ItemsSource="{Binding Reservations}">
 
-                                        </ItemsControl>
-                                    </ScrollViewer>
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
 
-                                </Grid>
+                                                                <!--  Each reservation  -->
+                                                                <Border
+                                                                    Height="60"
+                                                                    Margin="1"
+                                                                    CornerRadius="5"
+                                                                    Cursor="Hand">
+                                                                    <Border.InputBindings>
+                                                                        <MouseBinding
+                                                                            Command="{Binding DataContext.SelectReservationCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl, AncestorLevel=2}}"
+                                                                            CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                                                                            Gesture="LeftClick" />
+                                                                        <MouseBinding Command="{Binding DataContext.OpenReservationDetailsCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl, AncestorLevel=2}}" Gesture="LeftDoubleClick" />
+                                                                    </Border.InputBindings>
+                                                                    <Border.Resources>
 
-                            </Border>
+                                                                        <Style TargetType="Border">
+                                                                            <Setter Property="Background" Value="#CDEDF6" />
+                                                                            <Style.Triggers>
+                                                                                <DataTrigger Binding="{Binding Patient, Converter={StaticResource NullToBoolConverter}}" Value="False">
+                                                                                    <Setter Property="Background" Value="#8AC6D0" />
+                                                                                </DataTrigger>
+
+                                                                                <!--  Mouse over  -->
+                                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                                    <Setter Property="Background" Value="#89b0ae" />
+                                                                                </Trigger>
+
+                                                                                <!--  Selected Reservation  -->
+                                                                                <DataTrigger Value="True">
+                                                                                    <DataTrigger.Binding>
+                                                                                        <MultiBinding Converter="{StaticResource ReservationAndSelectedReservationToBoolMultiConverter}">
+                                                                                            <Binding Path="DataContext.SelectedReservation" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=ItemsControl, AncestorLevel=2}" />
+                                                                                            <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=TemplatedParent}" />
+                                                                                        </MultiBinding>
+                                                                                    </DataTrigger.Binding>
+                                                                                    <Setter Property="Background" Value="#9CC4B2" />
+                                                                                </DataTrigger>
+
+                                                                            </Style.Triggers>
+                                                                        </Style>
+                                                                    </Border.Resources>
+
+
+                                                                    <Grid>
+                                                                        <Grid.Resources>
+                                                                            <Style TargetType="Grid">
+                                                                                <!--  Canceled style  -->
+                                                                                <Style.Triggers>
+                                                                                    <DataTrigger Binding="{Binding Path=Status, Converter={StaticResource ReservationStatusBoolConverter}, ConverterParameter={x:Static enums:ReservationStatus.Canceled}}" Value="False">
+                                                                                        <Setter Property="Background" Value="#40FF0000" />
+                                                                                    </DataTrigger>
+                                                                                </Style.Triggers>
+                                                                            </Style>
+                                                                        </Grid.Resources>
+                                                                        <Grid.ColumnDefinitions>
+                                                                            <ColumnDefinition Width="auto" />
+                                                                            <ColumnDefinition Width="*" />
+                                                                        </Grid.ColumnDefinitions>
+                                                                        <Grid.RowDefinitions>
+                                                                            <RowDefinition Height="*" />
+                                                                        </Grid.RowDefinitions>
+                                                                        <TextBlock
+                                                                            Grid.Column="0"
+                                                                            Margin="4,4,10,0"
+                                                                            FontWeight="SemiBold"
+                                                                            Text="{Binding Time, Mode=OneWay}" />
+                                                                        <TextBlock
+                                                                            Grid.Column="1"
+                                                                            Padding="0,0,5,0"
+                                                                            VerticalAlignment="Center"
+                                                                            FontSize="20"
+                                                                            Text="{Binding PatientFullName, Mode=OneWay}"
+                                                                            TextWrapping="Wrap" />
+                                                                    </Grid>
+
+                                                                </Border>
 
 
 
 
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
 
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Horizontal" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                </ItemsControl>
+                                                        <ItemsControl.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <StackPanel Orientation="Vertical" />
+                                                            </ItemsPanelTemplate>
+                                                        </ItemsControl.ItemsPanel>
+
+                                                    </ItemsControl>
+                                                </ScrollViewer>
+
+                                            </Grid>
+
+                                        </Border>
+
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+
+                                <ItemsControl.ItemsPanel>
+
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </Border>
+
+
+
 
 
             </Grid>
