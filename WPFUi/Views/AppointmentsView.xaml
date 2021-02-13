@@ -14,7 +14,7 @@
     <UserControl.Resources>
         <converters:NullToBoolConverter x:Key="NullToBoolConverter" />
         <converters:DateTimeToBoolMultiConverter x:Key="DateTimeToBoolMultiConverter" />
-        <converters:MultiBindingToBoolConverter x:Key="MultiBindingToBoolConverter" />
+        <converters:ReservationAndSelectedReservationToBoolMultiConverter x:Key="ReservationAndSelectedReservationToBoolMultiConverter" />
         <converters:ReservationStatusBoolConverter x:Key="ReservationStatusBoolConverter" />
         <converters:EqualValueToParameterConverter x:Key="EqualValueToParameterConverter" />
 
@@ -238,7 +238,6 @@
                         <ComboBox
                             Grid.Row="1"
                             Grid.Column="0"
-                            IsEnabled="{Binding CanSelectDoctor}"
                             ItemsSource="{Binding Doctors}"
                             SelectedItem="{Binding SelectedDoctor}">
                             <ComboBox.ItemTemplate>
@@ -300,7 +299,7 @@
 
 
                 <!--  Items control  -->
-                <ItemsControl Grid.Row="1" ItemsSource="{Binding AppointmentViewSchedulesDisplay}">
+                <ItemsControl Grid.Row="1" ItemsSource="{Binding ScheduleViewModels}">
 
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
@@ -386,7 +385,7 @@
                                                                     <!--  Selected Reservation  -->
                                                                     <DataTrigger Value="True">
                                                                         <DataTrigger.Binding>
-                                                                            <MultiBinding Converter="{StaticResource MultiBindingToBoolConverter}">
+                                                                            <MultiBinding Converter="{StaticResource ReservationAndSelectedReservationToBoolMultiConverter}">
                                                                                 <Binding Path="DataContext.SelectedReservation" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=ItemsControl, AncestorLevel=2}" />
                                                                                 <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=TemplatedParent}" />
                                                                             </MultiBinding>

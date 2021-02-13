@@ -125,6 +125,10 @@
                     </DataGrid>
                 </Grid>
 
+                <!--  Edit schedule day  -->
+                <Grid Grid.Row="1" />
+
+
                 <!--  Schedule details  -->
                 <Grid Grid.Row="1">
                     <Grid.RowDefinitions>
@@ -176,7 +180,10 @@
                     </DataGrid>
 
                     <StackPanel Grid.Row="1" Orientation="Horizontal">
-                        <Button Content="Edit" Style="{StaticResource MenuBarButton}" />
+                        <Button
+                            Command="{Binding EditSelectedScheduleDayCommand}"
+                            Content="Edit"
+                            Style="{StaticResource MenuBarButton}" />
                         <Button
                             Command="{Binding DeleteSelectedScheduleDayCommand}"
                             Content="Delete"

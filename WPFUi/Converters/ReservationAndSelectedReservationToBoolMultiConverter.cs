@@ -5,12 +5,12 @@ using WPFUi.Models;
 
 namespace WPFUi.Converters
 {
-    public class MultiBindingToBoolConverter : IMultiValueConverter
+    public class ReservationAndSelectedReservationToBoolMultiConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             var result = false;
-            if (values[0] is AppointmentViewReservationModel)
+            if (values[0] is ReservationModel)
                 result = values[0] == values[1];
             return result;
         }

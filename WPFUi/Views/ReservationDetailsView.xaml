@@ -221,9 +221,11 @@
                 <TextBlock Grid.Row="0" Text="Details" />
                 <TextBox
                     Grid.Row="1"
+                    MaxWidth="700"
                     Padding="10"
                     FontSize="20"
-                    Text="{Binding Reservation.Details}" />
+                    Text="{Binding Reservation.Details}"
+                    TextWrapping="WrapWithOverflow" />
             </Grid>
 
             <!--  Patient picker  -->
