@@ -188,8 +188,7 @@
                             Padding="2"
                             FontSize="18"
                             Text="{Binding MaxTimePerPatient, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, TargetNullValue=''}"
-                            TextAlignment="Center"
-                            ToolTip="{Binding ErrorCollection[MaxTimePerPatient]}" />
+                            TextAlignment="Center" />
 
                         <TextBlock
                             Margin="5,0,0,0"

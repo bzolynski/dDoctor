@@ -3,27 +3,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:WPFUi.Styles">
 
+    <!--  Validation  -->
 
+    <Style x:Key="BorderValidationTemplate" TargetType="Border">
 
-    <Style x:Key="FormTextBoxWithValidation" TargetType="TextBox">
-        <Setter Property="Padding" Value="5" />
-        <Setter Property="Background" Value="White" />
-        <Setter Property="Margin" Value="0,0,0,25" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="TextBox">
-                    <StackPanel>
-                        <Border
-                            Height="{TemplateBinding Height}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="3">
-                            <ScrollViewer x:Name="PART_ContentHost" Background="{TemplateBinding Background}" />
-                        </Border>
-                    </StackPanel>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
+        <Setter Property="BorderThickness" Value="0.2" />
+        <Setter Property="BorderBrush" Value="black" />
+
         <Setter Property="Validation.ErrorTemplate">
             <Setter.Value>
                 <ControlTemplate>
@@ -37,7 +23,7 @@
                         <ItemsControl
                             Grid.Row="1"
                             Margin="5,2,0,0"
-                            FontSize="12"
+                            FontSize="13"
                             ItemsSource="{Binding}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
@@ -55,8 +41,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-
 
 
 

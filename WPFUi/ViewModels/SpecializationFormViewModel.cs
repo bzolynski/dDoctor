@@ -15,8 +15,6 @@ namespace WPFUi.ViewModels
         // Validators
         #region Validators
 
-        public Dictionary<string, string> ErrorCollection { get; set; } = new Dictionary<string, string>();
-
         private bool _canSubmit;
 
         public string Error => null;
@@ -31,15 +29,6 @@ namespace WPFUi.ViewModels
 
                 var error = errorList.FirstOrDefault(e => e.PropertyName == propertyName);
 
-                if (ErrorCollection.ContainsKey(propertyName) && error != null)
-                    ErrorCollection[propertyName] = error.ErrorMessage;
-                else if (error != null)
-                    ErrorCollection.Add(propertyName, error.ErrorMessage);
-                else
-                    ErrorCollection.Remove(propertyName);
-
-                OnPropertyChanged(nameof(ErrorCollection));
-
                 return error != null ? error.ErrorMessage : null;
             } 
         }
@@ -52,14 +41,35 @@ namespace WPFUi.ViewModels
 
         private readonly ISpecializationService _specializationService;
         private readonly SpecializationFormValidator _specializationFormValidator;
+        private string _specializationCode;
+        private string _specializationName;
 
         #endregion
 
         // Properties
         #region Properties
 
-        public string SpecializationCode { get; set; }
-        public string SpecializationName { get; set; }
+
+
+        public string SpecializationCode
+        {
+            get { return _specializationCode; }
+            set
+            {
+                _specializationCode = value;
+                OnPropertyChanged(nameof(SpecializationCode));
+            }
+        }
+        public string SpecializationName
+        {
+            get { return _specializationName; }
+            set
+            {
+                _specializationName = value;
+                OnPropertyChanged(nameof(SpecializationName));
+            }
+        }
+
         #endregion
 
         // Commands
@@ -76,7 +86,6 @@ namespace WPFUi.ViewModels
         // Constructors
         #region Constructors
 
-        // TODO: Check if new code is unique
         public SpecializationFormViewModel(ISpecializationService specializationService, SpecializationFormValidator specializationFormValidator)
         {
             _specializationService = specializationService;

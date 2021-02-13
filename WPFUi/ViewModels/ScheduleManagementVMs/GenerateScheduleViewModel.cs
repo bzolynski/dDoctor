@@ -21,9 +21,6 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
         // Validators
         #region Validators
 
-        // TODO: Fix validation
-        public Dictionary<string, string> ErrorCollection { get; set; } = new Dictionary<string, string>();
-
         private bool _canSubmit;
 
         public string Error => null;
@@ -38,15 +35,6 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
 
                 var error = errorList.FirstOrDefault(e => e.PropertyName == propertyName);
 
-                if (ErrorCollection.ContainsKey(propertyName) && error != null)
-                    ErrorCollection[propertyName] = error.ErrorMessage;
-                else if (error != null)
-                    ErrorCollection.Add(propertyName, error.ErrorMessage);
-                else
-                    ErrorCollection.Remove(propertyName);
-
-                OnPropertyChanged(nameof(ErrorCollection));
-
                 return error != null ? error.ErrorMessage : null;
             }
         }
@@ -60,8 +48,8 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
         private readonly ISpecializationService _specializationService;
         private readonly IRenavigator _manageSchedulesRenavigator;
         private readonly GenerateScheduleValidator _generateScheduleValidator;
-        private bool _isSpecializationFormVisible = false;
 
+        private bool _isSpecializationFormVisible = false;
         private Specialization _selectedSpecialization;
         private TimeSpan _maxTimePerPatient = new TimeSpan(0, 15, 0);
         private TimeSpan _startTime;
@@ -77,7 +65,6 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
         public Doctor SelectedDoctor => DoctorPicker.SelectedDoctor;
         public DoctorPickerViewModel DoctorPicker { get; set; }
         public ObservableCollection<Specialization> Specializations { get; set; }
-
 
         public Specialization SelectedSpecialization
         {
@@ -142,7 +129,6 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
             }
         }
         
-
         public TimeSpan EndTime
         {
             get { return _endTime; }
@@ -152,7 +138,6 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
                 OnPropertyChanged(nameof(EndTime));
             }
         }
-
 
         public bool IsSpecializationFormVisible
         {
