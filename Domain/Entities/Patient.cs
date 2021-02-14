@@ -15,7 +15,7 @@ namespace Domain.Entities
         public Address Address { get; set; }
         public int AddressId { get; set; }
 
-        public ICollection<Reservation> Reservations { get; set; }
+        public HashSet<Reservation> Reservations { get; set; }
 
     }
 }

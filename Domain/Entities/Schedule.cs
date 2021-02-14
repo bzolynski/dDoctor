@@ -10,7 +10,7 @@ namespace Domain.Entities
         public DateTime Date { get; set; }
         public TimeSpan StartHour { get; set; }
         public TimeSpan EndHour { get; set; }
-        public ICollection<Reservation> Reservations { get; set; }
+        public HashSet<Reservation> Reservations { get; set; }
         public TimeSpan MaxTimePerPatient { get; set; }
         public ScheduleStatus Status { get; set; }
 

@@ -621,14 +621,7 @@
                     <!--  Unregister button  -->
                     <Grid>
                         <Grid.Resources>
-                            <Style TargetType="Grid">
-                                <Setter Property="Visibility" Value="Collapsed" />
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding SelectedReservation.Status, Converter={StaticResource EqualValueToParameterConverter}, ConverterParameter={x:Static enums:ReservationStatus.Pending}}" Value="True">
-                                        <Setter Property="Visibility" Value="Visible" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
+                            <Style TargetType="Grid" />
                         </Grid.Resources>
 
                         <Grid.ColumnDefinitions>
@@ -640,14 +633,27 @@
                         <Button
                             Grid.Column="0"
                             Command="{Binding OpenReservationDetailsCommand}"
-                            Content="Edit"
-                            Style="{StaticResource MenuBarButton}" />
+                            Content="Edit">
+                            <Button.Resources>
+                                <Style BasedOn="{StaticResource MenuBarButton}" TargetType="Button">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SelectedReservation.Status, Converter={StaticResource EqualValueToParameterConverter}, ConverterParameter={x:Static enums:ReservationStatus.Pending}}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Resources>
+                        </Button>
 
                         <Button
                             Grid.Column="2"
                             Command="{Binding UnregisterPatientCommand}"
-                            Content="Unregister"
-                            Style="{StaticResource MenuBarButton}" />
+                            Content="Unregister">
+                            <Button.Resources>
+                                <Style BasedOn="{StaticResource MenuBarButton}" TargetType="Button" />
+                            </Button.Resources>
+                        </Button>
 
 
                     </Grid>

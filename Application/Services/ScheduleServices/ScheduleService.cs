@@ -2,6 +2,7 @@
 
 using Domain.Entities;
 using Domain.Enums;
+using Persistance.Services.ReservationDataService;
 using Persistance.Services.ScheduleDataServices;
 using System;
 using System.Collections.Generic;
@@ -13,12 +14,12 @@ namespace Application.Services.ScheduleServices
     public class ScheduleService : IScheduleService
     {
         private readonly IScheduleDataService _scheduleDataService;
-        private readonly IReservationService _reservationService;
+        private readonly IReservationDataService _reservationDataService;
 
-        public ScheduleService(IScheduleDataService scheduleDataService, IReservationService reservationService)
+        public ScheduleService(IScheduleDataService scheduleDataService, IReservationDataService reservationDataService)
         {
             _scheduleDataService = scheduleDataService;
-            _reservationService = reservationService;
+            _reservationDataService = reservationDataService;
         }
 
         public async Task GenerateSchedules(int doctorId, int specializationId, TimeSpan startTime, TimeSpan endTime, TimeSpan maxTimePerPatient, DateTime startDay, DateTime endDay, List<DayOfWeek> daysOfWeek)
@@ -42,7 +43,7 @@ namespace Application.Services.ScheduleServices
                     for (var ts = startTime; ts < endTime; ts += maxTimePerPatient)
                     {
 
-                        await _reservationService.Create(new Reservation
+                        await _reservationDataService.Create(new Reservation
                         {
                             Hour = ts,
                             ScheduleId = schedule.Id,
@@ -111,11 +112,15 @@ namespace Application.Services.ScheduleServices
             var schedule = await _scheduleDataService.Get(scheduleId);
             schedule.Status = ScheduleStatus.Canceled;
 
-            // TODO: Remove reservation from database if patient is null
             foreach (var reservation in schedule.Reservations)
             {
-                reservation.Status = ReservationStatus.Canceled;
+                if (reservation.Patient == null)
+                    await _reservationDataService.Delete(reservation.Id);
+                else
+                    reservation.Status = ReservationStatus.Canceled;
             }
+
+            schedule.Reservations.RemoveWhere(x => x.Patient == null);
 
             await _scheduleDataService.Update(schedule.Id, schedule);
 

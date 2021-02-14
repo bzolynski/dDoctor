@@ -145,7 +145,7 @@ namespace WPFUi.ViewModels.AppointmentVMs
 
             SelectedDate = DateTime.Today;
 
-            UnregisterPatientCommand = new AsyncRelayCommand(UnregisterPatient, (obj) => SelectedReservation != null, (ex) => throw ex);
+            UnregisterPatientCommand = new AsyncRelayCommand(UnregisterPatient, (obj) => SelectedReservation != null && SelectedReservation?.Patient != null, (ex) => throw ex);
 
             SelectReservationCommand = new RelayCommand(SelectReservation);
             OpenReservationDetailsCommand = new RelayCommand(OpenReservationDetails);
