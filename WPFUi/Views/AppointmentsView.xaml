@@ -14,8 +14,7 @@
     <UserControl.Resources>
         <converters:NullToBoolConverter x:Key="NullToBoolConverter" />
         <converters:DateTimeToBoolMultiConverter x:Key="DateTimeToBoolMultiConverter" />
-        <converters:ReservationAndSelectedReservationToBoolMultiConverter x:Key="ReservationAndSelectedReservationToBoolMultiConverter" />
-        <converters:ReservationStatusBoolConverter x:Key="ReservationStatusBoolConverter" />
+        <converters:TwoEqualValuesMultiConverter x:Key="TwoEqualValuesMultiConverter" />
         <converters:EqualValueToParameterConverter x:Key="EqualValueToParameterConverter" />
 
         <Style x:Key="ReservationDetailsSidePanel" TargetType="{x:Type TextBlock}">
@@ -384,10 +383,12 @@
 
                                                                         <Style TargetType="Border">
                                                                             <Setter Property="Background" Value="#CDEDF6" />
+
                                                                             <Style.Triggers>
                                                                                 <DataTrigger Binding="{Binding Patient, Converter={StaticResource NullToBoolConverter}}" Value="False">
                                                                                     <Setter Property="Background" Value="#8AC6D0" />
                                                                                 </DataTrigger>
+
 
                                                                                 <!--  Mouse over  -->
                                                                                 <Trigger Property="IsMouseOver" Value="True">
@@ -397,7 +398,7 @@
                                                                                 <!--  Selected Reservation  -->
                                                                                 <DataTrigger Value="True">
                                                                                     <DataTrigger.Binding>
-                                                                                        <MultiBinding Converter="{StaticResource ReservationAndSelectedReservationToBoolMultiConverter}">
+                                                                                        <MultiBinding Converter="{StaticResource TwoEqualValuesMultiConverter}">
                                                                                             <Binding Path="DataContext.SelectedReservation" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=ItemsControl, AncestorLevel=2}" />
                                                                                             <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=TemplatedParent}" />
                                                                                         </MultiBinding>
@@ -415,7 +416,7 @@
                                                                             <Style TargetType="Grid">
                                                                                 <!--  Canceled style  -->
                                                                                 <Style.Triggers>
-                                                                                    <DataTrigger Binding="{Binding Path=Status, Converter={StaticResource ReservationStatusBoolConverter}, ConverterParameter={x:Static enums:ReservationStatus.Canceled}}" Value="False">
+                                                                                    <DataTrigger Binding="{Binding Path=Status, Converter={StaticResource EqualValueToParameterConverter}, ConverterParameter={x:Static enums:ReservationStatus.Canceled}}" Value="True">
                                                                                         <Setter Property="Background" Value="#40FF0000" />
                                                                                     </DataTrigger>
                                                                                 </Style.Triggers>
@@ -452,7 +453,17 @@
 
                                                         <ItemsControl.ItemsPanel>
                                                             <ItemsPanelTemplate>
-                                                                <StackPanel Orientation="Vertical" />
+                                                                <StackPanel Orientation="Vertical">
+                                                                    <StackPanel.Resources>
+                                                                        <Style TargetType="StackPanel">
+                                                                            <Style.Triggers>
+                                                                                <DataTrigger Binding="{Binding Path=Status, Converter={StaticResource EqualValueToParameterConverter}, ConverterParameter={x:Static enums:ScheduleStatus.Canceled}}" Value="True">
+                                                                                    <Setter Property="Background" Value="#c23c3c" />
+                                                                                </DataTrigger>
+                                                                            </Style.Triggers>
+                                                                        </Style>
+                                                                    </StackPanel.Resources>
+                                                                </StackPanel>
                                                             </ItemsPanelTemplate>
                                                         </ItemsControl.ItemsPanel>
 

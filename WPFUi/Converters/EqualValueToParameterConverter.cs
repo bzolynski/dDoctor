@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
@@ -8,14 +9,8 @@ namespace WPFUi.Converters
 {
     public class EqualValueToParameterConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return value.ToString() == parameter.ToString();
-        }
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) => Object.Equals(value, parameter);
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
     }
 }

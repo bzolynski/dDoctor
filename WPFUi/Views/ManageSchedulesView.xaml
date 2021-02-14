@@ -46,39 +46,105 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <!--  Side panel  -->
-                <Grid Grid.Column="0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <!--  Doctor search  -->
-                    <Grid Grid.Row="0">
-                        <StackPanel Orientation="Vertical">
+                <Border
+                    Grid.Column="0"
+                    Padding="5"
+                    BorderBrush="LightGray"
+                    BorderThickness="1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
 
-                            <TextBlock Text="Search" />
-                            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
-
-                        </StackPanel>
-                    </Grid>
-
-                    <!--  Advanced search  -->
-                    <Grid Grid.Row="1">
-                        <StackPanel Orientation="Vertical">
-
-                            <!--  Date from-to  -->
+                        <!--  Doctor search  -->
+                        <Grid Grid.Row="0">
                             <StackPanel Orientation="Vertical">
-                                <TextBlock Text="Date from-to" />
-                                <StackPanel Orientation="Horizontal">
-                                    <DatePicker SelectedDate="{Binding DateFrom}" />
-                                    <DatePicker SelectedDate="{Binding DateTo}" />
-                                </StackPanel>
+
+                                <TextBlock Text="Search">
+                                    <TextBlock.Resources>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="FontWeight" Value="SemiBold" />
+                                            <Setter Property="FontSize" Value="19" />
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                            <Setter Property="VerticalAlignment" Value="Center" />
+                                            <Setter Property="Margin" Value="0,0,0,5" />
+                                        </Style>
+                                    </TextBlock.Resources>
+                                </TextBlock>
+                                <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}">
+                                    <TextBox.Resources>
+                                        <Style TargetType="Border">
+                                            <Setter Property="CornerRadius" Value="6" />
+                                        </Style>
+                                        <Style TargetType="TextBox">
+                                            <Setter Property="FontSize" Value="16" />
+                                            <Setter Property="Padding" Value="6,3" />
+                                        </Style>
+                                    </TextBox.Resources>
+                                </TextBox>
+
                             </StackPanel>
+                        </Grid>
 
-                        </StackPanel>
+                        <!--  Advanced search  -->
+                        <Grid Grid.Row="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0" Orientation="Vertical">
 
+                                <!--  Date from-to  -->
+                                <Grid Grid.IsSharedSizeScope="True">
+                                    <Grid.Resources>
+                                        <Style TargetType="TextBlock">
+
+                                            <Setter Property="FontSize" Value="16" />
+                                            <Setter Property="VerticalAlignment" Value="Center" />
+                                            <Setter Property="Margin" Value="0,0,0,5" />
+                                        </Style>
+                                    </Grid.Resources>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" SharedSizeGroup="Col" />
+                                        <ColumnDefinition Width="*" SharedSizeGroup="Col" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto" />
+                                        <RowDefinition Height="auto" />
+                                    </Grid.RowDefinitions>
+                                    <TextBlock
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        Text="Date from" />
+                                    <TextBlock
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Text="Date to" />
+                                    <DatePicker
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        Width="100"
+                                        Margin="0,0,5,0"
+                                        SelectedDate="{Binding DateFrom}" />
+                                    <DatePicker
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        Width="100"
+                                        SelectedDate="{Binding DateTo}" />
+                                </Grid>
+
+
+
+                            </StackPanel>
+                            <Button
+                                Grid.Row="1"
+                                Command="{Binding GenerateNewScheduleCommand}"
+                                Content="Generate new"
+                                Style="{StaticResource MenuBarButton}" />
+                        </Grid>
                     </Grid>
-                </Grid>
-
+                </Border>
                 <!--  Main content  -->
                 <Grid Grid.Column="1">
                     <Grid.RowDefinitions>
@@ -88,23 +154,12 @@
 
                     <!--  Doctor list  -->
                     <Grid Grid.Row="0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-
-                        <StackPanel Grid.Row="0" Orientation="Horizontal">
-                            <Button
-                                Command="{Binding GenerateNewScheduleCommand}"
-                                Content="Generate"
-                                Style="{StaticResource MenuBarButton}" />
-                        </StackPanel>
 
                         <DataGrid
-                            Grid.Row="1"
                             Padding="8"
                             HorizontalAlignment="Center"
                             AutoGenerateColumns="False"
+                            BorderThickness="0"
                             CanUserAddRows="False"
                             CanUserDeleteRows="False"
                             CanUserResizeRows="False"
@@ -151,6 +206,8 @@
                             Padding="8"
                             HorizontalAlignment="Center"
                             AutoGenerateColumns="False"
+                            BorderBrush="LightGray"
+                            BorderThickness="0,1,0,0"
                             CanUserAddRows="False"
                             CanUserDeleteRows="False"
                             CanUserResizeRows="False"
@@ -189,12 +246,19 @@
                             </DataGrid.Columns>
                         </DataGrid>
 
-                        <StackPanel Grid.Row="1" Orientation="Horizontal">
+                        <StackPanel
+                            Grid.Row="1"
+                            Margin="10"
+                            Orientation="Horizontal">
+
                             <Button
+                                Width="150"
+                                Margin="0,0,10,0"
                                 Command="{Binding EditSelectedScheduleDayCommand}"
                                 Content="Edit"
                                 Style="{StaticResource MenuBarButton}" />
                             <Button
+                                Width="150"
                                 Command="{Binding DeleteSelectedScheduleDayCommand}"
                                 Content="Delete"
                                 Style="{StaticResource MenuBarButton}" />
