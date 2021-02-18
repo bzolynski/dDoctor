@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -17,28 +18,51 @@ namespace WPFUi.Controls.Components
     /// <summary>
     /// Interaction logic for TimePicker.xaml
     /// </summary>
-    public partial class TimePicker : UserControl
+    public partial class TimePicker : UserControl, INotifyPropertyChanged
     {
-        
+        private int _hours;
+        private int _minutes;
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public static readonly DependencyProperty TimeProperty =
-            DependencyProperty.Register("Time", typeof(TimeSpan), typeof(TimePicker), new PropertyMetadata(new TimeSpan(hours: 8, minutes: 0, seconds: 0)));
-        
+           DependencyProperty.Register("Time", typeof(TimeSpan), typeof(TimePicker), new PropertyMetadata(new TimeSpan(8, 0, 0), new PropertyChangedCallback(OnTimePropertyChanged)));
+
+        private static void OnTimePropertyChanged(
+        DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (sender is TimePicker tp)
+            {
+                tp.OnTimeChanged();
+            }
+        }
+
+        protected virtual void OnTimeChanged()
+        {
+            OnPropertyChanged(nameof(Time));
+            HourBox.Text = Time.ToString("hh");
+            MinuteBox.Text = Time.ToString("mm");
+        }
+
         public TimeSpan Time
         {
             get { return (TimeSpan)GetValue(TimeProperty); }
             set { SetValue(TimeProperty, value); }
         }
 
-        private byte _hours = 8;
-        private byte _minutes = 0;
-
         public TimePicker()
         {
             InitializeComponent();
             HourBox.MaxLength = 2;
             MinuteBox.MaxLength = 2;
+            _hours = Time.Hours;
+            _minutes = Time.Minutes;
             SetTime();
 
+        }
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private void TextBox_SelectivelyIgnoreMouseButton(object sender, MouseButtonEventArgs e)
@@ -52,7 +76,6 @@ namespace WPFUi.Controls.Components
                     tb.Focus();
                 }
             }
-
         }
 
         private void TextBox_GotFocus(object sender, RoutedEventArgs e)
@@ -62,7 +85,6 @@ namespace WPFUi.Controls.Components
                 tb.SelectAll();
             }
         }
-
 
         private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
@@ -81,25 +103,16 @@ namespace WPFUi.Controls.Components
         {
             TextBox tb = sender as TextBox;
 
-            if (tb.Text[0] != '0' && int.Parse(tb.Text) < 10)
-            {
-                tb.Text = $"0{tb.Text}";
-            }
-            _hours = byte.Parse(tb.Text);
+            SetHourText(tb.Text);
 
             SetTime();
-
         }
 
         private void MinuteBox_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox tb = sender as TextBox;
 
-            if (tb.Text[0] != '0' && int.Parse(tb.Text) < 10)
-            {
-                tb.Text = $"0{tb.Text}";
-            }
-            _minutes = byte.Parse(tb.Text);
+            SetMinuteText(tb.Text);
 
             SetTime();
         }
@@ -117,7 +130,6 @@ namespace WPFUi.Controls.Components
                 tb.Text = "08";
                 tb.SelectAll();
             }
-            
         }
 
         private void MinuteBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -132,7 +144,24 @@ namespace WPFUi.Controls.Components
                 tb.Text = "00";
                 tb.SelectAll();
             }
-            
+        }
+
+        private void SetHourText(string hourString)
+        {
+            if (hourString[0] != '0' && int.Parse(hourString) < 10)
+            {
+                HourBox.Text = $"0{hourString}";
+            }
+            _hours = byte.Parse(hourString);
+        }
+
+        private void SetMinuteText(string minuteString)
+        {
+            if (minuteString[0] != '0' && int.Parse(minuteString) < 10)
+            {
+                MinuteBox.Text = $"0{minuteString}";
+            }
+            _minutes = byte.Parse(minuteString);
         }
 
         private void SetTime()
@@ -141,4 +170,5 @@ namespace WPFUi.Controls.Components
         }
 
     }
+
 }
