@@ -17,6 +17,8 @@
         </StackPanel.Resources>
         <TextBox
             x:Name="HourBox"
+            MinWidth="37"
+            HorizontalAlignment="Right"
             VerticalContentAlignment="Center"
             d:Height="50"
             d:Width="100"
@@ -40,6 +42,8 @@
             TextAlignment="Center" />
         <TextBox
             x:Name="MinuteBox"
+            MinWidth="37"
+            HorizontalAlignment="Right"
             VerticalContentAlignment="Center"
             d:Height="50"
             d:Width="100"

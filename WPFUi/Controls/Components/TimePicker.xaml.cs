@@ -52,6 +52,7 @@ namespace WPFUi.Controls.Components
         public TimePicker()
         {
             InitializeComponent();
+            OnTimeChanged();
             HourBox.MaxLength = 2;
             MinuteBox.MaxLength = 2;
             _hours = Time.Hours;

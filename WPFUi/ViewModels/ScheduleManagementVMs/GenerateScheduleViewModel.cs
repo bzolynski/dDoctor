@@ -259,6 +259,8 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
         {
             _maxTimePerPatient = new TimeSpan(0, 15, 0);
             OnPropertyChanged(nameof(MaxTimePerPatient));
+            StartTime = new TimeSpan(8, 0, 0);
+            EndTime = new TimeSpan(12, 00, 0);
             StartDate = DateTime.Today;
             EndDate = DateTime.Today.AddDays(1);
             SelectedSpecialization = null;

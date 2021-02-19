@@ -24,18 +24,29 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
         private List<Schedule> _schedules;
         private string _searchText = string.Empty;
         private DateTime _dateFrom;
+        //private EditScheduleViewModel _editScheduleViewModel;
         private DateTime _dateTo;
         private List<DoctorModel> _doctors;
         private DoctorModel _selectedDoctor;
         private Schedule _selectedSchedule;
         private bool _isGenerateScheduleViewVisible = false;
-
+        //private bool _isEditScheduleFormVisible = false;
         private readonly IDoctorService _doctorService;
         private readonly IScheduleService _scheduleService;
         #endregion
 
         // Bindings
         #region Bindings
+                
+        //public EditScheduleViewModel EditScheduleViewModel
+        //{
+        //    get { return _editScheduleViewModel; }
+        //    set
+        //    {
+        //        _editScheduleViewModel = value;
+        //        OnPropertyChanged(nameof(EditScheduleViewModel));
+        //    }
+        //}
 
         public GenerateScheduleViewModel GenerateScheduleViewModel { get; set; }
         public ICollectionView DoctorsCollectionView { get; set; }
@@ -52,6 +63,15 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
             }
         }
 
+        //public bool IsEditScheduleFormVisible
+        //{
+        //    get { return _isEditScheduleFormVisible; }
+        //    set
+        //    {
+        //        _isGenerateScheduleViewVisible = value;
+        //        OnPropertyChanged(nameof(IsEditScheduleFormVisible));
+        //    }
+        //}
 
         public Schedule SelectedSchedule
         {
@@ -112,7 +132,7 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
         // Commands
         #region Commands
 
-        public ICommand EditSelectedScheduleDayCommand { get; set; }
+        //public ICommand OpenEditSelectedScheduleFormCommand { get; set; }
         public ICommand DeleteSelectedScheduleDayCommand { get; set; }
         public ICommand GenerateNewScheduleCommand { get; set; }
         #endregion
@@ -135,7 +155,8 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
 
             _schedules = new List<Schedule>();
             SchedulesCollectionView = CollectionViewSource.GetDefaultView(_schedules);
-            EditSelectedScheduleDayCommand = new AsyncRelayCommand(EditSelectedScheduleDay, CanEditSelectedScheduleDay, (ex) => throw ex);
+            SchedulesCollectionView.SortDescriptions.Add(new SortDescription(nameof(Schedule.Date), ListSortDirection.Ascending));
+            //OpenEditSelectedScheduleFormCommand = new RelayCommand(OpenEditSelectedScheduleForm, CanEditSelectedScheduleDay);
             DeleteSelectedScheduleDayCommand = new AsyncRelayCommand(DeleteSelectedScheduleDay, CanDeleteSelectedScheduleDay, (ex) => throw ex);
             GenerateNewScheduleCommand = new RelayCommand(GenerateNewSchedule);
             GenerateScheduleViewModel.FormSubmited += GenerateScheduleViewModel_FormSubmited;
@@ -146,17 +167,7 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
             DateTo = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month));
         }
 
-        private void GenerateScheduleViewModel_FormSubmited()
-        {
-            IsGenerateScheduleViewVisible = false;
-        }
-
-
-
-
-
-
-
+        
         #endregion
 
         // Methods
@@ -186,7 +197,7 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
                     _schedules.Clear();
                     foreach (var schedule in task.Result)
                         _schedules.Add(schedule);
-
+                    
                     System.Windows.Application.Current.Dispatcher.Invoke(new Action(() => SchedulesCollectionView.Refresh()));
 
 
@@ -194,20 +205,30 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
             });
         }
 
-        private bool CanEditSelectedScheduleDay(object obj)
-        {
-            return SelectedSchedule != null ? true : false;
-        }
+        //private bool CanEditSelectedScheduleDay(object obj)
+        //{
+        //    return SelectedSchedule != null ? true : false;
+        //}
 
-        private async Task EditSelectedScheduleDay(object arg)
-        {
+        //private void OpenEditSelectedScheduleForm(object obj)
+        //{
+        //    EditScheduleViewModel = new EditScheduleViewModel(_selectedSchedule, _scheduleService);
+        //    EditScheduleViewModel.OnSubmit += EditScheduleViewModel_OnSubmit;
+        //    _isEditScheduleFormVisible = true;
+        //    OnPropertyChanged(nameof(IsEditScheduleFormVisible));
 
-        }
+        //}
 
-        private bool CanDeleteSelectedScheduleDay(object obj)
-        {
-            return SelectedSchedule != null ? true : false;
-        }
+        //private void EditScheduleViewModel_OnSubmit()
+        //{
+        //    EditScheduleViewModel = null;
+        //    _isEditScheduleFormVisible = false;
+        //    OnPropertyChanged(nameof(IsEditScheduleFormVisible));
+        //}
+
+        private void GenerateScheduleViewModel_FormSubmited() => IsGenerateScheduleViewVisible = false;
+
+        private bool CanDeleteSelectedScheduleDay(object obj) => SelectedSchedule != null ? true : false;
 
         private async Task DeleteSelectedScheduleDay(object obj)
         {
@@ -228,10 +249,7 @@ namespace WPFUi.ViewModels.ScheduleManagementVMs
             return false;
         }
                
-        private void GenerateNewSchedule(object obj)
-        {
-            IsGenerateScheduleViewVisible = true;
-        }
+        private void GenerateNewSchedule(object obj) => IsGenerateScheduleViewVisible = true;
         #endregion
 
     }

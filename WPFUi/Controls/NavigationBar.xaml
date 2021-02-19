@@ -102,7 +102,7 @@
                                 CommandParameter="{x:Static navigator:ViewType.ManageSchedules}"
                                 Header="Manage schedules" />
 
-                            <MenuItem Header="Manage your account" />
+                            <MenuItem Header="Manage your account" IsEnabled="False" />
 
 
                         </MenuItem>
